@@ -1,0 +1,67 @@
+@mixin border-1px($color,$pos){
+	&:after{
+		display:block;
+		position: absolute;
+		border-#{$pos}:1px solid $color;
+		content:'';
+		z-index:999;
+		@if $pos == 'top' {
+			top:0;
+			left:0;
+			width:100%;
+		}
+		@else if $pos == 'bottom' {
+			bottom:0;
+			left:0;
+			width:100%;
+		}
+		@else if $pos == 'left' {
+			bottom:0;
+			left:0;
+			height:100%;
+		}
+		@else if $pos == 'right' {
+			bottom:0;
+			right:0;
+			height:100%;
+		}
+	}
+}
+
+
+@media screen and  (-webkit-min-device-pixel-ratio: 1.5),(min-device-pixel-ratio: 1.5){
+	.border-scaleY{
+		&:after{
+			-webkit-transform: scaleY(0.7);
+			transform: scaleY(0.7);
+		}
+	}
+	.border-scaleX{
+		&:after{
+			-webkit-transform: scaleX(0.7);
+			transform: scaleX(0.7);
+		}
+	}
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 2),(min-device-pixel-ratio: 2){
+	.border-scaleY{
+		&:after{
+			-webkit-transform: scaleY(0.5);
+			transform: scaleY(0.5);
+		}
+	}
+	.border-scaleX{
+		&:after{
+			-webkit-transform: scaleX(0.7);
+			transform: scaleX(0.7);
+		}
+	}
+}
+
+@mixin bg-img($url){
+	background-image:url("./img/" + $url + "@2x.png");
+	@media (-webkit-min-device-pixel-ratio:2) and (min-device-pixel-ratio:2){
+		background-image:url("./img/" + $url + "@3x.png");
+	}
+}
