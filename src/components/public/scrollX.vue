@@ -1,12 +1,12 @@
 <template>
-  <div class="movie-conmmon">
-    <div class="movies-header">
+  <div class="wrap">
+    <div class="scrollX-header" v-if="isTitle">
       <div class="title">{{title}}</div>
-      <div class="more" v-show='more'>更多</div>
+      <div class="more" v-show='isMore' @click="getMore">更多</div>
     </div>
-    <div class="movies-content" ref="content">
+    <div class="scrollX-content" ref="content">
       <ul ref="list">
-        <li class="movies-item" v-for="item in itemsData" @click='routerTo(item)'>
+        <li class="list-item" v-for="(item, index) in data" :key="index" @click='routerTo(item)'>
           <img :src="item.images.medium" alt="">
           <div v-if="type === 'default'">
             <div class="name">{{item.title}}</div>
@@ -30,23 +30,36 @@
 </template>
 
 <script>
+/**
+ * 水平滑动展示图片组件
+ * @prop  [Array]  data  绑定的数据
+ * @prop  [Boolean]  more  是否显示更多按钮
+ * @prop  [String]  title  组件的标题
+ * @prop  [String]  isTtile  是否显示组件的标题
+ * @prop  [String]  type  组件的类型
+ * @emit  getMore  点击更多按钮的函数
+ */
   import star from '../star/star'
   import BScroll from 'better-scroll'
   export default{
     props: {
-      itemsData: {
+      data: {
         type: Array,
         default: function () {
           return []
         }
       },
-      more: {
+      isMore: {
         type: Boolean,
         default: true
       },
       title: {
         type: String,
         default: '文章标题'
+      },
+      isTitle: {
+        type: Boolean,
+        default: true
       },
       type: {
         type: String,
@@ -56,6 +69,11 @@
     components: {
       star
     },
+    watch: {
+      'data' (val) {
+        val.length !== 0 && this.setScroll()
+      }
+    },
     methods: {
       routerTo (data) {
         this.$router.push({name: 'movieDetail', query: {moviedata: data}})
@@ -63,7 +81,7 @@
       setScroll () {
         var width = 85
         var margin = 15
-        var totalWidth = (width + margin) * (this.itemsData.length)
+        var totalWidth = (width + margin) * (this.data.length)
         totalWidth += margin
         this.$refs.list.style.width = totalWidth + 'px'
         if (!this.scroll) {
@@ -76,35 +94,23 @@
           this.scroll.refresh()
         }
         this.$emit('refreshDom')
+      },
+      getMore () {
+        this.$emit('more')
       }
-    },
-    mounted () {
-      var that = this
-      var timer = setInterval(() => {
-        if (that.itemsData.length !== 0) {
-          that.setScroll()
-          clearInterval(timer)
-        }
-      }, 500)
     }
   }
 </script>
 
-<style lang='scss'>
-  .movie-conmmon{
+<style lang="scss" scoped>
+  .wrap{
     width: 100%;
-    position: relative;
     background-color:#fff;
     overflow:hidden;
-    margin-bottom:20px;
-    &:last-child{
-      margin-bottom:0;
-    }
-    .movies-header{
-      width: 100%;
+    .scrollX-header{
       display:flex;
       justify-content:space-between;
-      padding:25px 15px;
+      padding:0 15px;
       height:74px;
       .title{
         font-size:16px;
@@ -116,12 +122,12 @@
         color:#67c777;
       }
     }
-    .movies-content{
+    .scrollX-content{
       width: 100%;
       overflow: hidden;
       white-space: nowrap;
       height:173px;
-      .movies-item{
+      .list-item{
         display:inline-block;
         margin-left:15px;
         margin-bottom:10px;

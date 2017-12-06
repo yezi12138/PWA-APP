@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <keep-alive>
-      <router-view></router-view>
+      <router-view/>
     </keep-alive>
   </div>
 </template>
@@ -10,10 +10,7 @@
 export default {
   name: 'app'
 }
-
 </script>
 
-<style lang="scss">
-@import './sass/base.scss';
-
+<style lang="scss" scoped>
 </style>
