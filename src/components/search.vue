@@ -3,21 +3,34 @@
 		<div class="search-header">
       <div class="search-input">
         <div class="input-left">
-          <Icon type="android-search" v-show="!showSearchPage"></Icon>
-          <div class="select border-scaleX" v-show="showSearchPage" @click="toggleSelect" ref='select'>{{selectText}}<Icon type="chevron-down" v-if="!showSelectItem" /><Icon type="chevron-up" v-else /></div>
-          <div class="select-item" v-show="showSelectItem">
-            <ul class="border-scaleX">
-              <li class="border-scaleY" @click='chooseType($event)'>音乐</li>
-              <li class="border-scaleY" @click='chooseType($event)'>书籍</li>
-              <li class="border-scaleY" @click='chooseType($event)'>电影</li>
-              <li class="border-scaleY" @click='chooseType($event)'>广播</li>
-            </ul>
+          <i class="iconfont icon-search" v-show="!showSearchPage"></i>
+          <div class="select border-scaleX" v-show="showSearchPage" @click="toggleSelect" ref='select'>
+            {{selectText}}
+            <i class="iconfont icon-xiangxiajiantou" v-if="!showSelectItem" />
+            <i class="iconfont icon-xiangshangjiantou" v-else />
           </div>
+          <transition name="scale">
+            <div class="select-item" v-show="showSelectItem">
+              <ul class="border-scaleX">
+                <li class="border-bottom border-scaleY" @click='chooseType($event)'>音乐</li>
+                <li class="border-bottom border-scaleY" @click='chooseType($event)'>书籍</li>
+                <li class="border-bottom border-scaleY" @click='chooseType($event)'>电影</li>
+                <li class="border-bottom border-scaleY" @click='chooseType($event)'>广播</li>
+              </ul>
+            </div>
+          </transition>
         </div>
-        <input type="text" class="input" v-model="searchValue" placeholder="影视 图书 唱片 小组等" @focus="showPage" @change="doSearch">
+        <input
+          type="text"
+          class="input"
+          v-model="searchValue"
+          placeholder="影视 图书 唱片 小组等"
+          @focus="showPage"
+          @change="doSearch"
+        />
       </div>
       <div class="message" v-if='!showSearchPage'>
-        <Icon type="android-notifications"></Icon> 
+        <i class="iconfont icon-ios-notifications-ou" v-show="!showSearchPage"></i>
       </div>
       <div class="close" @click='hidePage' v-else>取消</div>  
     </div>
@@ -26,7 +39,7 @@
         <div class="books" v-show='books.length !== 0'>
           <div class="search-item-header">图书</div>
           <ul class="search-item-content">
-            <li class="search-item" v-for='item in books'>
+            <li class="search-item" v-for="(item, index) in books" :key="index">
               <img :src="item.image" alt="" class="item-pic">
               <div class="item-detail">
                 <li class="item-name">{{item.title}}</li>
@@ -37,7 +50,7 @@
         <div class="music" v-show='musics.length !== 0'>
           <div class="search-item-header">音乐</div>
           <ul class="search-item-content">
-            <li class="search-item" v-for='item in musics'>
+            <li class="search-item" v-for="(item, index) in musics" :key="index">
               <img :src="item.image" alt="" class="item-pic">
               <div class="item-detail">
                 <li class="item-name">{{item.title}}</li>
@@ -48,7 +61,7 @@
         <div class="movies" v-show='movies.length !== 0'>
           <div class="search-item-header">电影</div>
           <ul class="search-item-content">
-            <li class="search-item" v-for='item in movies' @click='routerTo(item)'>
+            <li class="search-item" v-for="(item, index) in movies" :key="index" @click='routerTo(item)'>
               <img v-if='item.images' :src="item.images.small" alt="" class="item-pic">
               <div class="item-detail">
                 <li class="item-name">{{item.title}}</li>
@@ -65,7 +78,9 @@
 <script>
   import Loading from './loading.js'
   import BScroll from 'better-scroll'
+  import req from 'api/douban'
   export default{
+    name: 'Search',
     data () {
       return {
         showSearchPage: false,
@@ -76,6 +91,7 @@
         movies: [],
         musics: [],
         showLaoding: true,
+        loading: null,
         selectText: '全部'
       }
     },
@@ -92,75 +108,71 @@
       },
       doSearch () {
         var value = this.searchValue
-        var context = this.$refs.canvas.getContext('2d')
-        var loading = new Loading(context)
         var select = this.selectText
+        var params = {
+          q: value,
+          count: 4
+        }
+        var setting = {
+          '书籍': {
+            key: 'books',
+            url: 'getBooks'
+          },
+          '电影': {
+            key: 'movies',
+            url: 'getMovies'
+          },
+          '音乐': {
+            key: 'musics',
+            url: 'getMusics'
+          }
+        }
+        const getData = select => {
+          if (select === '全部') {
+            let keyArr = Object.keys(setting)
+            // 遍历setting， 发出请求
+            let promiseArr = keyArr.map(key => {
+              return req(setting[key].url, params)
+            })
+            // 请求全部完成的回调
+            Promise.all(promiseArr)
+            .then(values => {
+              keyArr.forEach((itemKey, index) => {
+                console.log(itemKey)
+                let key = setting[itemKey].key
+                this[key] = values[index][key] || values[index].subjects
+                console.log(this[key])
+              })
+              this.hideLoading()
+              this.refreshScroll()
+            })
+            .catch((res) => {
+              this.hideLoading()
+            })
+          }
+        }
+        if (value === '') return
+        this.init()
+        this.showLoading()
+        getData(select)
+        // init input
+        this.searchValue = ''
+      },
+      showLoading () {
+        var context = this.$refs.canvas.getContext('2d')
+        !this.loading && (this.loading = new Loading(context))
         this.showLaoding = true
-        // init
+        context.clearRect(0, 0, context.canvas.width, context.canvas.height)
+        this.loading.drawSmile()
+      },
+      hideLoading () {
+        this.loading.hide()
+        this.showLaoding = false
+      },
+      init () {
         this.books = []
         this.movies = []
         this.musics = []
-        loading.drawSmile()
-        var count = 0
-        if (value === '') {
-          return
-        }
-        if (select === '全部' || select === '书籍') {
-          this.$http.get(`/api/v2/book/search?q=${value}&count=4`).then((res) => {
-            this.books = res.data.books
-            count++
-            if ((select === '全部' && count === 3) || (select === '书籍' && count === 1)) {
-              loading.hide()
-              this.showLaoding = false
-              this.refreshScroll()
-            }
-          }).catch((res) => {
-            if (res instanceof Error) {
-              loading.hide()
-              this.showLaoding = false
-              this.$Message.success('系统拒绝访问')
-              console.log('Error', res.message)
-            }
-          })
-        }
-        if (select === '全部' || select === '电影') {
-          this.$http.get(`/api/v2/movie/search?q=${value}&count=4`).then((res) => {
-            this.movies = res.data.subjects
-            count++
-            if ((select === '全部' && count === 3) || (select === '电影' && count === 1)) {
-              loading.hide()
-              this.showLaoding = false
-              this.refreshScroll()
-            }
-          }).catch((res) => {
-            if (res instanceof Error) {
-              loading.hide()
-              this.showLaoding = false
-              this.$Message.success('系统拒绝访问')
-              console.log('Error', res.message)
-            }
-          })
-        }
-        if (select === '全部' || select === '音乐') {
-          this.$http.get(`/api/v2/music/search?q=${value}&count=4`).then((res) => {
-            this.musics = res.data.musics
-            count++
-            if ((select === '全部' && count === 3) || (select === '音乐' && count === 1)) {
-              loading.hide()
-              this.showLaoding = false
-              this.refreshScroll()
-            }
-          }).catch((res) => {
-            if (res instanceof Error) {
-              loading.hide()
-              this.showLaoding = false
-              this.$Message.success('系统拒绝访问')
-              console.log('Error', res.message)
-            }
-          })
-        }
-        // init input
-        this.searchValue = ''
       },
       refreshScroll () {
         // 更新竖直方向的滚动高度
@@ -178,34 +190,31 @@
       chooseType (e) {
         var chooseHook = e.currentTarget
         var text = chooseHook.innerHTML
-        // console.log(select, text)
         var s = text
         chooseHook.innerHTML = this.selectText
         this.selectText = s
         this.showSelectItem = false
       },
       routerTo (data) {
-        this.$router.push({name: 'movieDetail', query: {moviedata: data}})
+        this.$router.push({path: '/movieDetail', query: {moviedata: data}})
       }
     }
   }
-
 </script>
 
 <style lang="scss" scoped>
-  @import '../sass/util.scss';
   .search{
     position:relative;
     .search-header{
       position: relative;
       z-index:1003;
-      height:52px;
+      height:40px;
       display:flex;
       flex-direction:row;
       align-items:center;
       justify-content:center;
-      background-color:#42c055;
-      padding:8px 3px 8px 10px;
+      background-color:rgba(128, 187, 82, 0.7);
+      padding:6px 0px 6px 12px;
       .search-input{
         flex:6;
         display:flex;
@@ -256,7 +265,6 @@
         .select{
           font-size:14px;
           color:#333;
-          @include border-1px(#f3f3f3,right);
           i{
             font-size:12px;
             margin-left:4px;
@@ -267,6 +275,8 @@
           top:100%;
           left:0;
           ul{
+            height: 100%;
+            overflow: hidden;
             position: relative;
             border:1px solid #e3e3e3;
             border-radius:3px;
@@ -275,7 +285,6 @@
               position: relative;
               width:80px;
               padding:8px 10px;
-              @include border-1px(#e3e3e3,bottom);
               color:#333;
               font-size:14px;
             }
@@ -285,9 +294,11 @@
     }
     .message{
       flex:1;
-      font-size:24px;
       color:#fff;
       text-align:center;
+      .iconfont{
+        font-size:26px;
+      }
     }
     .close{
       flex:1;
@@ -358,6 +369,24 @@
     top:50%;
     left:50%;
     transform:translate(-50%, -50%);
+  }
+
+  .scale-enter-active {
+    animation: strech 0.2s;
+  }
+  .scale-leave-active {
+    animation: strech 0.2s reverse;
+  }
+  @keyframes strech {
+    0% {
+      height: 0px;
+    }
+    50% {
+      height: 61px;
+    }
+    100% {
+      height:122px;
+    }
   }
 }
 </style>

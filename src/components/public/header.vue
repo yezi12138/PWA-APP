@@ -1,6 +1,6 @@
 <template>
   <div class="navTop border-scaleY">
-    <div class="back-icon" v-show="backIcon" @click='goback'><Icon type="ios-arrow-back"></Icon></div>
+    <div class="back-icon" v-show="backIcon" @click='goback'><i class="iconfont icon-xiangzuojiantou"></i></div>
     <div class="title">{{title}}</div>
     <div class="icon-group">
       <slot></slot>
@@ -28,7 +28,7 @@
   }
 </script>
 
-<style lang='scss'>
+<style lang="scss" scoped>
   .navTop{
     position: fixed;
     z-index:999;

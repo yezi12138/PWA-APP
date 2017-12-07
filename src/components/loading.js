@@ -98,7 +98,6 @@ var loading = function (canvas) {
                   })
                 } else {
                   that.hide()
-                  return
                 }
               }
             })

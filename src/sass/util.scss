@@ -1,33 +1,52 @@
-@mixin border-1px($color,$pos){
+
+.border-bottom {
+	position: relative;
 	&:after{
 		display:block;
 		position: absolute;
-		border-#{$pos}:1px solid $color;
+		bottom:0;
+		left:0;
+		width:100%;
+		border-bottom:1px solid #ccc;
 		content:'';
-		z-index:999;
-		@if $pos == 'top' {
-			top:0;
-			left:0;
-			width:100%;
-		}
-		@else if $pos == 'bottom' {
-			bottom:0;
-			left:0;
-			width:100%;
-		}
-		@else if $pos == 'left' {
-			bottom:0;
-			left:0;
-			height:100%;
-		}
-		@else if $pos == 'right' {
-			bottom:0;
-			right:0;
-			height:100%;
-		}
 	}
 }
 
+.border-top {
+	&:after{
+		display:block;
+		position: absolute;
+		top:0;
+		left:0;
+		width:100%;
+		border-top:1px solid #ccc;
+		content:'';
+	}
+}
+
+.border-left {
+	&:after{
+		display:block;
+		position: absolute;
+		bottom:0;
+		left:0;
+		height:100%;
+		border-left:1px solid #ccc;
+		content:'';
+	}
+}
+
+.border-right {
+	&:after{
+		display:block;
+		position: absolute;
+		bottom:0;
+		right:0;
+		height:100%;
+		border-right:1px solid #ccc;
+		content:'';
+	}
+}
 
 @media screen and  (-webkit-min-device-pixel-ratio: 1.5),(min-device-pixel-ratio: 1.5){
 	.border-scaleY{

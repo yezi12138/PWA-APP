@@ -12,9 +12,9 @@
       <div class="article-detail">
         <div class="introduction" v-show='detailContent.introduction'><span>‘‘</span>{{detailContent.introduction}}<span>’’</span></div>
         <ul>
-          <li v-for='(item, $index) in detailContent.pArray'>
+          <li v-for="(item, index) in detailContent.pArray" :key="index">
             <p>{{item}}</p>
-            <img v-if='($index % 2 === 0) && detailContent.imgs[$index]' :src="detailContent.imgs[$index]" alt="">
+            <img v-if='(index % 2 === 0) && detailContent.imgs[index]' :src="detailContent.imgs[index]" alt="">
           </li>
         </ul>
       </div>
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-  import xheader from '../public/header'
+  import xheader from 'components/public/header'
   export default{
     components: {
       xheader
@@ -36,21 +36,27 @@
     },
     methods: {
       initData () {
-        this.data = this.$route.query.articledata
+        this.data = JSON.parse(this.$route.query.articledata)
         this.detailContent = this.data.detailContent
         console.log(this.data)
       },
       back () {
         this.$router.go(-1)
+      },
+      toTop () {
+        var top = document.documentElement.scrollTop || document.body.scrollTop
+        console.log(top)
+        top !== 0 && window.scrollTo(0, 0)
       }
     },
     activated () {
+      this.toTop()
       this.initData()
     }
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .article{
     .article-content{
       margin-top:50px;

@@ -1,4 +1,5 @@
-# douban
+
+# vue 示例项目 · 仿豆瓣（正在升级版本）
 
 > A Vue.js project
 
