@@ -43,55 +43,32 @@
     "eslint-plugin-standard": "^3.0.1",
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.16.2",
-<<<<<<< HEAD
-=======
     "express-session": "^1.15.6",
->>>>>>> master
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^1.1.4",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^2.30.1",
     "http-proxy-middleware": "^0.17.4",
-<<<<<<< HEAD
-    "jest": "^21.2.0",
-    "jest-serializer-vue": "^0.3.0",
-    "mongoose": "^4.13.6",
-    "node-notifier": "^5.1.2",
-    "opn": "^5.1.0",
-=======
     "mongoose": "^4.13.6",
     "node-notifier": "^5.1.2",
     "node-sass": "^4.7.2",
->>>>>>> master
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.2.0",
     "portfinder": "^1.0.13",
     "postcss-import": "^11.0.0",
     "postcss-loader": "^2.0.8",
-<<<<<<< HEAD
-    "rimraf": "^2.6.0",
-=======
     "qs": "^6.5.1",
     "rimraf": "^2.6.0",
     "sass-loader": "^6.0.6",
->>>>>>> master
     "semver": "^5.3.0",
     "shelljs": "^0.7.6",
     "uglifyjs-webpack-plugin": "^1.1.1",
     "url-loader": "^0.5.8",
-<<<<<<< HEAD
-    "vue-jest": "^1.0.2",
-=======
->>>>>>> master
     "vue-loader": "^13.3.0",
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.5.2",
     "webpack": "^3.6.0",
     "webpack-bundle-analyzer": "^2.9.0",
-<<<<<<< HEAD
-    "webpack-dev-middleware": "^1.12.2",
-=======
->>>>>>> master
     "webpack-dev-server": "^2.9.1",
     "webpack-hot-middleware": "^2.21.0",
     "webpack-merge": "^4.1.0"

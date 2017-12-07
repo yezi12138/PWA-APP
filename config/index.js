@@ -7,11 +7,7 @@ const proxyTable = require('./proxy.js')
 
 module.exports = {
   dev: {
-<<<<<<< HEAD
-
-=======
     env: require('./dev.env'),
->>>>>>> master
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
@@ -31,11 +27,7 @@ module.exports = {
     useEslint: true,
     // If true, eslint errors and warnings will also be shown in the error overlay
     // in the browser.
-<<<<<<< HEAD
-    showEslintErrorsInOverlay: false,
-=======
     showEslintErrorsInOverlay: true,
->>>>>>> master
 
     /**
      * Source Maps
