@@ -5,10 +5,10 @@ var superagent = require('superagent')
 var fs = require('fs')
 
 var app = express()
-
+var saveUrl = 'E:\\douban\\data.json'
 
 app.get('/', function (req, res, next) {
-  getReadingContent(res);
+  getReadingContent(res)
   // getHotNews(res)
 })
 
@@ -51,7 +51,7 @@ function getReadingContent (res) {
     bookData.push(book3)
     bookData.push(reviews)
     res.send(JSON.stringify(bookData))
-    writeFile('C:\\Users\\Administrator\\Desktop\\data.json', JSON.stringify(bookData))
+    writeFile(saveUrl, JSON.stringify(bookData))
   })
   function getBookList (className,$) {
     var itemsData = {}
@@ -94,7 +94,8 @@ function getReadingContent (res) {
       var introduction = $(this).find('h3 a ').text().replace(/[\r\n]|[(^\s*)|(\s*$)]/g, "")
       var user = $(this).find('.review-meta a:first-child').text().replace(/[\r\n]|[(^\s*)|(\s*$)]/g, "")
       var bookName = $(this).find('.review-meta a:nth-child(2)').text().replace(/[\r\n]|[(^\s*)|(\s*$)]/g, "")
-      var content = $(this).find('.review-content').text().replace(/[\r\n]|[(^\s*)|(\s*$)]/g, "").split('全')[0]
+			var content = $(this).find('.review-content').text().replace(/[\r\n]|[(^\s*)|(\s*$)]/g, "").split('全')[0]
+			var 
       book = {
         images,
         introduction,
@@ -114,7 +115,7 @@ async function getHotNews (res) {
   var $ = cheerio.load(html)
   var article = await getArticle($)
   res.send(article)
-  writeFile('C:\\Users\\Administrator\\Desktop\\node爬虫\\data.json', JSON.stringify(article))
+  writeFile(saveUrl, JSON.stringify(article))
 }
 async function getArticle ($) {
   console.log('正在爬Article部分')

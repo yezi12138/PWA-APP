@@ -115,7 +115,6 @@
       width: 100%;
       overflow: hidden;
       white-space: nowrap;
-      height:173px;
       .list-item{
         display:inline-block;
         margin-left:15px;

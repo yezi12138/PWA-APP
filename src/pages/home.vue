@@ -36,7 +36,8 @@
         <common-card :title="newBooks.title">
           <scrollX :isTitle="false" :itemData="newBooks.subjects" :isMore="true" />
         </common-card>
-        <common-card :title="popularComments.title"> 
+        <common-card :title="popularComments.title">
+          <book-comment-card :itemData="popularComments.subjects" />
         </common-card>
         <common-card :title="popularBooks.title">
         </common-card>
@@ -54,6 +55,7 @@
   import CommonCard from 'components/public/common-card'
   import ScrollX from 'components/public/scrollX'
   import ScrollPanel from 'components/public/scroll-panel'
+  import BookCommentCard from 'components/book-comment-card'
   // import NavBottom from 'components/navBottom'
   // import req from 'api/home'
   export default{
@@ -63,7 +65,8 @@
       Swiper,
       CommonCard,
       ScrollX,
-      ScrollPanel
+      ScrollPanel,
+      BookCommentCard
       // NavBottom
     },
     data () {
