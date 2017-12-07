@@ -4,9 +4,9 @@
       <div class="title">{{title}}</div>
       <div class="more" v-show='isMore' @click="getMore">更多</div>
     </div>
-    <div class="scrollX-content" ref="content">
-      <ul ref="list">
-        <li class="list-item" v-for="(item, index) in data" :key="index" @click='routerTo(item)'>
+    <div class="scrollX-content">
+      <scroll-panel :scrollX="true" :loaded="loaded" ref="panel">
+        <div class="list-item" v-for="(item, index) in itemData" :key="index" @click='routerTo(item)'>
           <img :src="item.images.medium" alt="">
           <div v-if="type === 'default'">
             <div class="name">{{item.title}}</div>
@@ -23,8 +23,8 @@
             <div class="name">{{item.title}}</div>
             <div class="money">{{item.price}}元</div>
           </div>
-        </li>
-      </ul>
+        </div>
+      </scroll-panel>
     </div>   
   </div>
 </template>
@@ -40,10 +40,15 @@
  * @emit  getMore  点击更多按钮的函数
  */
   import star from '../star/star'
-  import BScroll from 'better-scroll'
+  import ScrollPanel from 'components/public/scroll-panel'
   export default{
+    data () {
+      return {
+        loaded: false
+      }
+    },
     props: {
-      data: {
+      itemData: {
         type: Array,
         default: function () {
           return []
@@ -67,33 +72,17 @@
       }
     },
     components: {
-      star
+      star,
+      ScrollPanel
     },
     watch: {
-      'data' (val) {
-        val.length !== 0 && this.setScroll()
+      'itemData' (val) {
+        val.length !== 0 && (this.loaded = true)
       }
     },
     methods: {
       routerTo (data) {
         this.$router.push({name: 'movieDetail', query: {moviedata: data}})
-      },
-      setScroll () {
-        var width = 85
-        var margin = 15
-        var totalWidth = (width + margin) * (this.data.length)
-        totalWidth += margin
-        this.$refs.list.style.width = totalWidth + 'px'
-        if (!this.scroll) {
-          this.scroll = new BScroll(this.$refs.content, {
-            click: true,
-            scrollX: true,
-            eventPassthrough: 'vertical'
-          })
-        } else {
-          this.scroll.refresh()
-        }
-        this.$emit('refreshDom')
       },
       getMore () {
         this.$emit('more')
