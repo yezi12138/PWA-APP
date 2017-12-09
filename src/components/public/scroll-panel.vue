@@ -11,27 +11,42 @@
  * 滑动面板
  * @prop  [Boolean]  scrollX  水平滑动
  * @prop  [Boolean]  scrollY  垂直滑动
+ * @prop  [Boolean]  loaded   加载完成得标志
  */
   import BScroll from 'better-scroll'
+  import { getStyle } from 'utils/index.js'
   export default {
     name: 'ScrollPanel',
     data () {
       return {
-        nodes: null
+        nodes: null           // 保存slot得节点
       }
     },
     props: {
+      // 水平滑动
       scrollX: {
         type: Boolean,
         default: false
       },
+      // 垂直滑动
       scrollY: {
         type: Boolean,
         default: true
       },
+      // 数据加载完毕标志
       loaded: {
         type: Boolean,
         default: false
+      },
+      // 开启slider
+      snap: {
+        type: Boolean,
+        default: false
+      },
+      // 触发slide的距离
+      snapThreshold: {
+        type: Number,
+        default: 0.1
       }
     },
     watch: {
@@ -61,7 +76,9 @@
           this.scroll = new BScroll(this.$refs.content, {
             click: true,
             scrollX: this.scrollX,
-            eventPassthrough: this.scrollX
+            eventPassthrough: this.scrollX,
+            snap: this.snap,
+            snapThreshold: 0.1
           })
         } else {
           this.scroll.refresh()
@@ -72,13 +89,9 @@
       getTotalWidth () {
         var totalWidth = 0
         var margin = 0
-        var padding = 0
-        var border = 0
         this.nodes.forEach(item => {
-          margin = this.dealMPB(this.getStyle(item, 'margin'))
-          padding = this.dealMPB(this.getStyle(item, 'padding'))
-          border = this.dealMPB(this.getStyle(item, 'border'), true)
-          totalWidth += item.offsetWidth + margin + padding + border
+          margin = this.dealMPB(getStyle(item, 'margin'))
+          totalWidth += item.offsetWidth + margin
         })
         return totalWidth
       },
@@ -99,10 +112,6 @@
           return parseInt(arr[0]) * 2
         }
         return setting[arr.length]
-      },
-      // 获取样式
-      getStyle (el, obj) {
-        return (el.currentStyle ? el.currentStyle[obj] : window.getComputedStyle(el, null)[obj])
       },
       // 获取节点
       getNodes () {

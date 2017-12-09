@@ -1,7 +1,10 @@
 <template>
   <div class="wrap">
-    <scroll-panel :scrollX="true" :loaded="loaded">
-      <div class="book" @touchmove="showMask" v-for="(item, index) in itemData" :key="index">
+    <scroll-panel
+      :scrollX="true"
+      :loaded="loaded"
+      :snap="true" >
+      <div class="book" v-for="(item, index) in itemData" :key="index">
         <div class="book-comment">
           <img :src="item.images" class="book-img" />
           <div class="book-info">
@@ -13,7 +16,6 @@
             </div>
             <div class="preview double-text-overflow">{{item.content}}</div>
           </div>
-          <div class="mask" v-show="isMask"></div>
         </div>
       </div>
     </scroll-panel>
@@ -38,8 +40,7 @@
     },
     data () {
       return {
-        loaded: false,
-        isMask: false
+        loaded: false
       }
     },
     watch: {
@@ -48,13 +49,6 @@
       }
     },
     methods: {
-      showMask () {
-        this.isMask = true
-      },
-      hideMask () {
-        console.log('aa')
-        this.hideMask = false
-      }
     }
   }
 </script>
@@ -95,19 +89,6 @@
         .introduction{
           font-weight: bold;
         }
-      }
-      .mask{
-        position: absolute;
-        left: -120px;
-        top: -120px;
-        bottom: -120px;
-        right: -120px;
-        z-index: 999;
-        border-radius: 8px;
-        margin: 10px;
-        padding: 10px;
-        background: #475458;
-        opacity: 0.6;
       }
     }
   }

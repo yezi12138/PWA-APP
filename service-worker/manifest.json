@@ -1,0 +1,8 @@
+{
+  "name": "douban app for study",
+  "short_name": "douban PWA",
+  "display": "standalone",
+  "start_url": "/",
+  "theme_color": "#8888ff",
+  "background_color": "#aaaaff"
+}
