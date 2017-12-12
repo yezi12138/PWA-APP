@@ -95,6 +95,10 @@
         })
         return totalWidth
       },
+      // 获取高度
+      getHeight () {
+        //
+      },
       // 处理margin padding border
       // todo: 暂不支持设置border-left的判断等
       dealMPB (str, isBorder) {

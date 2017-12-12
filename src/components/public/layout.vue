@@ -1,9 +1,20 @@
 <template>
-  <div class="navTop border-bottom border-scaleY">
-    <div class="back-icon" v-show="backIcon" @click='goback'><i class="iconfont icon-xiangzuojiantou"></i></div>
-    <div class="title">{{title}}</div>
-    <div class="icon-group">
-      <slot></slot>
+  <div class="wrap">
+
+    <!-- 头部导航 -->
+    <div class="navTop border-bottom border-scaleY">
+      <div class="back-icon" v-show="backIcon" @click='goback'><i class="iconfont icon-xiangzuojiantou"></i></div>
+      <div class="title">{{title}}</div>
+      <div class="icon-group">
+        <slot name="header"></slot>
+      </div>
+    </div>
+
+    <!-- 主体内容 -->
+    <div class="home" ref="content">
+      <scroll-panel :loaded="true">
+        <slot name="body"></slot>
+      </scroll-panel>
     </div>
   </div>
 </template>
@@ -13,9 +24,12 @@
  * @prop  [String]  title  标题
  * @prop  [Boolean]  backIcon  是否显示后退图标
  * @prop  [Function]  beforeGoBack  后退前的操作
- * @prop  [Boolean]  showHeader  是否显示头部导航
  */
+  import XHeader from 'components/public/header'
+  import ScrollPanel from 'components/public/scroll-panel'
+  // import NavBottom from 'components/navBottom'
   export default{
+    name: 'Home',
     props: {
       title: {
         type: String,
@@ -27,10 +41,15 @@
       },
       beforeGoBack: {
         type: Function
-      },
-      showHeader: {
-        type: Boolean,
-        default: true
+      }
+    },
+    components: {
+      XHeader,
+      ScrollPanel
+      // NavBottom
+    },
+    data () {
+      return {
       }
     },
     methods: {
@@ -51,6 +70,10 @@
 </script>
 
 <style lang="scss" scoped>
+  .wrap{
+    height: 100%;
+  }
+  /* 头部导航样式 */
   .navTop{
     position: fixed;
     z-index:999;
@@ -98,5 +121,10 @@
       background: rgba(255,255,255,.8);
       -webkit-backdrop-filter: brightness(1.5) blur(4px);
     }
+  }
+  /*  主体样式  */
+  .home{
+    height: calc(100% - 50px);
+    margin-top: 50px;
   }
 </style>

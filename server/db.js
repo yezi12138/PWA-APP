@@ -18,8 +18,7 @@ const loginSchema = new mongoose.Schema({
   username: String,
   password: String,
   avatar: String,
-  createTime: Date,
-  introduction: String
+  createTime: Date
 })
 
 /**

@@ -1,13 +1,12 @@
 
 .border-bottom {
-	position: relative;
-	&:after{
+	&::after{
 		display:block;
 		position: absolute;
 		bottom:0;
 		left:0;
 		width:100%;
-		border-bottom:1px solid #ccc;
+		border-bottom:1px solid #fbd7d7;
 		content:'';
 	}
 }

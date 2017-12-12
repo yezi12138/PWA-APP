@@ -4,10 +4,13 @@ const express = require('express')
 const router = express.Router()
 var bookData = require('../data.json')
 
-router.get('/', (req, res, next) => {
-  console.log('server start')
-  next()
-})
+const error = (res, code, message) => {
+  res
+  .status(500)
+  .send({
+    error: message
+  })
+}
 
 /**
  * 注册验证
@@ -18,25 +21,24 @@ router.post('/auth/register', (req, res) => {
     username: req.body.username,
     password: req.body.password,
     avatar: '',
-    createTime: date,
-    introduction: req.body.introduction
+    createTime: date
   })
   // 判断账号是否存在了
   User.find({username: newAccount.username}, (err, data) => {
     if (err) {
-      res.send(false)
+      error(res, 500, err)
     } else {
       // 如果不存在则注册账号
       if (data.length === 0) {
         newAccount.save((err, data) => {
           if (err) {
-            res.send(false)
+            error(res, 500, '注册失败')
           } else {
-            res.end(true)
+            res.send(true)
           }
         })
       } else {
-        res.end(false)
+        error(res, 500, '账号已经存在')
       }
     }
   })
@@ -52,16 +54,16 @@ router.post('/auth/login', (req, res) => {
   })
   User.find({username: newAccount.username, password: newAccount.password}, (err, data) => {
     if (err) {
-      console.log(false)
+      error(res, 500, err)
     } else {
       if (data.length === 0) {
-        res.send(false)
+        error(res, 500, 'No message available')
       } else {
-        var User = {
+        res.json({
           name: data[0].username,
-          avatar: data[0].avatar
-        }
-        res.send(User)
+          avatar: data[0].avatar,
+          createTime: data[0].createTime
+        })
       }
     }
   })
