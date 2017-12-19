@@ -28,21 +28,21 @@ const api = require('./api.js')
 app.use(api)
 
 // proxy api requests
-// var proxyTable = {
-//   '/api': {
-//     target: 'https://api.douban.com',
-//     changeOrigin: true,
-//     pathRewrite: {
-//       '/api': '/'
-//     }
-//   }
-// }
-// Object.keys(proxyTable).forEach(function (context) {
-//   var options = proxyTable[context]
-//   if (typeof options === 'string') {
-//     options = { target: options }
-//   }
-//   app.use(proxyMiddleware(options.filter || context, options))
-// })
+var proxyTable = {
+  '/api': {
+    target: 'https://api.douban.com',
+    changeOrigin: true,
+    pathRewrite: {
+      '/api': '/'
+    }
+  }
+}
+Object.keys(proxyTable).forEach(function (context) {
+  var options = proxyTable[context]
+  if (typeof options === 'string') {
+    options = { target: options }
+  }
+  app.use(proxyMiddleware(options.filter || context, options))
+})
 
 app.listen(9000)

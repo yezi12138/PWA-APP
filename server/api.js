@@ -2,11 +2,13 @@
 const User = require('./db')
 const express = require('express')
 const router = express.Router()
+const generateToken = require('./auth').generateToken
+const decodeToken = require('./auth').decodeToken
 var bookData = require('../data.json')
 
 const error = (res, code, message) => {
   res
-  .status(500)
+  .status(code)
   .send({
     error: message
   })
@@ -59,6 +61,29 @@ router.post('/auth/login', (req, res) => {
       if (data.length === 0) {
         error(res, 500, 'No message available')
       } else {
+        let token = generateToken(data[0])
+        res.json({
+          token: token
+        })
+      }
+    }
+  })
+})
+
+/**
+ * 获取用户信息
+ */
+router.get('/userInfo', (req, res) => {
+  let newAccount = new User({
+    username: req.body.username
+  })
+  User.find({username: newAccount.username}, (err, data) => {
+    if (err) {
+      error(res, 500, err)
+    } else {
+      if (data.length === 0) {
+        error(res, 500, 'No this user')
+      } else {
         res.json({
           name: data[0].username,
           avatar: data[0].avatar,
@@ -70,17 +95,30 @@ router.post('/auth/login', (req, res) => {
 })
 
 /**
- * 获取登录信息
- * 允许自动登录则返回账号
- * 不允许则返回登陆状态码 2
+ * 验证token
  */
-router.get('/auth', (req, res) => {
-  let token = {
-    account: req.session.User,
-    loginCode: req.session.loginCode
-  }
+router.get('/auth/token', (req, res) => {
+  let token = req.query.token
   if (token) {
-    res.send(token)
+    let result = decodeToken(token)
+    if (result) {
+      User.find({_id: result}, (err, data) => {
+        if (err) {
+          error(res, 500, err)
+        } else {
+          if (data.length === 0) {
+            console.log('No this user', 'come from /auth/token')
+            res.send(false)
+          } else {
+            res.send(true)
+          }
+        }
+      })
+    } else {
+      res.send(false)
+    }
+  } else {
+    res.send(false)
   }
 })
 

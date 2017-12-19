@@ -16,6 +16,7 @@
 <script>
   import Layout from 'components/public/layout'
   import { Indicator, Toast } from 'mint-ui'
+  import { setToken } from 'utils/auth'
   export default {
     name: 'Login',
     components: {
@@ -40,13 +41,17 @@
         this.$http.post('/auth/login', params)
         .then((res) => {
           console.log(res)
-          this.user = res.data
           Indicator.close()
           Toast({
             message: '登录成功',
             position: 'top',
             duration: 1000
           })
+          // 添加cookies
+          setToken(res.data.token)
+          // 跳转之前得页面
+          let path = this.$route.query.url
+          this.$router.push({ path: path })
         })
         .catch(res => {
           Indicator.close()

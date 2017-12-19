@@ -1,10 +1,10 @@
 import Cookies from 'js-cookie'
+import axios from 'axios'
 
 /**
  * 获取token
  */
 export function getToken () {
-  console.log('Token', Cookies.get('Token'))
   return Cookies.get('Token')
 }
 
@@ -24,15 +24,24 @@ export function removeToken () {
 
 /**
  * 检查是否存在token
+ * todo: 分组路由，指定路由才需要验证
  */
 export function checkAuth (to, from, next) {
+  let token = getToken()
   if (to.name) document.title = to.name
-  console.log(to.path, to.path === '/register')
   if (to.path !== '/login') {
     if (to.path === '/register') {
       next()
-    } else if (getToken()) {
-      next()
+    } else if (token) {
+      // 验证token
+      axios.get('/auth/token', {
+        params: {
+          token
+        }
+      })
+      .then(res => {
+        res.data ? next() : next({path: `/login?url=${to.path}`})
+      })
     } else {
       next({path: `/login?url=${to.path}`})
     }

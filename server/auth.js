@@ -2,15 +2,39 @@ var express = require('express')
 var jwt = require('jwt-simple')
 var moment = require('moment')
 var app = express()
-app.set('jwtTokenSecret', 'doubanjwt')
+app.set('jwtTokenSecret', 'doubanjwtbyyezi')
 
 var expires = moment().add('days', 7).valueOf()
 
 // 产生token
 exports.generateToken = function (user) {
-  console.log('user', user)
   return jwt.encode({
-    iss: user.id,
+    iss: user._id,
     exp: expires
   }, app.get('jwtTokenSecret'))
+}
+
+/**
+ * 解析token
+ * @param {*} token
+ * @return decoded.iss 返回用户id
+ */
+exports.decodeToken = function (token) {
+  try {
+    let decoded = jwt.decode(token, app.get('jwtTokenSecret'))
+    if (decoded) {
+      if (decoded.exp <= Date.now()) {
+        return false
+      }
+      if (decoded.iss) {
+        return decoded.iss
+      } else {
+        return false
+      }
+    } else {
+      return false
+    }
+  } catch (err) {
+    return false
+  }
 }
