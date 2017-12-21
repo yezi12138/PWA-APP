@@ -1,6 +1,6 @@
 <template>
 	<div class="search">
-		<div class="search-header">
+		<div class="search-header" :class="{'no-opacity': showSearchPage}">
       <div class="search-input">
         <div class="input-left">
           <i class="iconfont icon-search" v-show="!showSearchPage"></i>
@@ -215,6 +215,9 @@
       justify-content:center;
       background-color:rgba(128, 187, 82, 0.7);
       padding:6px 0px 6px 12px;
+      &.no-opacity{
+        background-color:rgb(128, 187, 82);
+      }
       .search-input{
         flex:6;
         display:flex;
