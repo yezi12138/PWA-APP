@@ -1,27 +1,21 @@
 <template>
-  <layout title="登录">
-    <div class="panel" slot="body">
-      <div class="form">
-        <mt-field label="用户名" placeholder="请输入用户名" v-model="formData.username"></mt-field>
-        <mt-field label="密码" placeholder="请密码" v-model="formData.password"></mt-field>
-      </div>
-      <div class="btn-group">
-        <mt-button class="login-btn" @click="login" type="primary" size="large">登录</mt-button>
-        <mt-button type="default" @click="routerTo" size="large">注册</mt-button>
-      </div>
+  <div class="panel" slot="body">
+    <div class="form">
+      <mt-field label="用户名" placeholder="请输入用户名" v-model="formData.username"></mt-field>
+      <mt-field label="密码" placeholder="请密码" v-model="formData.password"></mt-field>
     </div>
-  </layout>
+    <div class="btn-group">
+      <mt-button class="login-btn" @click="login" type="primary" size="large">登录</mt-button>
+      <mt-button type="default" @click="routerTo" size="large">注册</mt-button>
+    </div>
+  </div>
 </template>
 
 <script>
-  import Layout from 'components/public/layout'
   import { Indicator, Toast } from 'mint-ui'
   import { setToken } from 'utils/auth'
   export default {
     name: 'Login',
-    components: {
-      Layout
-    },
     data () {
       return {
         formData: {
@@ -65,10 +59,6 @@
       routerTo () {
         this.$router.push({ path: '/register' })
       }
-    },
-
-    created () {
-
     }
   }
 </script>
@@ -76,6 +66,7 @@
 <style lang="scss" scoped>
   .panel{
     padding: 0px 15px;
+    padding-top: 50px;
     .form{
       box-sizing: border-box;
       padding-top: 40px;

@@ -1,6 +1,5 @@
 <template>
   <div class="article">
-    <xheader :backIcon='true' @back='back' :title="'详情'"></xheader>
     <div class="article-content">
       <div class="article-header">{{data.title}}</div>
       <div class="user-info-wrap">
@@ -23,11 +22,7 @@
 </template>
 
 <script>
-  import xheader from 'components/public/header'
   export default{
-    components: {
-      xheader
-    },
     data () {
       return {
         data: {},
@@ -38,14 +33,12 @@
       initData () {
         this.data = JSON.parse(this.$route.query.articledata)
         this.detailContent = this.data.detailContent
-        console.log(this.data)
       },
       back () {
         this.$router.go(-1)
       },
       toTop () {
         var top = document.documentElement.scrollTop || document.body.scrollTop
-        console.log(top)
         top !== 0 && window.scrollTo(0, 0)
       }
     },
@@ -58,6 +51,7 @@
 
 <style lang="scss" scoped>
   .article{
+    height: 100%;
     .article-content{
       margin-top:50px;
       padding:10px 25px;

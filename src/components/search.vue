@@ -204,11 +204,15 @@
 
 <style lang="scss" scoped>
   .search{
-    position:relative;
+    position: relative;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
     .search-header{
       position: relative;
       z-index:1003;
-      height:40px;
+      height:38px;
       display:flex;
       flex-direction:row;
       align-items:center;
@@ -312,7 +316,7 @@
   }
   .search-content{
     position: fixed;
-    top:52px;
+    top:50px;
     left:0;
     right:0;
     bottom:0;

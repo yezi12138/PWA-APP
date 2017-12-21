@@ -1,50 +1,50 @@
 <template>
-	<div class="wrap">
-    <search></search>
-    <div class="home" ref="content">
-      <scroll-panel :loaded="true">
-        <div class="banner">
-          <swiper :height="'120px'" :indicatorType="2">
-            <div class="swiper-item">
-              <img src="../../static/images/banner1.jpg" alt="">
+	<div class="home-wrap">
+    <div class="home">
+      <div class="banner">
+        <swiper :height="'120px'" :indicatorType="2">
+          <div class="swiper-item">
+            <img src="../../static/images/banner1.jpg" alt="">
+          </div>
+          <div class="swiper-item">
+            <img src="../../static/images/banner2.jpg" alt="">
+          </div>
+          <div class="swiper-item">
+            <img src="../../static/images/banner3.jpg" alt="">
+          </div>
+          <div class="swiper-item">
+            <img src="../../static/images/banner4.jpg" alt="">
+          </div>
+        </swiper>
+      </div>
+      <common-card :title="topSelect.title">
+        <ul>
+          <li
+            class="border-bottom border-scaleY"
+            v-for='(item, index) in topSelect.subjects'
+            :key="index" @click='routerTo(item)'>
+            <div class="item-left">
+              <div class="title">{{item.title}}</div>
+              <div class="preview">{{item.review}}</div>
+              <div class="username border-scaleY">作者： {{item.userName}}</div>
             </div>
-            <div class="swiper-item">
-              <img src="../../static/images/banner2.jpg" alt="">
+            <div class="item-right">
+              <img :src="item.detailContent.imgs[0]" alt="img">
             </div>
-            <div class="swiper-item">
-              <img src="../../static/images/banner3.jpg" alt="">
-            </div>
-            <div class="swiper-item">
-              <img src="../../static/images/banner4.jpg" alt="">
-            </div>
-          </swiper>
-        </div>
-        <common-card :title="topSelect.title">
-          <ul>
-            <li class="border-bottom border-scaleY" v-for='(item, index) in topSelect.subjects' :key="index" @click='routerTo(item)'>
-              <div class="item-left">
-                <div class="title">{{item.title}}</div>
-                <div class="preview">{{item.review}}</div>
-                <div class="username border-scaleY">作者： {{item.userName}}</div>
-              </div>
-              <div class="item-right">
-                <img :src="item.detailContent.imgs[0]" alt="img">
-              </div>
-            </li>
-          </ul>
-        </common-card>
-        <common-card :title="newBooks.title">
-          <scrollX :isTitle="false" :itemData="newBooks.subjects" :isMore="true" />
-        </common-card>
-        <common-card :title="popularComments.title">
-          <book-comment-card :itemData="popularComments.subjects" />
-        </common-card>
-        <common-card :title="popularBooks.title">
-        </common-card>
-        <common-card :title="ebooks.title">
-        </common-card>
-        <!-- <navbottom></navbottom> -->
-      </scroll-panel>
+          </li>
+        </ul>
+      </common-card>
+      <common-card :title="newBooks.title">
+        <scrollX :isTitle="false" :itemData="newBooks.subjects" :isMore="true" />
+      </common-card>
+      <common-card :title="popularComments.title">
+        <book-comment-card :itemData="popularComments.subjects" />
+      </common-card>
+      <common-card :title="popularBooks.title">
+      </common-card>
+      <common-card :title="ebooks.title">
+      </common-card>
+      <!-- <navbottom></navbottom> -->
     </div>
   </div>
 </template>
@@ -105,11 +105,10 @@
 </script>
 
 <style lang="scss" scoped>
-  .wrap{
+  .home-wrap{
     height: 100%;
     .home{
       position: relative;
-      height: 100%;
       .ariticle-content{
         width:100%;
         font-size:0;

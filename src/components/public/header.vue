@@ -10,17 +10,12 @@
 
 <script>
 /**
- * @prop  [String]  title  标题
  * @prop  [Boolean]  backIcon  是否显示后退图标
  * @prop  [Function]  beforeGoBack  后退前的操作
  * @prop  [Boolean]  showHeader  是否显示头部导航
  */
   export default{
     props: {
-      title: {
-        type: String,
-        default: '标题'
-      },
       backIcon: {
         type: Boolean,
         default: true
@@ -31,6 +26,16 @@
       showHeader: {
         type: Boolean,
         default: true
+      }
+    },
+    watch: {
+      '$route.path' () {
+        this.setTitle()
+      }
+    },
+    data () {
+      return {
+        title: ''
       }
     },
     methods: {
@@ -45,7 +50,27 @@
         } else {
           this.$router.go(-1)
         }
+      },
+      setTitle () {
+        let map = this.$router.options.routes[0].children
+        let thisRoute = this.$route
+        if (thisRoute.path === '/articleDetail') {
+          let articledata = JSON.parse(this.$route.query.articledata)
+          this.title = articledata.title
+          return
+        }
+        if (map.length) {
+          for (let route of map) {
+            if (route.name === thisRoute.name) {
+              this.title = route.title
+              break
+            }
+          }
+        }
       }
+    },
+    activated () {
+      this.setTitle()
     }
   }
 </script>
