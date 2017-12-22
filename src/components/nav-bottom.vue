@@ -1,17 +1,17 @@
 <template>
 	<transition name='slideDown'>
-   <div class="nav-bottom border-scaleY" v-show='isNavBottomShow'>
+   <div class="nav-bottom border-top border-scaleY">
     <router-link to="/home">
-      <Icon type="ios-home" v-if="currentRouter==='home'" /><Icon class="base-color" type="ios-home-outline"v-else /><span :class="{'active':currentRouter==='home'}">首页</span>
+      <i class="iconfont icon-home" :class="{'active':currentRouter==='home'}" /><span :class="{'active':currentRouter==='home'}">首页</span>
     </router-link>
     <router-link to="/book">
-      <Icon type="ios-book" v-if="currentRouter==='book'" /><Icon class="base-color" type="ios-book-outline" v-else /><span :class="{'active':currentRouter==='book'}">书影音</span>
+      <i class="iconfont icon-book1" :class="{'active':currentRouter==='book'}" /><span :class="{'active':currentRouter==='book'}">书影音</span>
     </router-link>
     <router-link to="/broadcast">
-      <Icon type="ios-chatboxes" v-if="currentRouter==='broadcast'" /><Icon class="base-color" type="ios-chatboxes-outline" v-else /><span :class="{'active':currentRouter==='broadcast'}">评论</span>
+      <i class="iconfont icon-commet" :class="{'active':currentRouter==='broadcast'}" /><span :class="{'active':currentRouter==='broadcast'}">评论</span>
     </router-link>
     <router-link to="/mine">
-      <Icon type="ios-person" v-if="currentRouter==='mine'" /><Icon class="base-color" type="ios-person-outline" v-else /><span :class="{'active':currentRouter==='mine'}">我的</span>
+      <i class="iconfont icon-setting" :class="{'active':currentRouter==='mine'}" /><span :class="{'active':currentRouter==='mine'}">我的</span>
     </router-link>
   </div> 
 </transition>
@@ -26,9 +26,6 @@
           path = 'home'
         }
         return path
-      },
-      isNavBottomShow () {
-        return this.$store.state.isNavBottomShow
       }
     }
   }
@@ -36,7 +33,6 @@
 
 
 <style lang="scss" scoped>
-  @import '../sass/util.scss';
   .nav-bottom{
     position:fixed;
     display:flex;
@@ -44,9 +40,8 @@
     bottom:0;
     left:0;
     right:0;
-    padding:6px 0 0 0;
-    z-index:300;
-    @include border-1px(#999,top);
+    padding:3px 0 5px 0;
+    z-index:999;
     background-color:#fff;
     transform:translate(0, 0);
     a{
@@ -54,11 +49,13 @@
      flex-direction:column;
      flex:1;
      color:#999;
-     font-size:14px;
+     font-size:12px;
      text-align:center;
+     align-items: center;
+     text-decoration: none;
      i{
-      font-size:32px;
-      color:green;
+      font-size:24px;
+      color:#ccc;
     }
     .base-color{
       font-size:32px;

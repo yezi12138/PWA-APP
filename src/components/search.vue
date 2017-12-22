@@ -196,7 +196,7 @@
         this.showSelectItem = false
       },
       routerTo (data) {
-        this.$router.push({path: '/movieDetail', query: {moviedata: data}})
+        this.$router.push({path: '/movieDetail', query: {moviedata: JSON.stringify(data)}})
       }
     }
   }
@@ -204,7 +204,7 @@
 
 <style lang="scss" scoped>
   .search{
-    position: relative;
+    position: fixed;
     z-index: 9999;
     top: 0;
     left: 0;

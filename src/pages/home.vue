@@ -44,7 +44,6 @@
       </common-card>
       <common-card :title="ebooks.title">
       </common-card>
-      <!-- <navbottom></navbottom> -->
     </div>
   </div>
 </template>
@@ -56,8 +55,6 @@
   import ScrollX from 'components/public/scrollX'
   import ScrollPanel from 'components/public/scroll-panel'
   import BookCommentCard from 'components/book-comment-card'
-  // import NavBottom from 'components/navBottom'
-  // import req from 'api/home'
   export default{
     name: 'Home',
     components: {
@@ -67,7 +64,6 @@
       ScrollX,
       ScrollPanel,
       BookCommentCard
-      // NavBottom
     },
     data () {
       return {

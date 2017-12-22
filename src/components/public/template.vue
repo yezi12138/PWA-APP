@@ -1,13 +1,16 @@
 <template>
-  <div class="wrap">
+  <div class="wrap" ref="wrap">
     <keep-alive>
-      <component :is="currentView" />
+      <component ref="header" :is="currentView" />
     </keep-alive>
-    <scroll-panel :loaded="true">
-      <keep-alive>
-        <router-view/>
-      </keep-alive>
-    </scroll-panel>
+    <div class="content" :style="{height: setContentHeight}">
+      <scroll-panel :loaded="true">
+        <keep-alive>
+          <router-view/>
+        </keep-alive>
+      </scroll-panel>
+    </div>
+    <nav-bottom ref="bottom" v-if="isBottom" />
   </div>
 </template>
 
@@ -17,36 +20,45 @@
  */
   import ScrollPanel from 'components/public/scroll-panel'
   import XHeader from 'components/public/header'
+  import NavBottom from 'components/nav-bottom'
   import Search from 'components/search'
+  import { searchRoutes, bottomRoutes } from 'utils/setting'
   export default{
     name: 'Template',
     components: {
       ScrollPanel,
       Search,
-      XHeader
+      XHeader,
+      NavBottom
     },
     watch: {
       '$route.path' () {
-        this.setHeaderComponent()
+        this.setComponent()
       }
     },
     data () {
       return {
-        currentView: 'Search'
+        currentView: 'Search',
+        isBottom: false
+      }
+    },
+    computed: {
+      setContentHeight () {
+        let bottomHeight = this.isBottom ? 44 : 0
+        return `calc(100% - 50px - ${bottomHeight}px)`
       }
     },
     methods: {
-      setHeaderComponent () {
-        let path = this.$route.path
-        if (path === '/home') {
-          this.currentView = 'Search'
-        } else {
-          this.currentView = 'XHeader'
-        }
+      setComponent () {
+        let currentPath = this.$route.path
+        let isSearch = false
+        isSearch = searchRoutes.some(path => currentPath === path)
+        this.isBottom = bottomRoutes.some(path => currentPath === path)
+        isSearch ? (this.currentView = 'Search') : (this.currentView = 'XHeader')
       }
     },
     activated () {
-      this.setHeaderComponent()
+      this.setComponent()
     }
   }
 </script>
@@ -55,5 +67,8 @@
   .wrap{
     position: relative;
     height: 100%;
+    .content{
+      margin-top: 50px;
+    }
   }
 </style>

@@ -54,8 +54,8 @@
       setTitle () {
         let map = this.$router.options.routes[0].children
         let thisRoute = this.$route
-        if (thisRoute.path === '/articleDetail') {
-          let articledata = JSON.parse(this.$route.query.articledata)
+        if (thisRoute.path === '/articleDetail' || thisRoute.path === '/movieDetail') {
+          let articledata = JSON.parse(this.$route.query.articledata || this.$route.query.moviedata)
           this.title = articledata.title
           return
         }
@@ -97,6 +97,14 @@
       font-size:24px;
       color:#333;
       text-align:center;
+      .iconfont{
+        vertical-align: middle;
+      }
+      &:after{
+        content: '';
+        height: 100%;
+        vertical-align: middle;
+      }
     }
     .title{
       text-align:center;

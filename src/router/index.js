@@ -5,6 +5,7 @@ import Template from 'components/public/template'
 import Login from 'pages/login'
 import Register from 'pages/register'
 import ArticleDetail from 'pages/article-detail'
+import MovieDetail from 'components/movie-detail/movie-detail'
 import { checkAuth } from '../utils/auth'
 
 Vue.use(Router)
@@ -26,6 +27,11 @@ const router = new Router({
           path: '/articleDetail',
           name: 'articleDetail',
           component: ArticleDetail
+        },
+        {
+          path: '/movieDetail',
+          name: 'movieDetail',
+          component: MovieDetail
         },
         {
           path: '/login',

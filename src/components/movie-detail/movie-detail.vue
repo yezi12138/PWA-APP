@@ -1,7 +1,6 @@
 <template>
   <transition name='slide'>
     <div class="movie-detail">
-      <xheader :backIcon='true' @back='back'></xheader>
       <div class="bg-img">
         <img :src="images.large" alt="">
       </div>
@@ -10,7 +9,7 @@
           <div class="movie-name">{{data.title}}</div>
           <div class="other-info">
             <div>
-              {{data.year}}<span v-for='kind in data.genres'> / {{kind}}</span>
+              {{data.year}}<span v-for='(kind, index) in data.genres' :key="index"> / {{kind}}</span>
             </div>
             <div>原名: {{data.original_title}}</div>
             上映时间: {{data.year}}-07-07 <br>
@@ -28,15 +27,15 @@
           <div class="count">{{data.collect_count}}人</div>
         </div>
       </div>
-      <div class="buy-ticket border-scaleY">
-        <span><Icon type="pricetags" style='margin-right:6px'></Icon>选座购票</span>
-        <span>￥28元起<Icon type="ios-arrow-forward" style='color:#d27f6f;margin-left:7px'></Icon></span>
+      <div class="buy-ticket border-bottom border-scaleY">
+        <span>选座购票</span>
+        <span>￥28元起</span>
       </div>
       <div class="synopsis">
         <div class="title">剧情介绍</div>
         <p ref='synopsis'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. In deserunt minus voluptatem, deleniti, ipsum quod rerum vel id quisquam officia saepe esse tempora provident dolore aut dolorem, nobis placeat? Adipisci?Lorem ipsum dolor sit amet, consectetur adipisicing elit. In deserunt minus voluptatem, deleniti, ipsum quod rerum vel id quisquam officia saepe esse tempora provident dolore aut dolorem, nobis placeat? Adipisci?Lorem ipsum dolor sit amet, consectetur adipisicing elit. In deserunt minus voluptatem, deleniti, ipsum quod rerum vel id quisquam officia saepe esse tempora provident dolore aut dolorem, nobis placeat? Adipisci?Lorem ipsum dolor sit amet, consectetur adipisicing elit. In deserunt minus voluptatem, deleniti, ipsum quod rerum vel id quisquam officia saepe esse tempora provident dolore aut dolorem, nobis placeat? Adipisci?</p>
         <div class="unfold" @click='unfoldSynopsis' v-show='! synopsisIsUnfold'>
-          <Icon type="chevron-down"></Icon>
+          <i class="iconfont icon-xiangxiajiantou"></i>
         </div>
         <div class="glass" v-show='!synopsisIsUnfold'></div>
       </div>
@@ -44,8 +43,8 @@
         <div class="title">影人</div>
         <div class="actors" ref='actors'>
           <ul ref='actorList'>
-            <li class="actor-info" v-for='item in casts'>
-              <img v-if='item.avatars' :src="item.avatars.medium" :alt="item.alt">
+            <li class="actor-info" v-for='item in casts' :key="item.name">
+              <img v-if='item.avatars' :src="item.avatars.medium" :alt="item.name">
               <span class="name">{{item.name}}</span>
               <span class="position">actor</span>
             </li>
@@ -67,8 +66,6 @@
 
 <script>
   import star from '../star/star'
-  import BScroll from 'better-scroll'
-  import xheader from '../public/header'
   export default{
     data () {
       return {
@@ -82,15 +79,14 @@
       }
     },
     components: {
-      star,
-      xheader
+      star
     },
     methods: {
       unfoldSynopsis () {
         var synopsis = this.$refs.synopsis
         if (!this.synopsisIsUnfold) {
           synopsis.style.display = 'block'
-          synopsis.style.overflow = 'auto'
+          synopsis.style.overflow = 'hidden'
           this.synopsisIsUnfold = true
         } else {
           synopsis.style.display = '-webkit-box'
@@ -98,26 +94,8 @@
           this.synopsisIsUnfold = false
         }
       },
-      back () {
-        this.unfoldSynopsis()
-        this.$router.go(-1)
-      },
-      setACtorScroll () {
-        // 设置影人列表滚动
-        var actorWidth = 149 * this.casts.length
-        this.$refs.actorList.style.width = actorWidth + 'px'
-        if (!this.actorScroll) {
-          this.actorScroll = new BScroll(this.$refs.actors, {
-            click: true,
-            scrollX: true,
-            eventPassthrough: 'vertical'
-          })
-        } else {
-          this.actorScroll.refresh()
-        }
-      },
       initData () {
-        this.data = this.$route.query.moviedata
+        this.data = JSON.parse(this.$route.query.moviedata)
         this.images = this.data.images
         this.rating = this.data.rating
         this.casts = this.data.casts
@@ -140,36 +118,26 @@
             that.fixed = true
           } else if (that.fixed && document.body.scrollTop >= that.oldOffset) {
             // 固定且大于header的top高度的话就跳过下面动作
-            return
           } else if (that.fixed && document.body.scrollTop >= that.oldOffset) {
             // 大于headerTop的值且已经固定的话，不做任何操作
-            return
           } else if (that.fixed && document.body.scrollTop < that.oldOffset) {
             // 小于headerTop的值且已经固定的话，重置header的位置
             div.style.position = 'relative'
             div.style.top = '0'
             that.fixed = false
-          } else {
-            return
           }
         }
       }
     },
-    computed: {
-      detailPageClose () {
-        return this.$store.state.detailPageClose
-      }
-    },
     activated () {
       this.initData()
-      this.setACtorScroll()
       this.fixCommentHeader()
+      this.unfoldSynopsis()
     }
   }
 </script>
 
-<style lang="scss">
-  @import '../../sass/util.scss';
+<style lang="scss" scoped>
   .movie-detail{
     width:100%;
     overflow:hidden;
@@ -178,9 +146,6 @@
     .navTop{
       background-color:#444041;
       .title{
-        color:#fff;
-      }
-      .back-icon{
         color:#fff;
       }
     }
@@ -203,11 +168,13 @@
           font-size:18px;
           color:#464445;
           font-weight:600;
+          margin-bottom: 10px;
         }
         .other-info{
           color:#b2aeaf;
           font-size:12px;
           letter-spacing:1px;
+          line-height: 14px;
         }
       }
       .douban-score{
@@ -248,10 +215,10 @@
           border-radius:5px;
         }
         .want{
-          width:38%;
+          width:35%;
         }
         .seen{
-          width:58%;
+          width:60%;
           margin-left:10px;
           float:right;
         }
@@ -263,7 +230,6 @@
       justify-content:space-between;
       padding:15px 0;
       margin:0 18px;
-      @include border-1px(#dcdadb,bottom);
       span:first-child{
         color:#464445;
         font-size:14px;
