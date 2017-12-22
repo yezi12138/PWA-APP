@@ -1,7 +1,7 @@
 <template>
   <div class="navTop border-bottom border-scaleY">
     <div class="back-icon" v-show="backIcon" @click='goback'><i class="iconfont icon-xiangzuojiantou"></i></div>
-    <div class="title">{{title}}</div>
+    <div class="title">{{title || '标题'}}</div>
     <div class="icon-group">
       <slot></slot>
     </div>
@@ -26,16 +26,10 @@
       showHeader: {
         type: Boolean,
         default: true
-      }
-    },
-    watch: {
-      '$route.path' () {
-        this.setTitle()
-      }
-    },
-    data () {
-      return {
-        title: ''
+      },
+      title: {
+        type: String,
+        default: '标题'
       }
     },
     methods: {
@@ -50,27 +44,7 @@
         } else {
           this.$router.go(-1)
         }
-      },
-      setTitle () {
-        let map = this.$router.options.routes[0].children
-        let thisRoute = this.$route
-        if (thisRoute.path === '/articleDetail' || thisRoute.path === '/movieDetail') {
-          let articledata = JSON.parse(this.$route.query.articledata || this.$route.query.moviedata)
-          this.title = articledata.title
-          return
-        }
-        if (map.length) {
-          for (let route of map) {
-            if (route.name === thisRoute.name) {
-              this.title = route.title
-              break
-            }
-          }
-        }
       }
-    },
-    activated () {
-      this.setTitle()
     }
   }
 </script>
@@ -119,8 +93,10 @@
       top:50%;
       transform:translate(0, -50%);
       right:20px;
-      font-size:24px;
       color:green;
+      i{
+        font-size:24px;
+      }
       i+i{
         margin-left:20px;
       }

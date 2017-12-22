@@ -1,7 +1,8 @@
 <template>
   <div class="wrap" ref="wrap">
     <keep-alive>
-      <component ref="header" :is="currentView" />
+      <x-header v-if="currentView === 'XHeader'"></x-header>
+      <Search v-else />
     </keep-alive>
     <div class="content" :style="{height: setContentHeight}">
       <scroll-panel :loaded="true">

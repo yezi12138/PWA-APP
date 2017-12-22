@@ -1,6 +1,6 @@
 <template>
-  <div class="article">
-    <div class="article-content">
+  <layout :header="true" :title="data.title">
+    <div slot="body" class="article-content">
       <div class="article-header">{{data.title}}</div>
       <div class="user-info-wrap">
         <div class="user-info">
@@ -18,16 +18,20 @@
         </ul>
       </div>
     </div>
-  </div>
+  </layout>
 </template>
 
 <script>
+  import Layout from 'components/public/layout'
   export default{
     data () {
       return {
         data: {},
         detailContent: {}
       }
+    },
+    components: {
+      Layout
     },
     methods: {
       initData () {
@@ -50,51 +54,48 @@
 </script>
 
 <style lang="scss" scoped>
-  .article{
-    height: 100%;
-    .article-content{
-      margin-top:50px;
-      padding:10px 25px;
-      .article-header{
-        font-size:24px;
-        color:#333;
-        font-weight:600;
-      }
-      .user-info-wrap{
-        margin:10px 0 40px;
-        .user-info{
-          display:table-cell;
-          vertical-align:middle;
-          .avatar{
-            display:inline-block;
-            width:35px;
-            height:35px;
-            border-radius:50%;
-            margin-right:10px;
-            vertical-align:middle;
-          }
-          .user-name{
-            font-size:14px;
-            color:#999;
-            vertical-align:middle;
-          }
-        }
-      }
-      .article-detail{
-        font-size:16px;
-        overflow:hidden;
-        .introduction{
-          color:#9b9b9b;
-          margin:10px auto;
-          span{
-            font-size:32px;
-          }
-        }
-        img{
-          margin:8px 0;
-          width:100%;
-        }
-      }  
+  .article-content{
+    margin-top:50px;
+    padding:10px 25px;
+    .article-header{
+      font-size:24px;
+      color:#333;
+      font-weight:600;
     }
+    .user-info-wrap{
+      margin:10px 0 40px;
+      .user-info{
+        display:table-cell;
+        vertical-align:middle;
+        .avatar{
+          display:inline-block;
+          width:35px;
+          height:35px;
+          border-radius:50%;
+          margin-right:10px;
+          vertical-align:middle;
+        }
+        .user-name{
+          font-size:14px;
+          color:#999;
+          vertical-align:middle;
+        }
+      }
+    }
+    .article-detail{
+      font-size:16px;
+      overflow:hidden;
+      .introduction{
+        color:#9b9b9b;
+        margin:10px auto;
+        span{
+          font-size:32px;
+        }
+      }
+      img{
+        margin:8px 0;
+        width:100%;
+      }
+    }  
   }
 </style>

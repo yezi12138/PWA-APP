@@ -1,71 +1,74 @@
 <template>
   <transition name='slide'>
-    <div class="movie-detail">
-      <div class="bg-img">
-        <img :src="images.large" alt="">
-      </div>
-      <div class="movie-info">
-        <div class="description">
-          <div class="movie-name">{{data.title}}</div>
-          <div class="other-info">
-            <div>
-              {{data.year}}<span v-for='(kind, index) in data.genres' :key="index"> / {{kind}}</span>
+    <layout :header="true" :title="data.title">
+      <div slot="body" class="movie-detail">
+        <div class="bg-img">
+          <img :src="images.large" alt="">
+        </div>
+        <div class="movie-info">
+          <div class="description">
+            <div class="movie-name">{{data.title}}</div>
+            <div class="other-info">
+              <div>
+                {{data.year}}<span v-for='(kind, index) in data.genres' :key="index"> / {{kind}}</span>
+              </div>
+              <div>原名: {{data.original_title}}</div>
+              上映时间: {{data.year}}-07-07 <br>
+              片长: 90分钟
             </div>
-            <div>原名: {{data.original_title}}</div>
-            上映时间: {{data.year}}-07-07 <br>
-            片长: 90分钟
+          </div>
+          <div class="option">
+            <div class="option-common want">想看</div>
+            <div class="option-common seen">看过</div>
+          </div>
+          <div class="douban-score">
+            <div class="score-title">豆瓣评分</div>
+            <div class="score">{{rating.average || 0}}</div>
+            <star :size='12' :score='(rating.average / 2) || 0'></star>
+            <div class="count">{{data.collect_count}}人</div>
           </div>
         </div>
-        <div class="option">
-          <div class="option-common want">想看</div>
-          <div class="option-common seen">看过</div>
+        <div class="buy-ticket border-bottom border-scaleY">
+          <span>选座购票</span>
+          <span>￥28元起</span>
         </div>
-        <div class="douban-score">
-          <div class="score-title">豆瓣评分</div>
-          <div class="score">{{rating.average || 0}}</div>
-          <star :size='12' :score='(rating.average / 2) || 0'></star>
-          <div class="count">{{data.collect_count}}人</div>
+        <div class="synopsis">
+          <div class="title">剧情介绍</div>
+          <p ref='synopsis'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. In deserunt minus voluptatem, deleniti, ipsum quod rerum vel id quisquam officia saepe esse tempora provident dolore aut dolorem, nobis placeat? Adipisci?Lorem ipsum dolor sit amet, consectetur adipisicing elit. In deserunt minus voluptatem, deleniti, ipsum quod rerum vel id quisquam officia saepe esse tempora provident dolore aut dolorem, nobis placeat? Adipisci?Lorem ipsum dolor sit amet, consectetur adipisicing elit. In deserunt minus voluptatem, deleniti, ipsum quod rerum vel id quisquam officia saepe esse tempora provident dolore aut dolorem, nobis placeat? Adipisci?Lorem ipsum dolor sit amet, consectetur adipisicing elit. In deserunt minus voluptatem, deleniti, ipsum quod rerum vel id quisquam officia saepe esse tempora provident dolore aut dolorem, nobis placeat? Adipisci?</p>
+          <div class="unfold" @click='unfoldSynopsis' v-show='! synopsisIsUnfold'>
+            <i class="iconfont icon-xiangxiajiantou"></i>
+          </div>
+          <div class="glass" v-show='!synopsisIsUnfold'></div>
+        </div>
+        <div class="player">
+          <div class="title">影人</div>
+          <div class="actors" ref='actors'>
+            <ul ref='actorList'>
+              <li class="actor-info" v-for='item in casts' :key="item.name">
+                <img v-if='item.avatars' :src="item.avatars.medium" :alt="item.name">
+                <span class="name">{{item.name}}</span>
+                <span class="position">actor</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="comment">
+          <div class="comment-header" ref='commentHeader'>
+            <router-link to='/movie-detail/comment'>评论</router-link>
+            <router-link to='/movie-detail/discuss'>讨论区</router-link>
+          </div>
+          <keep-alive>
+            <router-view></router-view>
+          </keep-alive>
         </div>
       </div>
-      <div class="buy-ticket border-bottom border-scaleY">
-        <span>选座购票</span>
-        <span>￥28元起</span>
-      </div>
-      <div class="synopsis">
-        <div class="title">剧情介绍</div>
-        <p ref='synopsis'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. In deserunt minus voluptatem, deleniti, ipsum quod rerum vel id quisquam officia saepe esse tempora provident dolore aut dolorem, nobis placeat? Adipisci?Lorem ipsum dolor sit amet, consectetur adipisicing elit. In deserunt minus voluptatem, deleniti, ipsum quod rerum vel id quisquam officia saepe esse tempora provident dolore aut dolorem, nobis placeat? Adipisci?Lorem ipsum dolor sit amet, consectetur adipisicing elit. In deserunt minus voluptatem, deleniti, ipsum quod rerum vel id quisquam officia saepe esse tempora provident dolore aut dolorem, nobis placeat? Adipisci?Lorem ipsum dolor sit amet, consectetur adipisicing elit. In deserunt minus voluptatem, deleniti, ipsum quod rerum vel id quisquam officia saepe esse tempora provident dolore aut dolorem, nobis placeat? Adipisci?</p>
-        <div class="unfold" @click='unfoldSynopsis' v-show='! synopsisIsUnfold'>
-          <i class="iconfont icon-xiangxiajiantou"></i>
-        </div>
-        <div class="glass" v-show='!synopsisIsUnfold'></div>
-      </div>
-      <div class="player">
-        <div class="title">影人</div>
-        <div class="actors" ref='actors'>
-          <ul ref='actorList'>
-            <li class="actor-info" v-for='item in casts' :key="item.name">
-              <img v-if='item.avatars' :src="item.avatars.medium" :alt="item.name">
-              <span class="name">{{item.name}}</span>
-              <span class="position">actor</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="comment">
-        <div class="comment-header" ref='commentHeader'>
-          <router-link to='/movie-detail/comment'>评论</router-link>
-          <router-link to='/movie-detail/discuss'>讨论区</router-link>
-        </div>
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
-      </div>
-    </div>
+    </layout>
   </transition>
 </template>
 
 <script>
-  import star from '../star/star'
+  import Layout from 'components/public/layout'
+  import star from 'components/star/star'
   export default{
     data () {
       return {
@@ -79,6 +82,7 @@
       }
     },
     components: {
+      Layout,
       star
     },
     methods: {
@@ -142,7 +146,6 @@
     width:100%;
     overflow:hidden;
     background-color:#f9f5f6;
-    transform:translate(0, 0);
     .navTop{
       background-color:#444041;
       .title{
