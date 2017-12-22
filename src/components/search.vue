@@ -37,7 +37,7 @@
     <div class="search-content" v-show='showSearchPage' ref='searchContent'>
       <div ref='scrollview' v-show='!showLaoding'>
         <div class="books" v-show='books.length !== 0'>
-          <div class="search-item-header">图书</div>
+          <div class="search-item-header" @click="collapse">图书</div>
           <ul class="search-item-content">
             <li class="search-item" v-for="(item, index) in books" :key="index">
               <img :src="item.image" alt="" class="item-pic">
@@ -48,7 +48,7 @@
           </ul>
         </div>
         <div class="music" v-show='musics.length !== 0'>
-          <div class="search-item-header">音乐</div>
+          <div class="search-item-header" @click="collapse">音乐</div>
           <ul class="search-item-content">
             <li class="search-item" v-for="(item, index) in musics" :key="index">
               <img :src="item.image" alt="" class="item-pic">
@@ -59,7 +59,7 @@
           </ul>
         </div>
         <div class="movies" v-show='movies.length !== 0'>
-          <div class="search-item-header">电影</div>
+          <div class="search-item-header" @click="collapse">电影</div>
           <ul class="search-item-content">
             <li class="search-item" v-for="(item, index) in movies" :key="index" @click='routerTo(item)'>
               <img v-if='item.images' :src="item.images.small" alt="" class="item-pic">
@@ -79,6 +79,7 @@
   import Loading from './loading.js'
   import BScroll from 'better-scroll'
   import req from 'api/douban'
+  import { toggleClass } from 'utils/dom'
   export default{
     name: 'Search',
     data () {
@@ -105,6 +106,11 @@
       },
       toggleSelect () {
         this.showSelectItem = !this.showSelectItem
+      },
+      collapse (e) {
+        let content = e.currentTarget.parentNode.querySelector('.search-item-content')
+        toggleClass(e.currentTarget, 'collpase')
+        toggleClass(content, 'collpase')
       },
       doSearch () {
         var value = this.searchValue
@@ -138,11 +144,20 @@
             Promise.all(promiseArr)
             .then(values => {
               keyArr.forEach((itemKey, index) => {
-                console.log(itemKey)
                 let key = setting[itemKey].key
                 this[key] = values[index][key] || values[index].subjects
-                console.log(this[key])
               })
+              this.hideLoading()
+              this.refreshScroll()
+            })
+            .catch((res) => {
+              this.hideLoading()
+            })
+          } else {
+            let type = setting[select]
+            req(type.url, params)
+            .then(res => {
+              this[type.key] = res[type.key] || res.subjects
               this.hideLoading()
               this.refreshScroll()
             })
@@ -333,14 +348,18 @@
         &:before{
           content:'';
           display:block;
-          border-left:8px solid #d51d54;
+          border-left:6px solid transparent;
           border-right:6px solid transparent;
-          border-top:6px solid transparent;
+          border-top:8px solid #d51d54;
           border-bottom:6px solid transparent;
           position: absolute;
           left:10px;
-          top:50%;
+          top:60%;
           transform:translate(0, -50%);
+          transition: all 0.2s;
+        }
+        &.collpase:before{
+          transform: translate(40%, -70%) rotate(-90deg);
         }
       }
       .search-item-content{
@@ -348,12 +367,15 @@
         display:flex;
         flex-direction:column;
         justify-content:center;
-        padding: 10px 10px;
+        overflow: hidden;
+        &.collpase{
+          max-height: 0;
+        }
         .search-item{
           display:flex;
           flex-direction:row;
           justify-content:center;
-          margin-bottom:15px;
+          margin:15px 10px;
           .item-pic{
             flex: 0 0 50px;
             margin-right:15px;
