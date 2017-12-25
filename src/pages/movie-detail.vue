@@ -206,7 +206,7 @@
       .option{
         width:100%;
         font-size:0;
-        margin-top:30px;
+        margin-top:50px;
         .option-common{
           display:inline-block;
           height:37px;

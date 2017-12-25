@@ -82,7 +82,7 @@
     },
     methods: {
       routerTo (data) {
-        this.$router.push({name: 'movieDetail', query: {moviedata: data}})
+        this.$router.push({name: 'movieDetail', query: {moviedata: JSON.stringify(data)}})
       },
       getMore () {
         this.$emit('more')
