@@ -8,7 +8,8 @@
     "dev": "node build/dev-server.js",
     "server": "node server/index.js",
     "lint": "eslint --ext .js,.vue src",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "cheerio": "node server/cheerio/index.js"
   },
   "dependencies": {
     "axios": "^0.17.1",

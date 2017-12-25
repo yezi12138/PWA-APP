@@ -1,14 +1,14 @@
 <template>
   <div class="movies" ref='movies'>
     <div class="scroll-view" ref='scrollview'>
-      <scrollx :itemsData='hotMovies' :title="'正在热映'" @refreshDom='refreshScroll'></scrollx>
-      <scrollx :itemsData='comingMovies' :title="'即将上映'" @refreshDom='refreshScroll' :type="'want'"></scrollx>
+      <ScrollX :itemData='hotMovies' :title="'正在热映'"></ScrollX>
+      <ScrollX :itemData='comingMovies' :title="'即将上映'" :type="'want'"></ScrollX>
       <div class="billboard">
         <div class="billboard-header">
           <div class="title">精选榜单</div>
         </div>
-        <div class="billboard-content" ref="billboard">
-          <ul ref='billboardList'>
+        <div class="billboard-content">
+          <scroll-panel :scrollX="true" :loaded="setBillboard">
             <li class="billboard-item">
               <div class="picture">
                 <img src="../../static/images/top250.jpg" alt="">
@@ -29,7 +29,7 @@
                 <img src="../../static/images/newmovies.jpg" alt="">
               </div>
             </li>
-          </ul>
+        </scroll-panel>
         </div>   
       </div>
       <div class="recommedMovies">
@@ -38,7 +38,7 @@
         </div>
         <div class="recommedMovies-content">
           <ul>
-            <li class="recommedMovies-item" v-for='item in recommedMovies' @click='routerTo(item)'>
+            <li class="recommedMovies-item" v-for='(item, index) in recommedMovies' :key="index" @click='routerTo(item)'>
               <img :src='item.images.medium' alt="">
               <div class="name">{{item.title}}</div>
               <div class="star-score">
@@ -54,81 +54,53 @@
 </template>
 
 <script>
-  import star from './star/star'
-  import scrollx from './public/scrollX'
-  import BScroll from 'better-scroll'
+  import ScrollPanel from 'components/public/scroll-panel'
+  import CommonCard from 'components/public/common-card'
+  import req from 'api/douban'
+  import star from 'components/star/star'
+  import ScrollX from 'components/public/scrollX'
   export default{
     components: {
       star,
-      scrollx
+      ScrollX,
+      CommonCard,
+      ScrollPanel
     },
     data () {
       return {
         hotMovies: [],
         comingMovies: [],
         recommedMovies: [],
-        comingMoviesUrl: '/api/v2/movie/coming_soon',
-        hotMoviesUrl: '/api/v2/movie/in_theaters'
+        setBillboard: false
       }
     },
-    mounted () {
-      this.setBillboard()
-      this.$nextTick(() => {
-        this.getComingMovies()
-        this.getHotMovies()
-        this.getRecommedMovies()
-      })
-    },
     methods: {
-      refreshScroll () {
-        // 更新竖直方向的滚动高度
-        var height = this.$refs.scrollview.offsetHeight
-        this.$refs.scrollview.style.height = height + 'px'
-        if (!this.moviesScroll) {
-          this.moviesScroll = new BScroll(this.$refs.movies, {
-            click: true,
-            scrollY: true
-          })
-          // 下滑隐藏底部导航
-          this.navBottomHide(this.moviesScroll)
-        } else {
-          this.moviesScroll.refresh()
-        }
-      },
       getRecommedMovies () {
         // 模拟推荐电影板块
         var tags = ['喜剧', '治愈', '悬疑', '科幻', '青春', '爱情', '动作', '文艺']
         var tag = tags[Math.floor(Math.random() * tags.length)]
-        this.$http.get(`/api/v2/movie/search?count=6&tag=${tag}`).then((res) => {
-          this.recommedMovies = res.data.subjects
-          this.refreshScroll()
+        let params = {
+          count: 6,
+          tag: tag
+        }
+        req('getRecommendMovies', params).then((res) => {
+          console.log(res)
+          this.recommedMovies = res.subjects
         })
       },
       getComingMovies () {
         // 设置即将上映板块滚动
-        this.$http.get('/api/v2/movie/coming_soon').then((res) => {
-          this.comingMovies = res.data.subjects
+        req('getComingMovies').then((res) => {
+          console.log(res)
+          this.comingMovies = res.subjects
         })
       },
       getHotMovies () {
         // 设置正在热映板块滚动
-        this.$http.get('/api/v2/movie/in_theaters').then((res) => {
-          this.hotMovies = res.data.subjects
+        req('getHotMovies').then((res) => {
+          console.log(res)
+          this.hotMovies = res.subjects
         })
-      },
-      setBillboard () {
-        // 设置榜单滚动
-        var billboardWidth = 170 * 4
-        this.$refs.billboardList.style.width = billboardWidth + 'px'
-        if (!this.billboardScroll) {
-          this.billboardScroll = new BScroll(this.$refs.billboard, {
-            click: true,
-            scrollX: true,
-            eventPassthrough: 'vertical'
-          })
-        } else {
-          this.billboardScroll.refresh()
-        }
       },
       routerTo (data) {
         this.$router.push({name: 'movieDetail', query: {moviedata: data}})
@@ -144,6 +116,13 @@
           }
         })
       }
+    },
+    activated () {
+      // this.setBillboard()
+      this.setBillboard = true
+      this.getComingMovies()
+      this.getHotMovies()
+      this.getRecommedMovies()
     }
   }
 </script>
@@ -153,8 +132,7 @@
     width: 100%;
     height:100%;
     .scroll-view{
-      position: relative;
-      padding-top:95px;
+      padding: 20px 0;
       .movie-conmmon{
         width: 100%;
         position: relative;
@@ -168,8 +146,7 @@
           width: 100%;
           display:flex;
           justify-content:space-between;
-          padding:25px 15px;
-          height:74px;
+          padding:15px 15px;
           .title{
             font-size:16px;
             color:#333;
@@ -231,7 +208,6 @@
           display:flex;
           justify-content:space-between;
           padding:25px 15px;
-          height:74px;
           .title{
             font-size:16px;
             color:#333;
@@ -244,21 +220,22 @@
           overflow: hidden;
           white-space: nowrap;
           font-size:0;
-          ul{
-            .billboard-item{
-              display:inline-block;
-              margin-left:15px;
-              margin-bottom:10px;
-              overflow:hidden;
-              width:154px;
-              height:155px;
-              .picture{
+          .billboard-item{
+            display:inline-block;
+            margin-left:15px;
+            margin-bottom:10px;
+            overflow:hidden;
+            width:154px;
+            height:155px;
+            &:last-child{
+              margin-right:15px;
+            }
+            .picture{
+              width:100%;
+              height:100%;
+              img{
                 width:100%;
                 height:100%;
-                img{
-                  width:100%;
-                  height:100%;
-                }
               }
             }
           }
@@ -274,7 +251,6 @@
           display:flex;
           justify-content:space-between;
           padding:25px 15px;
-          height:74px;
           .title{
             font-size:16px;
             color:#333;
@@ -284,8 +260,6 @@
         .recommedMovies-content{
           width: 100%;
           overflow: hidden;
-          height:392px;
-           // margin:0 15px;
            ul{
             display:flex;
             justify-content:space-around;

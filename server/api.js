@@ -1,10 +1,16 @@
 'use strict'
-const User = require('./db')
 const express = require('express')
 const router = express.Router()
 const generateToken = require('./auth').generateToken
 const decodeToken = require('./auth').decodeToken
 var bookData = require('../data.json')
+// 数据库定义
+const db = require('./db')
+const User = db.User
+const Hot = db.Hot
+const NewBook = db.NewBook
+const EBook = db.EBook
+const PopularBook = db.PopularBook
 
 const error = (res, code, message) => {
   res
@@ -156,16 +162,91 @@ router.post('/refreshInfo', (req, res) => {
 })
 
 /**
- * 返回book数据
+ * 返回今日精选内容
  */
-router.get('/bookdata', (req, res) => {
-  res.json({
-    data: bookData
+router.get('/hot', (req, res) => {
+  Hot.find({}, (err, data) => {
+    if (err) {
+      console.log(err)
+    } else {
+      if (data.length === 0) {
+        res.json({
+          msg: 'fail to find data'
+        })
+      } else {
+        res.json({
+          title: '今日精选',
+          subjects: data
+        })
+      }
+    }
   })
 })
 
-router.get('/home/data', (req, res) => {
-  res.json(bookData)
+/**
+ * 返回新书速递
+ */
+router.get('/new_book', (req, res) => {
+  NewBook.find({}, (err, data) => {
+    if (err) {
+      console.log(err)
+    } else {
+      if (data.length === 0) {
+        res.json({
+          msg: 'fail to find data'
+        })
+      } else {
+        res.json({
+          title: '新书速递',
+          subjects: data
+        })
+      }
+    }
+  })
+})
+
+/**
+ * 返回最受关注图书榜
+ */
+router.get('/popular_book', (req, res) => {
+  PopularBook.find({}, (err, data) => {
+    if (err) {
+      console.log(err)
+    } else {
+      if (data.length === 0) {
+        res.json({
+          msg: 'fail to find data'
+        })
+      } else {
+        res.json({
+          title: '最受关注图书榜',
+          subjects: data
+        })
+      }
+    }
+  })
+})
+
+/**
+ * 返回电子图书
+ */
+router.get('/e_book', (req, res) => {
+  EBook.find({}, (err, data) => {
+    if (err) {
+      console.log(err)
+    } else {
+      if (data.length === 0) {
+        res.json({
+          msg: 'fail to find data'
+        })
+      } else {
+        res.json({
+          title: '电子图书',
+          subjects: data
+        })
+      }
+    }
+  })
 })
 
 module.exports = router

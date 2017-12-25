@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from 'pages/home'
 import Book from 'pages/book'
-// import Movies from 'pages/movies'
+import Movies from 'pages/movies'
 import Login from 'pages/login'
 import Register from 'pages/register'
 import ArticleDetail from 'pages/article-detail'
@@ -26,7 +26,15 @@ const router = new Router({
     {
       path: '/book',
       name: 'book',
-      component: Book
+      component: Book,
+      redirect: '/book/movies',
+      children: [
+        {
+          path: '/book/movies',
+          name: 'movies',
+          component: Movies
+        }
+      ]
     },
     {
       path: '/articleDetail',

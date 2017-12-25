@@ -99,8 +99,7 @@
     .scrollX-header{
       display:flex;
       justify-content:space-between;
-      padding:0 15px;
-      height:74px;
+      padding:25px 15px;
       .title{
         font-size:16px;
         color:#333;
@@ -117,10 +116,12 @@
       white-space: nowrap;
       .list-item{
         display:inline-block;
-        margin-left:15px;
-        margin-bottom:10px;
+        margin:0 0 10px 15px;
         overflow:hidden;
         width:85px;
+        &:last-child{
+          margin-right: 15px;
+        }
         img{
           width:100%;
           height:110px;

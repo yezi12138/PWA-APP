@@ -1,6 +1,7 @@
-import fetch from '../utils/fetch'
+import fetchDouBan from '../utils/fetch-douban'
+import fetchHome from '../utils/fetch-home'
 
-export default function request (config, funcName, data, isToken = true) {
+export default function request (config, funcName, data, isToken = true, isdouban) {
   if (typeof config[funcName] !== 'object') {
     throw new Error('调用api函数函数错误，请检查函数名称是否错误')
   }
@@ -28,5 +29,9 @@ export default function request (config, funcName, data, isToken = true) {
   //   const Token = getToken()
   //   newConfig.headers = Object.assign({'ihrAdminAuthorization': Token}, newConfig.headers)
   // }
-  return fetch(newConfig)
+  if (isdouban) {
+    return fetchDouBan(newConfig)
+  } else {
+    return fetchHome(newConfig)
+  }
 }

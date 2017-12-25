@@ -14,11 +14,9 @@
       </ul>
     </div>
     <div class="book" slot="body">
-      <div class="content">
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
-      </div>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </div>
   </layout>
 </template>
@@ -50,6 +48,7 @@
     left: 0;
     right: 0;
     height: 85px;
+    z-index: 999;
     .header-nav{
       display:flex;
       justify-content:space-between;

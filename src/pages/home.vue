@@ -1,5 +1,5 @@
 <template>
-	<layout :search="true" :bottom="true" :loaded="!!popularComments">
+	<layout :search="true" :bottom="true" :loaded="count === 4">
     <div class="home" slot="body">
       <div class="banner">
         <swiper :height="'120px'" :indicatorType="2">
@@ -35,11 +35,11 @@
         </ul>
       </common-card>
       <common-card :title="newBooks.title">
-        <scrollX :isTitle="false" :itemData="newBooks.subjects" :isMore="true" />
+        <ScrollX :isTitle="false" :itemData="newBooks.subjects" :isMore="true" />
       </common-card>
-      <common-card :title="popularComments.title">
+      <!-- <common-card :title="popularComments.title">
         <book-comment-card :itemData="popularComments.subjects" />
-      </common-card>
+      </common-card> -->
       <common-card :title="popularBooks.title">
       </common-card>
       <common-card :title="ebooks.title">
@@ -54,6 +54,7 @@
   import CommonCard from 'components/public/common-card'
   import ScrollX from 'components/public/scrollX'
   import BookCommentCard from 'components/book-comment-card'
+  import req from 'api/home'
   export default{
     name: 'Home',
     components: {
@@ -69,27 +70,32 @@
         newBooks: {},
         popularBooks: {},
         ebooks: {},
-        popularComments: {}
+        popularComments: {},
+        count: 0
       }
     },
     methods: {
       getData () {
-        this.$http.get('/home/data')
-        .then(res => {
-          console.log(res.data)
-          this.formatData(res.data)
+        req('getHotData').then(res => {
+          this.count++
+          this.topSelect = res
+          this.topSelect.subjects = this.topSelect.subjects.slice(-2)
+        })
+        req('getNewBookData').then(res => {
+          this.count++
+          this.newBooks = res
+        })
+        req('getPopularBookData').then(res => {
+          this.count++
+          this.popularBooks = Response
+        })
+        req('getEBookData').then(res => {
+          this.count++
+          this.ebooks = res
         })
       },
       routerTo (data) {
         this.$router.push({path: '/articleDetail', query: {articledata: JSON.stringify(data)}})
-      },
-      formatData (res) {
-        this.topSelect = res[0] || {}
-        this.topSelect.subjects = this.topSelect.subjects.slice(-2)
-        this.newBooks = res[1] || {}
-        this.popularBooks = res[2] || {}
-        this.ebooks = res[3] || {}
-        this.popularComments = res[4] || {}
       }
     },
     activated () {
