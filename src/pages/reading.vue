@@ -1,16 +1,16 @@
 <template>
   <div class="reading" ref='reading'>
     <div class="scroll-view" ref='scrollview'>
-      <scrollx :itemsData='bookExpress.subjects' :title="bookExpress.title" @refreshDom='refreshScroll'></scrollx>
-      <scrollx :itemsData='popularBook.subjects' :title="popularBook.title" @refreshDom='refreshScroll'></scrollx>
-      <scrollx :itemsData='ebook.subjects' :title="ebook.title" @refreshDom='refreshScroll' :type="'money'"></scrollx>
+      <scrollx :itemData='bookExpress.subjects' :title="bookExpress.title"></scrollx>
+      <scrollx :itemData='popularBook.subjects' :title="popularBook.title"></scrollx>
+      <scrollx :itemData='ebook.subjects' :title="ebook.title" :type="'money'"></scrollx>
       <div class="reviews">
         <div class="reviews-header">
           <div class="title">{{reviews.title}}</div>
         </div>
         <div class="reviews-content" ref="reviewsContent">
           <ul>
-            <li class="review border-scaleY" v-for="item in reviews.subjects">
+            <li class="review border-bottom border-scaleY" v-for="(item, index) in reviews.subjects" :key="index">
               <img :src="item.images" alt="">
               <div class="review-content">
                 <div class="introduction">{{item.introduction}}</div>
@@ -28,8 +28,7 @@
 </template>
 
 <script>
-  import scrollx from './public/scrollX'
-  import BScroll from 'better-scroll'
+  import scrollx from 'components/public/scrollX'
   export default{
     data () {
       return {
@@ -46,7 +45,6 @@
     },
     mounted () {
       this.$http.get('/bookdata').then((res) => {
-        console.log(res.data)
         this.bookExpress = res.data.data[0]
         this.popularBook = res.data.data[1]
         this.ebook = res.data.data[2]
@@ -54,46 +52,17 @@
       })
     },
     methods: {
-      refreshScroll () {
-        // 更新竖直方向的滚动高度
-        var height = this.$refs.scrollview.offsetHeight
-        this.$refs.scrollview.style.height = height + 'px'
-        if (!this.readingScroll) {
-          this.readingScroll = new BScroll(this.$refs.reading, {
-            click: true,
-            scrollY: true
-          })
-          // 下滑隐藏底部导航
-          this.navBottomHide(this.readingScroll)
-        } else {
-          this.readingScroll.refresh()
-        }
-        // var dom = this.readingScroll
-        // this.navBottomHide(dom)
-      },
-      navBottomHide (dom) {
-        dom.on('scrollEnd', (pos) => {
-          if (pos.y >= -50) {
-            this.oldPosY = 0
-            this.$store.commit('showNavBottom')
-          } else if (pos.y < 0) {
-            console.log('上滑')
-            this.$store.commit('hideNavBottom')
-          }
-        })
-      }
     }
   }
 </script>
 
-<style lang='scss'>
-  @import '../sass/util.scss';
+<style lang="scss" scoped>
   .reading{
     width: 100%;
     height:100%;
     .scroll-view{
       position: relative;
-      padding-top:95px;
+      padding-top: 95px;
       .reviews{
         width: 100%;
         position: relative;
@@ -118,7 +87,6 @@
           margin-bottom:30px;
           padding-bottom:10px;
           overflow: hidden;
-          @include border-1px(#eaeaea, bottom);
           img{
             flex: 0 0 99px;
             width:99px;

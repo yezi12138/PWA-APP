@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from 'pages/home'
 import Book from 'pages/book'
 import Movies from 'pages/movies'
+import Reading from 'pages/reading'
 import Login from 'pages/login'
 import Register from 'pages/register'
 import ArticleDetail from 'pages/article-detail'
@@ -33,6 +34,11 @@ const router = new Router({
           path: '/book/movies',
           name: 'movies',
           component: Movies
+        },
+        {
+          path: '/book/reading',
+          name: 'reading',
+          component: Reading
         }
       ]
     },

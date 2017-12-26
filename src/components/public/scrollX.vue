@@ -82,7 +82,7 @@
     },
     methods: {
       routerTo (data) {
-        this.$router.push({name: 'movieDetail', query: {moviedata: JSON.stringify(data)}})
+        this.$emit('clickTo', data)
       },
       getMore () {
         this.$emit('more')
@@ -112,6 +112,7 @@
     }
     .scrollX-content{
       width: 100%;
+      min-height: 142px;
       overflow: hidden;
       white-space: nowrap;
       .list-item{

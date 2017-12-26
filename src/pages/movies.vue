@@ -1,8 +1,8 @@
 <template>
   <div class="movies" ref='movies'>
     <div class="scroll-view" ref='scrollview'>
-      <ScrollX :itemData='hotMovies' :title="'正在热映'"></ScrollX>
-      <ScrollX :itemData='comingMovies' :title="'即将上映'" :type="'want'"></ScrollX>
+      <ScrollX :itemData='hotMovies' :title="'正在热映'" @clickTo="clickTo"></ScrollX>
+      <ScrollX :itemData='comingMovies' :title="'即将上映'" :type="'want'" @clickTo="clickTo"></ScrollX>
       <div class="billboard">
         <div class="billboard-header">
           <div class="title">精选榜单</div>
@@ -75,6 +75,9 @@
       }
     },
     methods: {
+      clickTo (data) {
+        this.$router.push({name: 'movieDetail', query: {moviedata: JSON.stringify(data)}})
+      },
       getRecommedMovies () {
         // 模拟推荐电影板块
         var tags = ['喜剧', '治愈', '悬疑', '科幻', '青春', '爱情', '动作', '文艺']
@@ -101,9 +104,6 @@
           console.log(res)
           this.hotMovies = res.subjects
         })
-      },
-      routerTo (data) {
-        this.$router.push({name: 'movieDetail', query: {moviedata: data}})
       },
       navBottomHide (dom) {
         dom.on('scrollEnd', (pos) => {

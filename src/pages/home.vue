@@ -43,6 +43,7 @@
       <common-card :title="popularBooks.title">
       </common-card>
       <common-card :title="ebooks.title">
+        <ScrollX :isTitle="false" :itemData="ebooks.subjects" :isMore="true" type="money" />
       </common-card>
     </div>
   </layout>
