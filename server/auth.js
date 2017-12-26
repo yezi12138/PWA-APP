@@ -4,7 +4,7 @@ var moment = require('moment')
 var app = express()
 app.set('jwtTokenSecret', 'doubanjwtbyyezi')
 
-var expires = moment().add('days', 7).valueOf()
+var expires = moment().add(7, 'days').valueOf()
 
 // 产生token
 exports.generateToken = function (user) {
@@ -24,6 +24,7 @@ exports.decodeToken = function (token) {
     let decoded = jwt.decode(token, app.get('jwtTokenSecret'))
     if (decoded) {
       if (decoded.exp <= Date.now()) {
+        console.log('生效时间过期')
         return false
       }
       if (decoded.iss) {

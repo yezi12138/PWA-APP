@@ -36,7 +36,8 @@ module.exports = async function (res, saveUrl) {
   superagent.get('https://book.douban.com/')
   .end(function (err, sres) {
     if (err) {
-      return next(err)
+      console.log(err)
+      return false
     }
     var $ = cheerio.load(sres.text)
     var book1 = getBookList('.books-express', $)
@@ -46,7 +47,7 @@ module.exports = async function (res, saveUrl) {
     saveNewBook(book1.subjects)
     savePopularBook(book2.subjects)
     saveEBook(book3.subjects)
-    res.send(JSON.stringify(bookData))
+    // res.send(JSON.stringify(bookData))
     // writeFile(saveUrl, JSON.stringify(bookData))
   })
   function getBookList (className,$) {

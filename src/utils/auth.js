@@ -11,8 +11,8 @@ export function getToken () {
 /**
  * 设置token
  */
-export function setToken (token) {
-  return Cookies.set('Token', token)
+export function setToken (token, option) {
+  return Cookies.set('Token', token, option)
 }
 
 /**

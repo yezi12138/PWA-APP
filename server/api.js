@@ -3,7 +3,6 @@ const express = require('express')
 const router = express.Router()
 const generateToken = require('./auth').generateToken
 const decodeToken = require('./auth').decodeToken
-var bookData = require('../data.json')
 // 数据库定义
 const db = require('./db')
 const User = db.User
@@ -174,9 +173,12 @@ router.get('/hot', (req, res) => {
           msg: 'fail to find data'
         })
       } else {
+        let pushData = []
+        pushData.push(data[data.length - 1])
+        pushData.push(data[data.length - 2])
         res.json({
           title: '今日精选',
-          subjects: data
+          subjects: pushData
         })
       }
     }

@@ -79,7 +79,6 @@
         req('getHotData').then(res => {
           this.count++
           this.topSelect = res
-          this.topSelect.subjects = this.topSelect.subjects.slice(-2)
         })
         req('getNewBookData').then(res => {
           this.count++

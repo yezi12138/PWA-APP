@@ -10,8 +10,8 @@ var app = express()
 var saveUrl = 'C:\\Users\\yeyq\\Desktop\\douban.json'
 
 app.get('/', function (req, res, next) {
-  getReadingContent(res, saveUrl)
-  // getHotNews(res, saveUrl)
+  // getReadingContent(res, saveUrl)
+  getHotNews(res, saveUrl)
 })
 
 app.listen(3000, function () {

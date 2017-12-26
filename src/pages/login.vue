@@ -41,18 +41,27 @@
         }
         this.$http.post('/auth/login', params)
         .then((res) => {
-          console.log(res)
-          Indicator.close()
-          Toast({
-            message: '登录成功',
-            position: 'top',
-            duration: 1000
-          })
-          // 添加cookies
-          setToken(res.data.token)
-          // 跳转之前得页面
-          let path = this.$route.query.url
-          this.$router.push({ path: path })
+          if (res) {
+            Indicator.close()
+            Toast({
+              message: '登录成功',
+              position: 'top',
+              duration: 1000
+            })
+            // 添加cookies
+            setToken(res.data.token, {
+              expires: 7
+            })
+            // 跳转之前得页面
+            let path = this.$route.query.url
+            this.$router.push({ path: path })
+          } else {
+            Toast({
+              message: '登录失败',
+              position: 'top',
+              duration: 1000
+            })
+          }
         })
         .catch(res => {
           Indicator.close()

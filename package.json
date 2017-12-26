@@ -51,6 +51,7 @@
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^2.30.1",
     "http-proxy-middleware": "^0.17.4",
+    "jsonwebtoken": "^8.1.0",
     "mongoose": "^4.13.6",
     "node-notifier": "^5.1.2",
     "node-sass": "^4.7.2",
