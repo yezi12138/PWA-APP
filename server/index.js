@@ -18,7 +18,7 @@ app.use(session({
     url: 'mongodb://localhost/test'
   })
 }))
-// app.use(express.static('./dist'))
+app.use(express.static('./dist'))
 
 // // 解析post过来的数据
 app.use(bodyParser.json())

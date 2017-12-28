@@ -39,7 +39,8 @@ module.exports = {
       'components': resolve('src/components'),
       'api': resolve('src/api'),
       'pages': resolve('src/pages'),
-      'utils': resolve('src/utils')
+      'utils': resolve('src/utils'),
+      'static': resolve('src/static')
     }
   },
   module: {
@@ -60,7 +61,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: utils.assetsPath('img/[name].[hash:7].[ext]')
+          name: utils.assetsPath('images/[name].[hash:7].[ext]')
         }
       },
       {
