@@ -2,13 +2,13 @@
   <layout :backIcon="false" :header="true" title="注册">
     <div class="panel" slot="body">
       <div class="form">
-        <mt-field label="账号" placeholder="请输入用户名" v-model="formData.username"></mt-field>
-        <mt-field label="密码" placeholder="请输入密码" v-model="formData.password"></mt-field>
-        <mt-field label="确认密码" placeholder="请重新输入密码" v-model="formData.passwordCheck"></mt-field>
+        <button label="账号" placeholder="请输入用户名"></button>
+        <button label="密码" placeholder="请输入密码"></button>
+        <button label="确认密码" placeholder="请重新输入密码"></button>
       </div>
       <div class="btn-group">
-        <mt-button class="register-btn" @click="register" type="primary" size="large">提交</mt-button>
-        <mt-button type="default" size="large">重置</mt-button>
+        <button class="register-btn" @click="register" type="primary" size="large">提交</button>
+        <button type="default" size="large">重置</button>
       </div>
     </div>
   </layout>
@@ -16,7 +16,6 @@
 
 <script>
   import Layout from 'components/public/layout'
-  import { Indicator, Toast } from 'mint-ui'
   export default{
     name: 'Register',
     data () {
@@ -43,12 +42,11 @@
           this.$router.push('/login')
         })
         .catch(res => {
-          Indicator.close()
-          Toast({
-            message: res.error,
-            position: 'top',
-            duration: 1000
-          })
+          // Toast({
+          //   message: res.error,
+          //   position: 'top',
+          //   duration: 1000
+          // })
         })
       }
     }
