@@ -1,6 +1,6 @@
 {
-  "name": "web_app",
-  "short_name": "web_app",
+  "name": "yezi_web_app",
+  "short_name": "Y Z",
   "scope": "/",
   "description": "The app that helps you understand PWA", //用于描述应用
   "display": "standalone", // 定义开发人员对Web应用程序的首选显示模式。standalone模式会有单独的

@@ -56,6 +56,7 @@
   import ScrollX from 'components/public/scrollX'
   import BookCommentCard from 'components/book-comment-card'
   import req from 'api/home'
+  import { requestPermission } from 'utils/sw.js'
   export default{
     name: 'Home',
     components: {
@@ -100,6 +101,9 @@
     },
     activated () {
       this.getData()
+    },
+    mounted () {
+      requestPermission()
     }
   }
 </script>
