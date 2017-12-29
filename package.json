@@ -5,7 +5,7 @@
   "author": "yeyq<18924400146@163.com>",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development node build/dev-server.js ",
+    "dev": "node build/dev-server.js ",
     "server": "node server/index.js",
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js",

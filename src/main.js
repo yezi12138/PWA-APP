@@ -3,10 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import 'src/sass/index.scss'
 import axios from 'axios'
-import Cube from 'cube-ui' // 一般直接放在这个位置
-Vue.use(Cube)
 
 Vue.prototype.$http = axios
 
