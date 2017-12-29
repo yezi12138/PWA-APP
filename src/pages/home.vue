@@ -1,5 +1,5 @@
 <template>
-	<layout :search="true" :bottom="true" :loaded="count === 4">
+	<layout :search="true" :loaded="count === 4">
     <div class="home" slot="body">
       <div class="banner">
         <swiper :height="'120px'" :indicatorType="2">

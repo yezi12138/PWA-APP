@@ -8,9 +8,6 @@ const baseWebpackConfig = require('./webpack.base.conf')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
-const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
-const SwRegisterWebpackPlugin = require('sw-register-webpack-plugin')
-
 // add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
   baseWebpackConfig.entry[name] = ['webpack-hot-middleware/client'].concat(baseWebpackConfig.entry[name])
@@ -34,11 +31,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       filename: 'index.html',
       template: 'index.html',
       inject: true
-    }),
-    // service worker caching
-    new SWPrecacheWebpackPlugin(config.swPrecache),
-    new SwRegisterWebpackPlugin({
-        filePath: path.resolve(__dirname, '../src/sw-register.js')
     })
   ]
 })
