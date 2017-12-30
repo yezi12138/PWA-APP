@@ -1,5 +1,5 @@
 <template>
-	<layout :search="true" :loaded="count === 4">
+	<!-- <layout :search="true" :loaded="count === 4">
     <div class="home" slot="body">
       <div class="banner">
         <swiper :height="'120px'" :indicatorType="2">
@@ -17,93 +17,51 @@
           </div>
         </swiper>
       </div>
-      <common-card :title="topSelect.title">
-        <ul>
-          <li
-            class="border-bottom border-scaleY"
-            v-for='(item, index) in topSelect.subjects'
-            :key="index" @click='routerTo(item)'>
-            <div class="item-left">
-              <div class="title">{{item.title}}</div>
-              <div class="preview">{{item.review}}</div>
-              <div class="username border-scaleY">作者： {{item.userName}}</div>
-            </div>
-            <div class="item-right">
-              <img :src="item.detailContent.imgs[0]" alt="img">
-            </div>
-          </li>
-        </ul>
-      </common-card>
-      <common-card :title="newBooks.title">
-        <ScrollX :isTitle="false" :itemData="newBooks.subjects" :isMore="true" />
-      </common-card>
-      <!-- <common-card :title="popularComments.title">
-        <book-comment-card :itemData="popularComments.subjects" />
-      </common-card> -->
-      <common-card :title="popularBooks.title">
-      </common-card>
-      <common-card :title="ebooks.title">
-        <ScrollX :isTitle="false" :itemData="ebooks.subjects" :isMore="true" type="money" />
-      </common-card>
     </div>
-  </layout>
+  </layout> -->
+  <drawer
+    :show.sync="showSide"
+    show-mode="push">
+    <div slot="default">
+      <home-header @toggleSide="toggleSide" />
+    </div>
+    <div slot="drawer" @click="toggleSide">这是侧边栏</div>
+  </drawer>
 </template>
 
 <script>
+  import { Drawer } from 'vux'
+  import HomeHeader from 'components/home-header'
   import Layout from 'components/public/layout'
   import Swiper from 'banner-swiper'
   import CommonCard from 'components/public/common-card'
   import ScrollX from 'components/public/scrollX'
   import BookCommentCard from 'components/book-comment-card'
-  import req from 'api/home'
-  import { requestPermission } from 'utils/sw.js'
   export default{
     name: 'Home',
     components: {
+      HomeHeader,
       Layout,
       Swiper,
       CommonCard,
       ScrollX,
-      BookCommentCard
+      BookCommentCard,
+      Drawer
     },
     data () {
       return {
-        topSelect: {},
-        newBooks: {},
-        popularBooks: {},
-        ebooks: {},
-        popularComments: {},
-        count: 0
+        showSide: false
       }
     },
     methods: {
-      getData () {
-        req('getHotData').then(res => {
-          this.count++
-          this.topSelect = res
-        })
-        req('getNewBookData').then(res => {
-          this.count++
-          this.newBooks = res
-        })
-        req('getPopularBookData').then(res => {
-          this.count++
-          this.popularBooks = Response
-        })
-        req('getEBookData').then(res => {
-          this.count++
-          this.ebooks = res
-        })
+      toggleSide () {
+        this.showSide = !this.showSide
       },
       routerTo (data) {
         this.$router.push({path: '/articleDetail', query: {articledata: JSON.stringify(data)}})
       }
     },
     activated () {
-      this.getData()
-    },
-    mounted () {
-      requestPermission()
     }
   }
 </script>

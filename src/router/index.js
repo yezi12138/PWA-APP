@@ -8,7 +8,7 @@ import Login from 'pages/login'
 import Register from 'pages/register'
 import ArticleDetail from 'pages/article-detail'
 import MovieDetail from 'pages/movie-detail'
-import { checkAuth } from '../utils/auth'
+// import { checkAuth } from '../utils/auth'
 
 Vue.use(Router)
 
@@ -65,6 +65,6 @@ const router = new Router({
   ]
 })
 
-router.beforeEach(checkAuth)
+// router.beforeEach(checkAuth)
 
 export default router
