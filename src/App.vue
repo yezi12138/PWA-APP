@@ -16,5 +16,6 @@ export default {
   #app{
     height: 100vh;
     overflow: hidden;
+    background-color: #F2F3F7;
   }
 </style>

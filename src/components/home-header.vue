@@ -3,14 +3,13 @@
     <div class="nav clearfix">
       <i class="iconfont icon-iconfont303" @click="toggleSide"></i>
       <span class="master">这是一个电商网站</span>
-      <i class="iconfont icon-ios-notifications-ou"></i>
+      <i class="iconfont icon-notification"></i>
     </div>
     <search
-      :auto-scroll-to-top="true"
       @on-submit="submit">
-      <div class="search-results">
+      <!-- <div class="search-results">
         <div>this is results</div>
-      </div>
+      </div> -->
     </search>
   </div>
 </template>
@@ -19,7 +18,7 @@
 /**
  * 主页顶部导航
  */
-  import { Search } from 'vux'
+  import Search from 'components/search'
   export default {
     name: 'HomeHeader',
     components: {
@@ -49,7 +48,7 @@
       justify-content: space-between;
       text-align: center;
       height: 20px;
-      padding: 15px;
+      padding: 10px 18px;
       .master{
         display: inline-block;
         min-width: 135px;
@@ -62,7 +61,8 @@
         display: inline-block;
         vertical-align: middle;
       }
-      .icon-ios-notifications-ou{
+      .icon-notification{
+        font-size: 20px;
         float: right;
       }
     }

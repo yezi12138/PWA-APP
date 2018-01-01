@@ -3,8 +3,6 @@
 
     <!-- 头部导航 -->
     <slot name="header">
-      <x-header ref="header" v-if="header" :backIcon="backIcon" :beforeGoBack="beforeGoBack" :title="title"></x-header>
-      <Search ref="search" v-if="search" />
     </slot>
 
     <!-- 主体内容 -->
@@ -13,9 +11,6 @@
         <slot name="body"></slot>
       </scroll-panel>
     </div>
-
-    <!-- 底部组件 -->
-    <nav-bottom ref="bottom" v-if="bottom" />
 
   </div>
 </template>
@@ -30,12 +25,9 @@
  * @prop  [Boolean]  search  是否显示搜索组件
  * @prop  [Boolean]  bottom  是否显示底部组件
  */
-  import Search from 'components/search'
-  import XHeader from 'components/public/header'
-  import NavBottom from 'components/nav-bottom'
   import ScrollPanel from 'components/public/scroll-panel'
   export default{
-    name: 'Home',
+    name: 'Layout',
     props: {
       title: {
         type: String,
@@ -63,13 +55,14 @@
       bottom: {
         type: Boolean,
         default: false
+      },
+      fixHeader: {
+        type: Boolean,
+        default: false
       }
     },
     components: {
-      Search,
-      XHeader,
-      ScrollPanel,
-      NavBottom
+      ScrollPanel
     },
     data () {
       return {
@@ -93,15 +86,24 @@
         }
       },
       setHeight () {
+        let headerElm = this.$slots.header ? this.$slots.header[0].elm : null
         let wrapHeight = this.$refs.wrap.offsetHeight
-        let headerHeight = this.header ? this.$refs.header.$el.offsetHeight : 0
-        let searchHeight = this.search ? this.$refs.search.$el.offsetHeight : 0
-        let headerSlotHeight = this.$slots.header ? this.$slots.header[0].elm.offsetHeight : 0
-        let bottomHeight = this.bottom ? this.$refs.bottom.$el.offsetHeight : 0
-        let height = wrapHeight - headerHeight - searchHeight - headerSlotHeight - bottomHeight + 'px'
-        let marginTop = (headerHeight || searchHeight || headerSlotHeight) + 'px'
+        let headerHeight = headerElm ? headerElm.offsetHeight : 0
+        // let bottomHeight = this.bottom ? this.$refs.bottom.$el.offsetHeight : 0
+        let height = wrapHeight - headerHeight + 'px'
+        // 设置边距
+        let marginTop = headerHeight + 'px'
         this.$set(this.bodyStyle, 'marginTop', marginTop)
+        // 设置主体高度
         this.$set(this.bodyStyle, 'height', height)
+        // 设置fixed定位
+        if (this.fixHeader) {
+          headerElm.style.position = 'fixed'
+          headerElm.style.zIndex = '9998'
+          headerElm.style.top = '0'
+          headerElm.style.left = '0'
+          headerElm.style.right = '0'
+        }
       }
     },
     mounted () {

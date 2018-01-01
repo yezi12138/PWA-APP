@@ -20,7 +20,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .loadEffect{
     width: 100px;
     height: 100px;

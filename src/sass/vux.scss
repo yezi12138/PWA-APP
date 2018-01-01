@@ -1,0 +1,18 @@
+/* 
+ *  覆盖vux默认样式
+ */
+
+.home-header{
+	.weui-search-bar{
+		background-color: #fff;
+		padding: 4px 18px;
+		&:before, &:after{
+			display: none;
+		}
+		.weui-search-bar__form{
+			height: 36px;
+			line-height: 36px;
+			background-color: #c7c7c7;
+		}
+	}
+}

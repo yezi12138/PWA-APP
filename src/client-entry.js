@@ -3,10 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import axios from 'axios'
 import 'src/sass/index.scss'
-
-Vue.prototype.$http = axios
 
 Vue.config.productionTip = false
 
