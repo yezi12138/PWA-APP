@@ -15,10 +15,12 @@
           <div class="search-input">
             <form
               action="#"
+              class="form"
               @submit.stop="search">
               <input
                 v-model="inputText"
                 type="text"
+                class="input"
                 placeholder="请输入搜索内容"
                 @blur.stop="hideCloseIcon"
                 @input.stop="showCloseIcon"
@@ -139,12 +141,17 @@ export default {
           padding-right: 50px;
           padding-left: 10px;
           height: 52px;
-          input[type=text]{
-            width: 100%;
+          .form{
             height: 50px;
-            border: 0;
-            outline: none;
-            font-size: 16px;
+            padding: 0;
+            .input{
+              width: 100%;
+              height: 100%;
+              border: 0;
+              outline: none;
+              font-size: 16px;
+              padding: 0;
+            }
           }
           .closeIcon{
             position: absolute;
