@@ -30,12 +30,15 @@ exports.decodeToken = function (token) {
       if (decoded.iss) {
         return decoded.iss
       } else {
+        console.log('不存在id')
         return false
       }
     } else {
+      console.log('解析错误')
       return false
     }
   } catch (err) {
+    console.log('发生错误', err)
     return false
   }
 }

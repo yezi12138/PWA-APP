@@ -2,7 +2,7 @@
   <div class="home-header">
     <div class="nav clearfix">
       <i class="iconfont icon-iconfont303" @click="toggleSide"></i>
-      <span class="master">这是一个电商网站</span>
+      <span class="master">这是一个电商网站 yezi</span>
       <i class="iconfont icon-notification"></i>
     </div>
     <search
@@ -48,7 +48,7 @@
       justify-content: space-between;
       text-align: center;
       height: 20px;
-      padding: 10px 18px;
+      padding: 15px 18px;
       .master{
         display: inline-block;
         min-width: 135px;

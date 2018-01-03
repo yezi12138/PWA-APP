@@ -185,7 +185,7 @@ export default {
               display: inline-block;
               font-size: 12px;
               border: 1px solid #ddd;
-              color: #333;
+              color: #999;
               padding: 5px 8px;
               margin: 5px 6px;
               border-radius: 3px;

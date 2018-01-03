@@ -1,5 +1,4 @@
-import fetchDouBan from '../utils/fetch-douban'
-import fetchHome from '../utils/fetch-home'
+import fetchHome from '../utils/fetch'
 
 export default function request (config, funcName, data, isToken = true, isdouban) {
   if (typeof config[funcName] !== 'object') {
@@ -29,9 +28,5 @@ export default function request (config, funcName, data, isToken = true, isdouba
   //   const Token = getToken()
   //   newConfig.headers = Object.assign({'ihrAdminAuthorization': Token}, newConfig.headers)
   // }
-  if (isdouban) {
-    return fetchDouBan(newConfig)
-  } else {
-    return fetchHome(newConfig)
-  }
+  return fetchHome(newConfig)
 }

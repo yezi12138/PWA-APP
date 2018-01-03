@@ -68,7 +68,12 @@ router.post('/auth/login', (req, res) => {
       } else {
         let token = generateToken(data[0])
         res.json({
-          token: token
+          token: token,
+          user: {
+            name: data[0].username,
+            avatar: data[0].avatar,
+            createTime: data[0].createTime
+          }
         })
       }
     }
@@ -103,7 +108,7 @@ router.get('/userInfo', (req, res) => {
  * 验证token
  */
 router.get('/auth/token', (req, res) => {
-  let token = req.query.token
+  let token = req.cookies.Token
   if (token) {
     let result = decodeToken(token)
     if (result) {
@@ -112,18 +117,28 @@ router.get('/auth/token', (req, res) => {
           error(res, 500, err)
         } else {
           if (data.length === 0) {
-            console.log('No this user', 'come from /auth/token')
-            res.send(false)
+            res.json({
+              status: false,
+              msg: 'No this user token不正确'
+            })
           } else {
-            res.send(true)
+            res.json({
+              status: true
+            })
           }
         }
       })
     } else {
-      res.send(false)
+      res.json({
+        status: false,
+        msg: 'token不正确'
+      })
     }
   } else {
-    res.send(false)
+    res.json({
+      status: false,
+      msg: 'token不存在'
+    })
   }
 })
 

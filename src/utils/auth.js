@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import axios from 'axios'
+import req from 'api/common'
 
 /**
  * 获取token
@@ -29,21 +29,25 @@ export function removeToken () {
 export function checkAuth (to, from, next) {
   let token = getToken()
   if (to.name) document.title = to.name
-  if (to.path !== '/login') {
-    if (to.path === '/register') {
+  if (to.path === '/login') {
+    if (to.query.url) {
       next()
-    } else if (token) {
+    } else {
+      next({path: `/login?url=${from.path}`})
+    }
+  } else if (to.path.match(/\/login.{1,}/)) {
+    next()
+  } else if (to.path === '/register') {
+    next()
+  } else if (to.path === '/shopcart') {
+    if (token) {
       // 验证token
-      axios.get('/auth/token', {
-        params: {
-          token
-        }
-      })
+      req('authToken')
       .then(res => {
-        res.data ? next() : next({path: `/login?url=${to.path}`})
+        res.status ? next() : next({path: `/login?url=${to.path}`})
       })
     } else {
-      next({path: `/login?url=${to.path}`})
+      next()
     }
   } else {
     next()

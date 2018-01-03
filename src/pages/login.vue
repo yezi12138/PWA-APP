@@ -1,21 +1,40 @@
 <template>
   <layout :backIcon="false" :header="true" title="登录">
     <div class="panel" slot="body">
-      <div class="form">
-        <button label="用户名" placeholder="请输入用户名" ></button>
-        <button label="密码" placeholder="请密码" ></button>
-      </div>
-      <div class="btn-group">
-        <button class="login-btn" @click="login" type="primary" size="large">登录</button>
-        <button type="default" @click="routerTo" size="large">注册</button>
-      </div>
+      <x-header>登录</x-header>
+      <form
+        @submit="login"
+        class="form">
+        <div class="form-item">
+          <input
+            v-model="formData.username"
+            class="username"
+            placeholder="请输入用户名"
+            @focus="showLine(0)"
+          />
+          <div :class="['underline', {'active': currentActive === 0}]"></div>
+        </div>
+        <div class="form-item">
+          <input
+            v-model="formData.password"
+            class="password" type="password"
+            placeholder="请输入密码"
+            @focus="showLine(1)"
+          />
+          <div :class="['underline', {'active': currentActive === 1}]"></div>
+        </div>
+        <input class="login" value="登录" type="submit">
+        <router-link to="/register" class="register">去注册?</router-link>
+      </form>
     </div>
   </layout>
 </template>
 
 <script>
+  import { XHeader, Toast } from 'vux'
   import Layout from 'components/public/layout'
   import { setToken } from 'utils/auth'
+  import req from 'api/common'
   export default {
     name: 'Login',
     data () {
@@ -23,12 +42,15 @@
         formData: {
           username: '',
           password: ''
-        }
+        },
+        currentActive: ''
       }
     },
 
     components: {
-      Layout
+      Layout,
+      XHeader,
+      Toast
     },
 
     methods: {
@@ -37,39 +59,33 @@
           username: this.formData.username,
           password: this.formData.password
         }
-        this.$http.post('/auth/login', params)
+        req('login', params)
         .then((res) => {
+          console.log(res)
           if (res) {
-            // Toast({
-            //   message: '登录成功',
-            //   position: 'top',
-            //   duration: 1000
-            // })
+            this.$vux.toast.text('登录成功', 'top')
             // 添加cookies
-            setToken(res.data.token, {
+            setToken(res.token, {
               expires: 7
             })
+            // 获取用户信息
+            sessionStorage.setItem('user', JSON.stringify(res.user))
             // 跳转之前得页面
             let path = this.$route.query.url
             this.$router.push({ path: path })
           } else {
-            // Toast({
-            //   message: '登录失败',
-            //   position: 'top',
-            //   duration: 1000
-            // })
+            this.$vux.toast.text('登录失败', 'top')
           }
+          return false
         })
         .catch(res => {
-          // Toast({
-          //   message: '登录失败',
-          //   position: 'top',
-          //   duration: 1000
-          // })
         })
       },
       routerTo () {
         this.$router.push({ path: '/register' })
+      },
+      showLine (num) {
+        num ? this.currentActive = 1 : this.currentActive = 0
       }
     }
   }
@@ -77,11 +93,88 @@
 
 <style lang="scss" scoped>
   .panel{
-    padding: 0px 15px;
-    padding-top: 50px;
+    background-color: #fff;
     .form{
       box-sizing: border-box;
-      padding-top: 40px;
+      margin-top: 35px;
+      padding: 0 15px;
+      .form-item{
+        position: relative;
+        margin-bottom: 25px;
+        .username, .password{
+          -webkit-appearance: none;
+          border-radius: 0;
+          margin-top: 16px;
+          border: none;
+          padding: 0;
+          width: 100%;
+          height: 36px;
+          font-size: 16px;
+          text-indent: 0;
+          color: #333;
+          box-sizing: border-box;
+          box-shadow: none;
+          -webkit-box-shadow: none;
+          border-bottom: 1px solid #ddd;
+          outline: none;
+        }
+        .underline{
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          pointer-events: none;
+          display: block;
+          width: 100%;
+          white-space: nowrap;
+          text-align: left;
+          &:after{
+            background-color: #ff6a00;
+            bottom: 0;
+            content: '';
+            height: 2px;
+            left: 0;
+            position: absolute;
+            -webkit-transition-duration: .2s;
+            transition-duration: .2s;
+            -webkit-transition-timing-function: cubic-bezier(0.4,0,.2,1);
+            transition-timing-function: cubic-bezier(0.4,0,.2,1);
+            -webkit-transform-origin: 50% 0;
+            transform-origin: 50% 0;
+            -webkit-transform: scaleX(0);
+            transform: scaleX(0);
+            width: 100%;
+            z-index: 1;
+          }
+          &.active{
+            &:after{
+              transform: scaleX(1);
+            }
+          }
+        }
+      }
+      
+      .login{
+        text-transform: uppercase;
+        -webkit-appearance: none;
+        font-family: Arial;
+        font-size: 16px;
+        margin-top: 7px!important;
+        border: none;
+        border-radius: 3px;
+        height: 44px;
+        font-weight: 400;
+        box-shadow: none;
+        text-shadow: none;
+        color: #fff;
+        background: #f60;
+        width: 100%!important;
+      }
+      .register{
+        float: right;
+        margin-top: 15px;
+        font-weight: 400;
+        color: #666!important;
+      }
     }
     .btn-group{
       margin-top: 80px;
