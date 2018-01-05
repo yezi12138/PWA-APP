@@ -121,7 +121,7 @@ export default {
       position: relative;
       height: 100px;
       padding: 16px;
-      background: url('/static/images/home-side-header-bg.jpg') no-repeat 60% 60%;
+      background: url('../../static/images/home-side-header-bg.jpg') no-repeat 60% 60%;
       .avatar{
         position: relative;
         width: 70px;
