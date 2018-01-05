@@ -1,8 +1,8 @@
 // proxy api requests
 module.exports = {
   '/api': {
-    target: 'https://api.douban.com',
-    changeOrigin: true,
+    target: 'http://120.79.133.111:9001',
+    changeOrigin: false,
     pathRewrite: {
       '/api': ''
     }

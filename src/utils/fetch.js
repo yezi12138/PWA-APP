@@ -2,10 +2,14 @@
 import axios from 'axios'
 import qs from 'qs'
 import config from '../../config'
+// let baseURL = 'http:\\localhost:9000'
+let baseURL = ''
+if (process.env.NODE_ENV === 'production') {
+  baseURL = 'http://120.79.133.111:9001'
+}
 
-var baseURL = '120.79.133.111'
 const instance = axios.create({
-  baseURL: baseURL,
+  baseURL,
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json'

@@ -10,6 +10,9 @@ var bodyParser = require('body-parser')
 var session = require('express-session')
 var cookieParser = require('cookie-parser')
 var MongoStore = require('connect-mongo')(session)
+var proxyMiddleware = require('http-proxy-middleware')
+var config = require('../config')
+var proxyTable = config.dev.proxyTable
 
 // 使用session
 app.use(cookieParser())
@@ -32,6 +35,23 @@ app.use(bodyParser.urlencoded({ extended: true }))
 const api = require('./api.js')
 app.use(api)
 app.use(express.static('./dist'))
+// proxy api requests
+Object.keys(proxyTable).forEach(function (context) {
+  var options = proxyTable[context]
+  if (typeof options === 'string') {
+    options = { target: options }
+  }
+  app.use(proxyMiddleware(options.filter || context, options))
+})
+
+app.all('*', function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS')
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With')
+  res.header('Access-Control-Allow-Headers', 'Content-Type')
+  res.header('Access-Control-Allow-Credentials', true)
+  next()
+})
 
 var PORT = 9001
 var SSLPORT = 9000
