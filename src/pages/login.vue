@@ -2,9 +2,7 @@
   <layout :backIcon="false" :header="true" title="登录">
     <div class="panel" slot="body">
       <x-header>登录</x-header>
-      <form
-        @submit="login"
-        class="form">
+      <div class="form">
         <div class="form-item">
           <input
             v-model="formData.username"
@@ -23,9 +21,9 @@
           />
           <div :class="['underline', {'active': currentActive === 1}]"></div>
         </div>
-        <input class="login" value="登录" type="submit">
+        <button class="login" type="submit" @click.stop="login">登录</button>
         <router-link to="/register" class="register">去注册?</router-link>
-      </form>
+      </div>
     </div>
   </layout>
 </template>
@@ -69,7 +67,9 @@
               expires: 7
             })
             // 获取用户信息
-            sessionStorage.setItem('user', JSON.stringify(res.user))
+            req('userInfo').then(res => {
+              this.$store.commit('addUser', res)
+            })
             // 跳转之前得页面
             let path = this.$route.query.url
             this.$router.push({ path: path })

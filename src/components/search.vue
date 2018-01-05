@@ -195,7 +195,7 @@ export default {
       }
     }
   }
-   .down-enter-active, .down-leave-active, .up-enter-active, .up-leave-active, {
+  .down-enter-active, .down-leave-active, .up-enter-active, .up-leave-active, {
     transition: all 1s;
   }
   .down-enter, .down-leave-to {

@@ -29,13 +29,18 @@ export function removeToken () {
 export function checkAuth (to, from, next) {
   let token = getToken()
   if (to.name) document.title = to.name
-  if (to.path === '/login') {
-    if (to.query.url) {
-      next()
-    } else {
-      next({path: `/login?url=${from.path}`})
-    }
-  } else if (to.path.match(/\/login.{1,}/)) {
+  // 当跳转到空页面时候，刷新会回到之前的页面
+  if (to.matched.length === 0) {
+    from.path ? next({ path: from.path }) : next('/')
+  }
+  if (to.fullPath === '/login') {
+    next({
+      path: '/login',
+      query: {
+        url: from.path
+      }
+    })
+  } else if (to.fullPath.match(/\/login.{1,}/)) {
     next()
   } else if (to.path === '/register') {
     next()

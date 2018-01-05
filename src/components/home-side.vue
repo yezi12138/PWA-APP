@@ -1,7 +1,10 @@
 <template>
   <div class="home-side">
     <div class="home-side-header">
-      <div class="avatar"></div>
+      <div class="avatar" @click="upLoadAvatar">
+        <input type="file" class="fileInput" ref='fileInput' accept="image/*" @change.stop="upLoadAvatar">
+        <img v-show="user" :src="user ? user.avatar : '#'">
+      </div>
       <div class="header-button" v-if="!user">
         <router-link to="/login">登录</router-link>|
         <router-link to="/register">注册</router-link>
@@ -18,16 +21,20 @@
         :to="item.path"
         :class="['nav-item', {'home': index === 0}]">
         <i :class="['iconfont', item.icon]"></i>
-        <button class="text">{{item.text}}</button>
+        <span class="text">{{item.text}}</span>
       </router-link>
     </div>
   </div>
 </template>
 
 <script>
-import { removeToken } from 'utils/auth'
+import { Toast } from 'vux'
+import req from 'api/common'
 export default {
   name: 'HomeSide',
+  components: {
+    Toast
+  },
   data () {
     return {
       navList: [                        // 侧边栏导航条配置
@@ -37,31 +44,72 @@ export default {
           path: '/home'
         },
         {
-          icon: 'icon-home',
-          text: '主页',
-          path: '/home'
+          icon: 'icon-shopcart',
+          text: '购物车',
+          path: '/shopcart'
         },
         {
-          icon: 'icon-home',
-          text: '主页',
-          path: '/home'
+          icon: 'icon-mine',
+          text: '我的商品',
+          path: '/myGoods'
         }
-      ],
-      user: null
+      ]
+    }
+  },
+
+  computed: {
+    user () {
+      return this.$store.state.user
     }
   },
 
   methods: {
     exit () {
-      removeToken('Token')
-      sessionStorage.removeItem('user')
+      this.$store.commit('removeUser')
       window.location.reload()
+    },
+    upLoadAvatar (e) {
+      let file = this.$refs.fileInput.files[0]
+      if (!file) {
+        return
+      }
+      var MAXSIZE = 100 * 1024 // 超过这个值就进行压缩
+      var fr = new FileReader()
+      fr.onload = e => {
+        var result = e.currentTarget.result
+        let imgData = result
+        var img = new Image()
+        img.onload = () => {
+          (file.size >= MAXSIZE) && (imgData = this.compressImg(img))
+          let userInfo = {
+            username: this.user.name,
+            avatar: imgData
+          }
+          req('uploadAvatar', userInfo).then((res) => {
+            this.$store.commit('addUser', res)
+          })
+        }
+        img.src = result
+      }
+      fr.onerror = function () {
+        this.$vux.toast.text('上传失败', 'top')
+      }
+      fr.readAsDataURL(file)
+    },
+    compressImg (img) {
+      var canvas = document.createElement('canvas')
+      var ctx = canvas.getContext('2d')
+      // 利用canvas进行绘图
+      ctx.drawImage(img, 0, 0, 70, 70)
+      // 将原来图片的质量压缩到原先的0.2倍。
+      var data = canvas.toDataURL('image/jpeg', 0.2) // data url的形式
+      console.log(data)
+      canvas = null
+      return data
     }
   },
 
   activated () {
-    let user = sessionStorage.getItem('user')
-    user && (this.user = JSON.parse(user))
   }
 }
 </script>
@@ -73,12 +121,30 @@ export default {
       position: relative;
       height: 100px;
       padding: 16px;
-      background-color: #999;
+      background: url('/static/images/home-side-header-bg.jpg') no-repeat 60% 60%;
       .avatar{
+        position: relative;
         width: 70px;
         height: 70px;
         border-radius: 50%;
+        overflow: hidden;
         background-color: #ccc;
+        img{
+          position: relative;
+          z-index: 0;
+          width: 100%;
+          height: 100%;
+        }
+        .fileInput{
+          position: absolute;
+          top: 0;
+          left: 0;
+          z-index: 1;
+          width: 100%;
+          height: 100%;
+          text-indent:-9999;
+          opacity:0;
+        }
       }
       .header-button{
         position: absolute;

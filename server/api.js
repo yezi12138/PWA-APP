@@ -68,12 +68,7 @@ router.post('/auth/login', (req, res) => {
       } else {
         let token = generateToken(data[0])
         res.json({
-          token: token,
-          user: {
-            name: data[0].username,
-            avatar: data[0].avatar,
-            createTime: data[0].createTime
-          }
+          token: token
         })
       }
     }
@@ -84,24 +79,30 @@ router.post('/auth/login', (req, res) => {
  * 获取用户信息
  */
 router.get('/userInfo', (req, res) => {
-  let newAccount = new User({
-    username: req.body.username
-  })
-  User.find({username: newAccount.username}, (err, data) => {
-    if (err) {
-      error(res, 500, err)
-    } else {
-      if (data.length === 0) {
-        error(res, 500, 'No this user')
+  let token = req.cookies.Token
+  let user = decodeToken(token)
+  if (!user) {
+    res.json({
+      status: false,
+      msg: 'no this user'
+    })
+  } else {
+    User.find({_id: user}, (err, data) => {
+      if (err) {
+        error(res, 500, err)
       } else {
-        res.json({
-          name: data[0].username,
-          avatar: data[0].avatar,
-          createTime: data[0].createTime
-        })
+        if (data.length === 0) {
+          error(res, 500, 'No this user')
+        } else {
+          res.json({
+            name: data[0].username,
+            avatar: data[0].avatar,
+            createTime: data[0].createTime
+          })
+        }
       }
-    }
-  })
+    })
+  }
 })
 
 /**
@@ -145,32 +146,32 @@ router.get('/auth/token', (req, res) => {
 /**
  * 修改头像
  */
-router.post('/refreshInfo', (req, res) => {
-  var userInfo = req.body.userInfo
-  if (userInfo.password) {
-    return
-  }
-  User.update({username: userInfo.username}, {$set: {avatar: userInfo.avatar}}, function (err, result) {
+router.post('/upLoadAvatar', (req, res) => {
+  var username = req.body.username
+  var avatar = req.body.avatar
+  User.update({username: username}, {$set: {avatar: avatar}}, function (err, result) {
     if (err) {
-      console.log(false)
+      error(res, 500, err)
     } else {
-      console.log(true)
-      User.find({username: userInfo.username}, (err, data) => {
+      User.find({username: username}, (err, data) => {
         if (err) {
-          console.log(false)
+          error(res, 500, err)
         } else {
           if (data.length === 0) {
-            console.log('不存在该用户', userInfo.username)
-            res.send(false)
+            res.json({
+              status: false,
+              msg: '不存在该用户'
+            })
           } else {
             var User = {
               name: data[0].username,
-              avatar: data[0].avatar
+              avatar: data[0].avatar,
+              createTime: data[0].createTime
             }
             res.send(User)
           }
-       }
-     })
+        }
+      })
     }
   })
 })

@@ -15,6 +15,11 @@ export const config = {
   userInfo: {
     url: '/userInfo',
     method: 'get'
+  },
+  // 获取用户信息
+  uploadAvatar: {
+    url: '/upLoadAvatar',
+    method: 'post'
   }
 }
 
