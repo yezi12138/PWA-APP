@@ -3,10 +3,12 @@
     <div class="panel" slot="body">
       <x-header>注册</x-header>
       <div class="form">
-        <input class="username" placeholder="请输入用户名" />
-        <input class="password" placeholder="请输入密码" />
+        <input v-model="formData.username" class="username" placeholder="请输入用户名" />
+        <input v-model="formData.password" class="password" placeholder="请输入密码" />
         <button class="login" type="text" @click.stop="register">注册</button>
-        <router-link to="/login" class="register">去登录?</router-link>
+        <div class="register-wrap">
+          <router-link to="/login" class="register">去登录?</router-link>
+        </div>
       </div>
     </div>
   </layout>
@@ -95,6 +97,7 @@
       }
       .register{
         float: right;
+        padding: 10px;
         margin-top: 15px;
         font-weight: 400;
         color: #666!important;

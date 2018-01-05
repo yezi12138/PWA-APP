@@ -170,6 +170,7 @@
       }
       .register{
         float: right;
+        padding: 10px;
         margin-top: 15px;
         font-weight: 400;
         color: #666!important;
