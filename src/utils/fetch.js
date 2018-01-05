@@ -3,7 +3,9 @@ import axios from 'axios'
 import qs from 'qs'
 import config from '../../config'
 
+var baseURL = '120.79.133.111'
 const instance = axios.create({
+  baseURL: baseURL,
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json'
