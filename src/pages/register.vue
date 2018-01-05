@@ -28,7 +28,8 @@
     },
     components: {
       Layout,
-      XHeader
+      XHeader,
+      Toast
     },
     methods: {
       register () {
