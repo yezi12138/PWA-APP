@@ -2,7 +2,7 @@
   <div class="home-side">
     <div class="home-side-header">
       <div class="avatar" @click="upLoadAvatar">
-        <input type="file" class="fileInput" ref='fileInput' accept="image/*" @change.stop="upLoadAvatar">
+        <input v-show="user" type="file" class="fileInput" ref='fileInput' accept="image/*" @change.stop="upLoadAvatar">
         <img v-show="user" :src="user ? user.avatar : '#'">
       </div>
       <div class="header-button" v-if="!user">
@@ -69,6 +69,9 @@ export default {
       window.location.reload()
     },
     upLoadAvatar (e) {
+      if (e._constructed) {
+        return
+      }
       let file = this.$refs.fileInput.files[0]
       if (!file) {
         return

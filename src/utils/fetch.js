@@ -2,8 +2,8 @@
 import axios from 'axios'
 import qs from 'qs'
 import config from '../../config'
-// let baseURL = 'http:\\localhost:9000'
 let baseURL = ''
+
 if (process.env.NODE_ENV === 'production') {
   baseURL = 'http://120.79.133.111:9001'
 }

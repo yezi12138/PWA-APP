@@ -1,11 +1,11 @@
 <template>
-  <layout :backIcon="false" :header="true" title="登录">
+  <layout :backIcon="false" :header="true" title="登录" :loaded="true">
     <div class="panel" slot="body">
       <x-header>注册</x-header>
       <div class="form">
         <input v-model="formData.username" class="username" placeholder="请输入用户名" />
         <input v-model="formData.password" class="password" placeholder="请输入密码" />
-        <button class="login" type="text" @click.stop="register">注册</button>
+        <button class="login-btn" type="text" @click.stop="register">注册</button>
         <div class="register-wrap">
           <router-link to="/login" class="register">去登录?</router-link>
         </div>
@@ -34,7 +34,10 @@
       Toast
     },
     methods: {
-      register () {
+      register (e) {
+        if (e._constructed) {
+          return
+        }
         let params = {
           username: this.formData.username,
           password: this.formData.password
@@ -42,7 +45,9 @@
         req('register', params)
         .then((res) => {
           if (res.status) {
-            this.$router.push('/login')
+            // 跳转之前得页面
+            let path = this.$route.query.url
+            this.$router.push(`/login?url=${path}`)
           } else {
             this.$vux.toast.text('注册失败', 'top')
           }
@@ -79,7 +84,7 @@
         border-bottom: 1px solid #ddd;
         outline: none;
       }
-      .login{
+      .login-btn{
         text-transform: uppercase;
         -webkit-appearance: none;
         font-family: Arial;

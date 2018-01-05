@@ -33,17 +33,17 @@ export function checkAuth (to, from, next) {
   if (to.matched.length === 0) {
     from.path ? next({ path: from.path }) : next('/')
   }
-  if (to.fullPath === '/login') {
-    next({
-      path: '/login',
-      query: {
-        url: from.path
-      }
-    })
+  if (to.fullPath === '/login' || to.fullPath === '/register') {
+    next({path: `${to.fullPath}?url=${from.path}`})
   } else if (to.fullPath.match(/\/login.{1,}/)) {
     next()
-  } else if (to.path === '/register') {
-    next()
+  } else if (to.fullPath === '/register') {
+    let path = from.query.url
+    if (path) {
+      next({path: `/register?url=${path}`})
+    } else {
+      next()
+    }
   } else if (to.path === '/shopcart') {
     if (token) {
       // 验证token

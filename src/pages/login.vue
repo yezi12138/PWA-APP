@@ -1,5 +1,5 @@
 <template>
-  <layout :backIcon="false" :header="true" title="登录">
+  <layout :backIcon="false" :header="true" title="登录" :loaded="true">
     <div class="panel" slot="body">
       <x-header>登录</x-header>
       <div class="form">
@@ -21,7 +21,7 @@
           />
           <div :class="['underline', {'active': currentActive === 1}]"></div>
         </div>
-        <button class="login" type="submit" @click.stop="login">登录</button>
+        <button class="login-btn" type="text" @click.stop="login">登录</button>
         <router-link to="/register" class="register">去注册?</router-link>
       </div>
     </div>
@@ -52,7 +52,10 @@
     },
 
     methods: {
-      login () {
+      login (e) {
+        if (e._constructed) {
+          return
+        }
         let params = {
           username: this.formData.username,
           password: this.formData.password
@@ -79,9 +82,6 @@
         })
         .catch(res => {
         })
-      },
-      routerTo () {
-        this.$router.push({ path: '/register' })
       },
       showLine (num) {
         num ? this.currentActive = 1 : this.currentActive = 0
@@ -152,7 +152,7 @@
         }
       }
       
-      .login{
+      .login-btn{
         text-transform: uppercase;
         -webkit-appearance: none;
         font-family: Arial;
