@@ -59,8 +59,7 @@
         }
         req('login', params)
         .then((res) => {
-          console.log(res)
-          if (res) {
+          if (res.token) {
             this.$vux.toast.text('登录成功', 'top')
             // 添加cookies
             setToken(res.token, {

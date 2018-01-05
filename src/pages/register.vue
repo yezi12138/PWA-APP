@@ -1,12 +1,11 @@
 <template>
   <layout :backIcon="false" :header="true" title="登录">
     <div class="panel" slot="body">
-      <x-header>登录</x-header>
+      <x-header>注册</x-header>
       <div class="form">
         <input class="username" placeholder="请输入用户名" />
         <input class="password" placeholder="请输入密码" />
-        <input class="password" placeholder="请再次输入密码" />
-        <input class="login" value="注册" type="submit">
+        <button class="login" type="text" @click.stop="register">注册</button>
         <router-link to="/login" class="register">去登录?</router-link>
       </div>
     </div>
@@ -14,7 +13,7 @@
 </template>
 
 <script>
-  import { XHeader } from 'vux'
+  import { XHeader, Toast } from 'vux'
   import Layout from 'components/public/layout'
   export default{
     name: 'Register',
@@ -22,8 +21,7 @@
       return {
         formData: {
           username: '',
-          password: '',
-          passwordCheck: ''
+          password: ''
         }
       }
     },
@@ -37,17 +35,16 @@
           username: this.formData.username,
           password: this.formData.password
         }
-        this.$http.post('/auth/register', params)
+        req('register', params)
         .then((res) => {
-          console.log(res)
-          this.$router.push('/login')
+          if (res.status) {
+            this.$router.push('/login')
+          } else {
+            this.$vux.toast.text('注册失败', 'top')
+          }
         })
         .catch(res => {
-          // Toast({
-          //   message: res.error,
-          //   position: 'top',
-          //   duration: 1000
-          // })
+          this.$vux.toast.text('注册失败', 'top')
         })
       }
     }

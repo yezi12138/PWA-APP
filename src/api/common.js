@@ -6,6 +6,10 @@ export const config = {
     url: '/auth/login',
     method: 'post'
   },
+  register: {
+    url: '/auth/register',
+    method: 'post'
+  },
   // 验证token
   authToken: {
     url: '/auth/token',

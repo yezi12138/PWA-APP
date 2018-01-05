@@ -41,7 +41,10 @@ router.post('/auth/register', (req, res) => {
           if (err) {
             error(res, 500, '注册失败')
           } else {
-            res.send(true)
+            res.json({
+              status: true,
+              msg: '注册成功'
+            })
           }
         })
       } else {
