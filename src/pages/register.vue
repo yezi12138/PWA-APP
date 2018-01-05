@@ -14,6 +14,7 @@
 
 <script>
   import { XHeader, Toast } from 'vux'
+  import req from 'api/common'
   import Layout from 'components/public/layout'
   export default{
     name: 'Register',
