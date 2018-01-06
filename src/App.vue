@@ -9,8 +9,22 @@
 </template>
 
 <script>
+import req from 'api/common'
 export default {
-  name: 'app'
+  name: 'app',
+  methods: {
+    getUserInfo () {
+      if (this.$store.state.login) {
+        // 获取用户信息
+        req('userInfo').then(res => {
+          !res.error && this.$store.commit('ADD_USER', res)
+        })
+      }
+    }
+  },
+  mounted () {
+    this.getUserInfo()
+  }
 }
 </script>
 

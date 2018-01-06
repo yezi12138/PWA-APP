@@ -1,21 +1,30 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { removeToken } from 'utils/auth'
+import Cookies from 'js-cookie'
 
 Vue.use(Vuex)
 
 const state = {
-  user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null
+  user: JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')) : (Cookies.get('user') ? Cookies.get('user') : null),
+  login: sessionStorage.getItem('login') || false
 }
 
 const mutations = {
-  addUser (state, user) {
-    localStorage.setItem('user', JSON.stringify(user))
+  ADD_USER (state, user) {
+    if (localStorage) {
+      localStorage.setItem('user', JSON.stringify(user))
+    } else {
+      Cookies.set('user', user)
+    }
     state.user = user
+    sessionStorage.setItem('login', true)
+    state.login = true
   },
-  removeUser (state) {
-    removeToken('Token')
+  REMOVE_USER (state) {
+    Cookies.remove('Token')
     localStorage.removeItem('user')
+    sessionStorage.removeItem('login')
+    state.login = false
   }
 }
 

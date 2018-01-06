@@ -70,7 +70,7 @@
             })
             // 获取用户信息
             req('userInfo').then(res => {
-              this.$store.commit('addUser', res)
+              !res.error && this.$store.commit('ADD_USER', res)
             })
             // 跳转之前得页面
             let path = this.$route.query.url

@@ -65,7 +65,7 @@ export default {
 
   methods: {
     exit () {
-      this.$store.commit('removeUser')
+      this.$store.commit('REMOVE_USER')
       window.location.reload()
     },
     upLoadAvatar (e) {
@@ -89,7 +89,7 @@ export default {
             avatar: imgData
           }
           req('uploadAvatar', userInfo).then((res) => {
-            this.$store.commit('addUser', res)
+            this.$store.commit('ADD_USER', res)
           })
         }
         img.src = result
@@ -106,13 +106,12 @@ export default {
       ctx.drawImage(img, 0, 0, 70, 70)
       // 将原来图片的质量压缩到原先的0.2倍。
       var data = canvas.toDataURL('image/jpeg', 0.2) // data url的形式
-      console.log(data)
       canvas = null
       return data
     }
   },
 
-  activated () {
+  mounted () {
   }
 }
 </script>

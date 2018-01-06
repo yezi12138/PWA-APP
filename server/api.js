@@ -85,17 +85,14 @@ router.get('/userInfo', (req, res) => {
   let token = req.cookies.Token
   let user = decodeToken(token)
   if (!user) {
-    res.json({
-      status: false,
-      msg: 'no this user'
-    })
+    error(res, 403, 'no correct token')
   } else {
     User.find({_id: user}, (err, data) => {
       if (err) {
-        error(res, 500, err)
+        error(res, 403, err)
       } else {
         if (data.length === 0) {
-          error(res, 500, 'No this user')
+          error(res, 403, 'No this user')
         } else {
           res.json({
             name: data[0].username,
