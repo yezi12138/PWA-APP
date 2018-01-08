@@ -6,11 +6,13 @@ Vue.use(Vuex)
 
 const state = {
   user: JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')) : (Cookies.get('user') ? Cookies.get('user') : null),
-  login: sessionStorage.getItem('login') || false
+  login: sessionStorage.getItem('login') || false,
+  transitionName: ''
 }
 
 const mutations = {
   ADD_USER (state, user) {
+    // 兼容微信页面不支持localstorage
     if (localStorage) {
       localStorage.setItem('user', JSON.stringify(user))
     } else {
@@ -25,6 +27,9 @@ const mutations = {
     localStorage.removeItem('user')
     sessionStorage.removeItem('login')
     state.login = false
+  },
+  TRANSITION_NAME (state, transitionName) {
+    state.transitionName = transitionName
   }
 }
 

@@ -3,7 +3,7 @@
     <div class="nav clearfix">
       <i class="iconfont icon-iconfont303" @click="toggleSide"></i>
       <span class="master">这是一个电商网站 yezi</span>
-      <i class="iconfont icon-notification"></i>
+      <i class="iconfont icon-notification" @click="routerTo"></i>
     </div>
     <search
       @on-submit="submit">
@@ -34,6 +34,9 @@
       },
       submit () {
         console.log('submit')
+      },
+      routerTo () {
+        this.$router.push('/notification')
       }
     }
   }

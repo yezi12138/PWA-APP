@@ -1,5 +1,5 @@
 <template>
-  <layout :backIcon="false" :header="true" title="登录" :loaded="true">
+  <layout :backIcon="false" :loaded="true">
     <div class="panel" slot="body">
       <x-header>登录</x-header>
       <div class="form">
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  import { XHeader, Toast } from 'vux'
+  import { XHeader } from 'vux'
   import Layout from 'components/public/layout'
   import { setToken } from 'utils/auth'
   import req from 'api/common'
@@ -47,8 +47,7 @@
 
     components: {
       Layout,
-      XHeader,
-      Toast
+      XHeader
     },
 
     methods: {

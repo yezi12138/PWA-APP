@@ -1,12 +1,12 @@
 <template>
-  <div class="wrap" ref="wrap">
+  <div class="layout" ref="wrap">
 
     <!-- 头部导航 -->
     <slot name="header">
     </slot>
 
     <!-- 主体内容 -->
-    <div class="home" :style="bodyStyle" ref="content">
+    <div class="layout-home" :style="bodyStyle" ref="content">
       <scroll-panel :loaded="loaded">
         <slot name="body"></slot>
       </scroll-panel>
@@ -17,9 +17,6 @@
 
 <script>
 /**
- * @prop  [String]  title  标题
- * @prop  [Boolean]  backIcon  是否显示后退图标
- * @prop  [Function]  beforeGoBack  后退前的操作
  * @prop  [Boolean]  loaded  数据加载完毕之后刷新滚动
  * @prop  [Boolean]  header  是否显示标题
  * @prop  [Boolean]  search  是否显示搜索组件
@@ -29,17 +26,6 @@
   export default{
     name: 'Layout',
     props: {
-      title: {
-        type: String,
-        default: '标题'
-      },
-      backIcon: {
-        type: Boolean,
-        default: true
-      },
-      beforeGoBack: {
-        type: Function
-      },
       loaded: {
         type: Boolean,
         default: false
@@ -73,18 +59,18 @@
       }
     },
     methods: {
-      goback () {
-        if (this.beforeGoBack) {
-          let promise = new Promise((resolve) => {
-            this.beforeGoBack(resolve)
-          })
-          promise.then(res => {
-            this.$router.back()
-          })
-        } else {
-          this.$router.go(-1)
-        }
-      },
+      // goback () {
+      //   if (this.beforeGoBack) {
+      //     let promise = new Promise((resolve) => {
+      //       this.beforeGoBack(resolve)
+      //     })
+      //     promise.then(res => {
+      //       this.$router.back()
+      //     })
+      //   } else {
+      //     this.$router.go(-1)
+      //   }
+      // },
       setHeight () {
         let headerElm = this.$slots.header ? this.$slots.header[0].elm : null
         let wrapHeight = this.$refs.wrap.offsetHeight
@@ -114,7 +100,7 @@
 
 <style lang="scss" scoped>
   /*  主体样式  */
-  .wrap{
+  .layout{
     position: relative;
     height: 100%;
   }

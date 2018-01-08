@@ -7,7 +7,6 @@ import 'src/sass/index.scss'
 import store from './store.js'
 import { ToastPlugin } from 'vux'
 Vue.use(ToastPlugin)
-Vue.use(ToastPlugin, {position: 'top'})
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

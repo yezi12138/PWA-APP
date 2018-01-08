@@ -1,5 +1,5 @@
 <template>
-  <layout :backIcon="false" :header="true" title="登录" :loaded="true">
+  <layout :backIcon="false" :loaded="true">
     <div class="panel" slot="body">
       <x-header>注册</x-header>
       <div class="form">
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-  import { XHeader, Toast } from 'vux'
+  import { XHeader } from 'vux'
   import req from 'api/common'
   import Layout from 'components/public/layout'
   export default{
@@ -30,8 +30,7 @@
     },
     components: {
       Layout,
-      XHeader,
-      Toast
+      XHeader
     },
     methods: {
       register (e) {
