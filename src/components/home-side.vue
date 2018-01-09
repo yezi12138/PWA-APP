@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { Toast } from 'vux'
 import req from 'api/common'
 export default {
@@ -58,9 +59,9 @@ export default {
   },
 
   computed: {
-    user () {
-      return this.$store.state.user
-    }
+    ...mapGetters({
+      user: 'getUser'
+    })
   },
 
   methods: {

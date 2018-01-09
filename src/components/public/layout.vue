@@ -73,7 +73,6 @@
         let headerHeight = headerElm ? headerElm.offsetHeight : 0
         // let bottomHeight = this.bottom ? this.$refs.bottom.$el.offsetHeight : 0
         let height = wrapHeight - headerHeight + 'px'
-        console.log(height)
         // 设置边距
         let marginTop = headerHeight + 'px'
         this.$set(this.bodyStyle, 'marginTop', marginTop)
