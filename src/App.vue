@@ -9,26 +9,12 @@
 </template>
 
 <script>
-import req from 'api/common'
 export default {
   name: 'app',
-  methods: {
-    getUserInfo () {
-      if (this.$store.state.login) {
-        // 获取用户信息
-        req('userInfo').then(res => {
-          !res.error && this.$store.commit('ADD_USER', res)
-        })
-      }
-    }
-  },
   computed: {
     transitionName () {
       return this.$store.state.transitionName
     }
-  },
-  mounted () {
-    this.getUserInfo()
   }
 }
 </script>
