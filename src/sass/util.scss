@@ -48,6 +48,15 @@
 	}
 }
 
+.clearfix{
+	&:after{
+		content: '';
+		display: table;
+		clear: both;
+		overflow: hidden;
+	}
+}
+
 // 单行文本省略
 .single-text-overflow{
 	overflow: hidden;

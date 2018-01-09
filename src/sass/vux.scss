@@ -14,3 +14,14 @@
 		border-left: 1px solid #333 !important;
 	}
 }
+
+@supports (-webkit-backdrop-filter: none) {
+	.vux-header{
+		background: rgba(255,255,255,.8) !important;
+		-webkit-backdrop-filter: brightness(1.5) blur(4px) !important;
+	}
+}
+
+.vux-previewer{
+	z-index: 9999 !important;
+}

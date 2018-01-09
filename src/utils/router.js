@@ -1,6 +1,9 @@
 import { authRouter, router } from '../router/index'
 import req from 'api/common'
 import { getToken } from './auth'
+import NProgress from 'nprogress'
+
+NProgress.configure({ showSpinner: false })
 
 /**
  * 检查是否存在token
@@ -9,10 +12,10 @@ import { getToken } from './auth'
 export function checkAuth (to, from, next) {
   let token = getToken()
   if (to.name) document.title = to.name
+  NProgress.start()
   // 判断当前是前进还是后退，添加不同的动画效果
   if (router.app.$store) {
     let pageTransitionName = isForward(to, from) ? 'slide-left' : 'slide-right'
-    console.log('pageTransitionName', pageTransitionName)
     router.app.$store.commit('TRANSITION_NAME', pageTransitionName)
   }
   // 当跳转到空页面时候，刷新会回到之前的页面
@@ -47,6 +50,18 @@ export function checkAuth (to, from, next) {
     }
   })
   next()
+}
+
+export function getInfo (to, from) {
+  if (to.path === '/login') {
+    if (router.app.$store && router.app.$store.state.login) {
+      // 获取用户信息
+      req('userInfo').then(res => {
+        !res.error && router.app.$store.commit('ADD_USER', res)
+      })
+    }
+  }
+  NProgress.done()
 }
 
 /**

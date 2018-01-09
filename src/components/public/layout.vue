@@ -30,10 +30,6 @@
         type: Boolean,
         default: false
       },
-      header: {
-        type: Boolean,
-        default: false
-      },
       search: {
         type: Boolean,
         default: false
@@ -77,13 +73,14 @@
         let headerHeight = headerElm ? headerElm.offsetHeight : 0
         // let bottomHeight = this.bottom ? this.$refs.bottom.$el.offsetHeight : 0
         let height = wrapHeight - headerHeight + 'px'
+        console.log(height)
         // 设置边距
         let marginTop = headerHeight + 'px'
         this.$set(this.bodyStyle, 'marginTop', marginTop)
         // 设置主体高度
         this.$set(this.bodyStyle, 'height', height)
         // 设置fixed定位
-        if (this.fixHeader) {
+        if (this.fixHeader && this.$slots.header) {
           headerElm.style.position = 'fixed'
           headerElm.style.zIndex = '9998'
           headerElm.style.top = '0'

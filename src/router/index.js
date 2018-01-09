@@ -4,7 +4,8 @@ import Home from 'pages/home'
 import Login from 'pages/login'
 import Register from 'pages/register'
 import Notification from 'pages/notification'
-import { checkAuth } from '../utils/router'
+import GoodDetail from 'pages/good-detail'
+import { checkAuth, getInfo } from '../utils/router'
 
 Vue.use(Router)
 
@@ -34,6 +35,11 @@ const router = new Router({
       path: '/notification',
       name: 'notification',
       component: Notification
+    },
+    {
+      path: '/good_detail',
+      name: 'goodDetail',
+      component: GoodDetail
     }
   ]
 })
@@ -44,6 +50,7 @@ export const authRouter = [
 ]
 
 router.beforeEach(checkAuth)
+router.afterEach(getInfo)
 
 export { router }
 export default router

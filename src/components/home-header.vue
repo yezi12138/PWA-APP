@@ -1,6 +1,6 @@
 <template>
   <div class="home-header">
-    <div class="nav clearfix">
+    <div class="nav">
       <i class="iconfont icon-iconfont303" @click="toggleSide"></i>
       <span class="master">这是一个电商网站 yezi</span>
       <i class="iconfont icon-notification" @click="routerTo"></i>
@@ -66,7 +66,6 @@
       }
       .icon-notification{
         font-size: 20px;
-        float: right;
       }
     }
   }

@@ -36,7 +36,11 @@
           </div>
           <div class="home-recommend">
             <ul class="goods-list">
-              <li class="goods-item" v-for="(item, index) in goods" :key="index">
+              <li
+                class="goods-item"
+                v-for="(item, index) in goods"
+                :key="index"
+                @click="routerToDetail(item)">
                 {{item.name}}
               </li>
             </ul>
@@ -141,6 +145,9 @@
         let left = el.offsetLeft
         let iconWrap = this.iconWrap || this.$refs.iconWrap
         iconWrap.style.left = left + 12 + 'px'
+      },
+      routerToDetail (data) {
+        this.$router.push({ path: '/good_detail', query: { goodData: JSON.stringify(data) } })
       }
     },
     activated () {
