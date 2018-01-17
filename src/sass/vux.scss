@@ -25,3 +25,9 @@
 .vux-previewer{
 	z-index: 1000 !important;
 }
+
+.vux-card-content{
+	.weui-cell__bd{
+		text-align: center !important;
+	}
+}

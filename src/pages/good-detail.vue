@@ -1,16 +1,20 @@
 <template>
   <div class="good-detail-wrap">
+
     <layout
       :fix-header="true"
       :loaded="true">
+
       <x-header
         slot="header"
         :right-options="{showMore: true}"
         @on-click-more="showMenus = true">
         good
       </x-header>
-      <div class="good-detail" slot="body">
-        <div class="img-wrap border-bottom border-scaleY" @click="showImg">
+
+      <div class="main-good" slot="body"> 
+
+        <div class="border-bottom border-scaleY" @click="showImg">
           <swiper
             :list="imgList1"
             height="275px"
@@ -18,6 +22,7 @@
             @on-index-change="imgIndexChange"
           />
         </div>
+
         <div class="introduction">
           <h1 class="name">Factory</h1>
           <div class="price-wrap">
@@ -39,17 +44,46 @@
             <h3>商家推荐</h3>
             <p>Factory Free sample U8 Smart Watch U8 Android Smart Watch DZ09 TW64 GT08 Wifi in stock</p>
           </div>
-          <div class="btn-group clearfix">
-            <button class="buy-btn">BUY</button>
+        </div>
+
+        <div class="btn-group clearfix">
+          <div class="select-meal">
+            <x-select :data="meal"></x-select>
           </div>
+          <button class="buy-btn">BUY</button>
+        </div>
+
+        <div class="good-detail">
+          <card :header="{title: '商品详情' }">
+            <div slot="content">
+              <ul class="good-info-wrap">
+                <li
+                  class="good-info-item"
+                  v-for="(item, index) in goodDetail"
+                  :key="index">
+                  <span class="item-name">{{item.name}}</span>
+                  <span class="item-content">{{item.content}}</span>
+                </li>
+              </ul>
+            </div>
+            <router-link
+              slot="footer"
+              class="good-detail-footer"
+              to="/good_detail">
+              查看更多
+            </router-link>
+          </card>
         </div>
       </div>
+      
     </layout>
+
     <previewer
       :list="imgList2"
       ref="previewer"
       v-transfer-dom
     />
+
     <div v-transfer-dom>
       <actionsheet
         :menus="menus"
@@ -58,12 +92,14 @@
         @on-click-menu="selectOperation">
       </actionsheet>
     </div>
+
   </div>
 </template>
 
 <script>
 import Layout from 'components/public/layout'
-import { XHeader, Actionsheet, TransferDom, Previewer, Swiper } from 'vux'
+import XSelect from 'components/public/x-select'
+import { XHeader, Actionsheet, TransferDom, Previewer, Swiper, Card } from 'vux'
 export default {
   name: 'GoodDetail',
   components: {
@@ -71,7 +107,9 @@ export default {
     XHeader,
     Actionsheet,
     Previewer,
-    Swiper
+    Swiper,
+    Card,
+    XSelect
   },
   data () {
     return {
@@ -110,7 +148,55 @@ export default {
         src: 'https://static.vux.li/demo/3.jpg'
       }],
       imgIndex: 0,
-      like: false
+      like: false,
+      goodDetail: [
+        {
+          name: '商品名称',
+          content: '爱马仕手表'
+        },
+        {
+          name: '生产时间',
+          content: '2012-2-13'
+        },
+        {
+          name: '型号',
+          content: 'sfa232345463'
+        },
+        {
+          name: '价格',
+          content: '999'
+        },
+        {
+          name: '简介',
+          content: 'Factory Free sample U8 Smart Watch U8 Android Smart Watch DZ09 TW64 GT08 Wifi in stock'
+        }
+      ],
+      meal: [
+        {
+          value: '苹果6',
+          key: 'apple6'
+        },
+        {
+          value: '苹果6s',
+          key: 'apple6s'
+        },
+        {
+          value: '苹果7',
+          key: 'apple7'
+        },
+        {
+          value: '苹果61',
+          key: 'apple61'
+        },
+        {
+          value: '苹果6s1',
+          key: 'apple6s1'
+        },
+        {
+          value: '苹果71',
+          key: 'apple71'
+        }
+      ]
     }
   },
 
@@ -145,9 +231,12 @@ export default {
 <style lang="scss" scoped>
   .good-detail-wrap{
     height: 100%;
+    background-color: #F2F3F7;
   }
-  .good-detail{
+  .main-good{
+    padding-bottom: 20px;
     .introduction{
+      background-color: #fff;
       text-align: center;
       .name{
         padding: 20px 10px;
@@ -180,54 +269,103 @@ export default {
         font-weight: 300;
         font-size: 14px;
         line-height: 18px;
-        margin: 20px 15px;
+        padding: 20px 15px;
         h3{
           font-weight: 400;
           padding-bottom: 5px;
         }
       }
-      .btn-group{
-        margin: 30px 15px;
-        .buy-btn{
-          float: right;
-          width: 48%;
-          border-radius: 3px;
-          border: 0;
-          padding: 0;
-          height: 36px;
-          line-height: 36px;
-          text-align: center;
-          text-transform: uppercase;
-          font-weight: 500;
-          background: #ff6a00;
-          color: #fff;
-          margin-left: 2%;
-        }
+    }
+    .btn-group{
+      display: flex;
+      flex-direction: row;
+      background-color: #fff;
+      padding: 30px 15px 15px 15px;
+      margin: 0;
+      .select-meal{
+        flex: 1;
+      }
+      .buy-btn{
+        float: right;
+        flex: 1;
+        border-radius: 3px;
+        border: 0;
+        padding: 0;
+        height: 36px;
+        line-height: 36px;
+        text-align: center;
+        text-transform: uppercase;
+        font-weight: 500;
+        background: #ff6a00;
+        color: #fff;
+        margin-left: 2%;
       }
     }
-  }
-</style>
-
-<style>
-  .like-leave-active {
-    animation: fadeOut 1.5s ease-out;
-  }
-  @keyframes fadeOut {
-    10%{
-      opacity: 0.9;
-      transform: translate(-2px, -10px);
-    }
-    20%{
-      opacity: 0.7;
-      transform: translate(5px, -10px);
-    }
-    50%{
-      opacity: 0.5;
-      transform: translate(-10px, -10px);
-    }
-    100%{
-      opacity: 0;
-      transform: translate(10px, -20px);
+    .good-detail{
+      background-color: #fff;
+      margin-top: 20px;
+      .good-info-wrap{
+        display: flex;
+        flex-direction: column;
+        padding: 20px 15px;
+        .good-info-item{
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: top;
+          padding: 5px 0;
+          .item-name{
+            font-size: 14px;
+            flex: 1;
+            width: 50%;
+            text-align: left;
+            color: #999;
+            padding: 4px 0;
+          }
+          .item-content{
+            flex: 1;
+            width: 50%;
+            font-size: 14px;
+          }
+        }
+      }
+      .good-detail-footer{
+        display: block;
+        position: relative;
+        height: 100%;
+        text-transform: uppercase;
+        font-weight: 500;
+        font-size: 14px;
+        border-top: 1px solid #e6e7eb;
+        margin-top: 16px;
+        padding: 12px 0;
+        text-align: center;
+        color: #ff6a00;
+        &:after{
+          position: absolute;
+          content: '';
+          background-color: #ccc;
+          bottom: 0;
+          top: 0;
+          left: 0;
+          right: 0;
+          -webkit-transition-duration: .2s;
+          transition-duration: .2s;
+          -webkit-transition-timing-function: cubic-bezier(0.4,0,.2,1);
+          transition-timing-function: cubic-bezier(0.4,0,.2,1);
+          -webkit-transform-origin: 50% 0;
+          transform-origin: 50% 0;
+          -webkit-transform: scaleX(0);
+          transform: scaleX(0);
+          z-index: 1;
+        }
+        &:active{
+          background-color: red;
+          &:after{
+            transform: scaleX(1);
+          }
+        }
+      }
     }
   }
 </style>

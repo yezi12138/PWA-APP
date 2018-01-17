@@ -47,6 +47,16 @@
       snapThreshold: {
         type: Number,
         default: 0.1
+      },
+      // 阻止原生滑动
+      eventPassthrough: {
+        type: String,
+        default: ''
+      },
+      // 探针类型
+      probeType: {
+        type: Number,
+        default: 0
       }
     },
     watch: {
@@ -76,9 +86,10 @@
           this.scroll = new BScroll(this.$refs.content, {
             click: true,
             scrollX: this.scrollX,
-            eventPassthrough: this.scrollX,
+            eventPassthrough: this.eventPassthrough || this.scrollX,
             snap: this.snap,
-            snapThreshold: 0.1
+            snapThreshold: 0.1,
+            probeType: this.probeType
           })
         } else {
           this.scroll.refresh()
