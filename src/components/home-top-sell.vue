@@ -1,52 +1,135 @@
 <template>
-	<div class="ariticle">
-		<div class="ariticle-header">{{title}}</div>
-		<div class="ariticle-content">
-			<slot></slot>
-		</div>
-	</div>
+  <div class="wrap">
+    <scroll-panel
+      :scrollX="true"
+      eventPassthrough="vertical"
+      :loaded="loaded">
+      <div 
+        class="good"
+        v-for="(item, index) in itemData"
+        :key="index"
+        @click="routerToDetail(item)">
+        <div class="good-comment">
+          <img :src="item.image" class="good-img" />
+          <div class="good-info">
+            <div class="good-name">{{ item.name }}</div>
+            <div class="good-price">价格： ${{item.price}}</div>
+            <ul class="good-label-wrap">
+              <li
+                class="good-label"
+                v-for="(babel, index) in item.labels"
+                :key="index"
+                v-if="index < 2">
+                {{babel}}
+              </li>
+            </ul>
+            <i class="iconfont icon-shopcart"></i>
+          </div>
+        </div>
+      </div>
+    </scroll-panel>
+  </div>
 </template>
 
 <script>
-/**
- * 普通展示卡片
- * @prop  [String]  title  卡片的标题
- */
-export default {
-  name: 'CommonCard',
-  props: {
-    title: {
-      type: String,
-      default: '标题',
-      required: true
+  import ScrollPanel from 'components/public/scroll-panel'
+  export default {
+    name: 'goodCommentCard',
+    props: {
+      itemData: {
+        type: Array,
+        required: true
+      }
+    },
+    components: {
+      ScrollPanel
+    },
+    data () {
+      return {
+        loaded: false
+      }
+    },
+    watch: {
+      'itemData' (val) {
+        val && (this.loaded = true)
+      }
+    },
+    methods: {
+      routerToDetail (data) {
+        this.$router.push({ path: '/good_detail', query: { goodData: JSON.stringify(data) } })
+      }
+    },
+    mounted () {
+      this.itemData && (this.loaded = true)
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>
-	.ariticle{
-    min-height: 150px;
-		margin-top:20px;
-		.ariticle-header{
-			position: relative;
-			padding:10px 10px 10px 20px;
-			font-size:16px;
-			color:#e56f0a;
-			&:before{
-				content:'';
-				display:block;
-				width:5px;
-				height:22px;
-				background-color:#e56f0a;
-				position: absolute;
-				left:0;
-				top:50%;
-				transform:translate(0, -50%);
-			}
-		}
-		.ariticle-content{
-			padding: 15px;
-		}
-	}
+  .wrap{
+    width:100%;
+    height: 150px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .good{
+    display: inline-block;
+    width: 260px;
+    vertical-align: top;
+    border: 1px dotted #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    margin: 10px;
+    padding: 10px;
+    padding-right: 20px;
+    overflow: hidden;
+    .good-comment{
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      white-space: normal;
+      .good-img{
+        flex: 0 0 100px;
+        width: 100px;
+        height: 110px;
+      }
+      .good-info{
+        flex: 1;
+        width: 60%;
+        font-size: 12px;
+        line-height: 18px;
+        margin-left: 15px;
+        .good-name{
+          font-size: 14px;
+          padding: 2px 5px;
+        }
+        .good-price{
+          font-size: 14px;
+          color: red;
+          font-weight: 600;
+          margin: 5px 0;
+        }
+        .good-label-wrap{
+          position: absolute;
+          bottom: 0;
+          left: 110px;
+          .good-label{
+            display: inline-block;
+            margin: 2px 5px;
+            padding: 2px 5px;
+            font-size: 12px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background-color: #fff;
+          }
+        }
+        .icon-shopcart{
+          position: absolute;
+          bottom: 6px;
+          right: 0;
+          color: #ccc;
+        }
+      }
+    }
+  }
 </style>

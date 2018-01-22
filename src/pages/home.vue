@@ -28,8 +28,8 @@
           </div>
           <!-- 主页推荐 -->
           <div class="home-recommend">
-            <common-card title="热门推荐">
-              <ScrollX :isTitle="false" :itemData="topSell.subjects" />
+            <common-card :title="topSell.title">
+              <home-top-sell :itemData="topSell.subjects" />
             </common-card>
           </div>
         </div>
@@ -47,7 +47,7 @@
   import HomeHeader from 'components/home-header'
   import Layout from 'components/public/layout'
   import HomeSide from 'components/home-side'
-  import ScrollX from 'components/public/scrollX'
+  import HomeTopSell from 'components/home-top-sell'
   import CommonCard from 'components/public/common-card'
   export default{
     name: 'Home',
@@ -57,7 +57,7 @@
       Swiper,
       Drawer,
       HomeSide,
-      ScrollX,
+      HomeTopSell,
       CommonCard
     },
     data () {
@@ -134,11 +134,20 @@
           img: '../../static/images/banner4.jpg'
         }],
         topSell: {
-          title: '热门推荐',
+          title: '热销产品',
           subjects: [
             {
-              images: '../../static/images/banner4.jpg',
-              title: '123',
+              image: '../../static/images/top250.jpg',
+              name: '【好吃到爆】棕熊饼干 *232',
+              introduction: 'this is introduction',
+              labels: ['食品', '小吃', '吃啥'],
+              price: 12
+            },
+            {
+              image: '../../static/images/banner4.jpg',
+              name: '123',
+              introduction: 'this is introduction',
+              seller: 'user',
               rating: {
                 stars: 42,
                 average: 4.2,
@@ -147,8 +156,10 @@
               }
             },
             {
-              images: '../../static/images/banner4.jpg',
-              title: '123',
+              image: '../../static/images/banner4.jpg',
+              name: '123',
+              introduction: 'this is introduction',
+              seller: 'user',
               rating: {
                 stars: 42,
                 average: 4.2,
@@ -157,8 +168,10 @@
               }
             },
             {
-              images: '../../static/images/banner4.jpg',
-              title: '123',
+              image: '../../static/images/banner4.jpg',
+              name: '123',
+              introduction: 'this is introduction',
+              seller: 'user',
               rating: {
                 stars: 42,
                 average: 4.2,
@@ -167,18 +180,10 @@
               }
             },
             {
-              images: '../../static/images/banner4.jpg',
-              title: '123',
-              rating: {
-                stars: 42,
-                average: 4.2,
-                collect_count: 102,
-                price: 99
-              }
-            },
-            {
-              images: '../../static/images/banner4.jpg',
-              title: '123',
+              image: '../../static/images/banner4.jpg',
+              name: '123',
+              introduction: 'this is introduction',
+              seller: 'user',
               rating: {
                 stars: 42,
                 average: 4.2,
@@ -196,9 +201,6 @@
       },
       routerTo (e) {
         this.toggleIconWrap(e)
-      },
-      routerToDetail (data) {
-        this.$router.push({ path: '/good_detail', query: { goodData: JSON.stringify(data) } })
       }
     },
     activated () {
@@ -255,26 +257,6 @@
     }
   }
   .home-recommend{
-    .goods-list{
-      background-color: #fff;
-      .goods-item{
-        display: inline-block;
-        box-sizing: border-box;
-        width:50%;
-        height: 80px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        &:nth-child(2n){
-          border-left: 0;
-        }
-        &:nth-child(1), &:nth-child(2){
-          border-top: 0;
-        }
-        &:nth-child(n+3){
-          // border-bottom: 0;
-          border-top: 0;
-        }
-      }
-    }
+    margin-bottom: 15px;
   }
 </style>

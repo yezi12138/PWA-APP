@@ -86,7 +86,7 @@
           this.scroll = new BScroll(this.$refs.content, {
             click: true,
             scrollX: this.scrollX,
-            eventPassthrough: this.eventPassthrough || this.scrollX,
+            eventPassthrough: this.eventPassthrough,
             snap: this.snap,
             snapThreshold: 0.1,
             probeType: this.probeType

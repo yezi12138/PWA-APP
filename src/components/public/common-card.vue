@@ -28,6 +28,7 @@ export default {
 	.ariticle{
     min-height: 150px;
 		margin-top:20px;
+		background-color: #fff;
 		.ariticle-header{
 			position: relative;
 			padding:10px 10px 10px 20px;
