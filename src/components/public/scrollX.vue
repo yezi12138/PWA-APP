@@ -7,17 +7,17 @@
     <div class="scrollX-content">
       <scroll-panel :scrollX="true" :loaded="loaded" ref="panel">
         <div class="list-item" v-for="(item, index) in itemData" :key="index" @click='routerTo(item)'>
-          <img :src="item.images.medium" alt="">
+          <img :src="item.images" alt="">
           <div v-if="type === 'default'">
             <div class="name">{{item.title}}</div>
             <div class="star-score">
-              <star :size='24' :score='item.rating.stars / 10'></star>
+              <star :size='24' :score='item.rating / 10'></star>
               <div class="score">{{item.rating.average}}</div>
             </div>
           </div>
           <div v-if="type === 'want'">
             <div class="name">{{item.title}}</div>
-            <div class="want-count">{{item.collect_count}}人想看</div>
+            <div class="want-count">{{item.collect_count}}人收藏</div>
           </div>
           <div v-if="type === 'money'">
             <div class="name">{{item.title}}</div>

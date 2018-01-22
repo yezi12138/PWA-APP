@@ -1,6 +1,9 @@
 
 // 添加喜爱的动画
 .like-leave-active {
+	position: absolute;
+	top: 0;
+	left: 0;
 	animation: fadeOut 1.5s ease-out;
 }
 @keyframes fadeOut {

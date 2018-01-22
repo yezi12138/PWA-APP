@@ -2,25 +2,18 @@
   <drawer
     :show.sync="showSide"
     show-mode="push">
+
     <layout
       :fix-header="true"
       :loaded="true">
         <home-header slot="header" @toggleSide="toggleSide" />
         <div slot="body" class="body">
-          <swiper :height="'120px'" :indicatorType="2">
-            <div class="swiper-item">
-              <img src="../../static/images/banner1.jpg" alt="">
-            </div>
-            <div class="swiper-item">
-              <img src="../../static/images/banner2.jpg" alt="">
-            </div>
-            <div class="swiper-item">
-              <img src="../../static/images/banner3.jpg" alt="">
-            </div>
-            <div class="swiper-item">
-              <img src="../../static/images/banner4.jpg" alt="">
-            </div>
-          </swiper>
+          <!-- 轮播图 -->
+          <swiper
+            :list="imgList"
+            height="120px"
+          />
+          <!-- 主页导航 -->
           <div class="nav-list">
             <div
               class="nav-item"
@@ -32,33 +25,30 @@
               </div>
               <span class="nav-name">{{item.name}}</span>
             </div>
-            <img ref="iconWrap" class="icon-wrap" src="static/images/icon-wrap.png">
           </div>
+          <!-- 主页推荐 -->
           <div class="home-recommend">
-            <ul class="goods-list">
-              <li
-                class="goods-item"
-                v-for="(item, index) in goods"
-                :key="index"
-                @click="routerToDetail(item)">
-                {{item.name}}
-              </li>
-            </ul>
+            <common-card title="热门推荐">
+              <ScrollX :isTitle="false" :itemData="topSell.subjects" />
+            </common-card>
           </div>
         </div>
     </layout>
+
     <div slot="drawer" @click="toggleSide">
       <home-side></home-side>
     </div>
+
   </drawer>
 </template>
 
 <script>
-  import { Drawer } from 'vux'
+  import { Drawer, Swiper } from 'vux'
   import HomeHeader from 'components/home-header'
   import Layout from 'components/public/layout'
-  import Swiper from 'banner-swiper'
   import HomeSide from 'components/home-side'
+  import ScrollX from 'components/public/scrollX'
+  import CommonCard from 'components/public/common-card'
   export default{
     name: 'Home',
     components: {
@@ -66,7 +56,9 @@
       Layout,
       Swiper,
       Drawer,
-      HomeSide
+      HomeSide,
+      ScrollX,
+      CommonCard
     },
     data () {
       return {
@@ -130,7 +122,72 @@
           {
             name: 123
           }
-        ]
+        ],
+        imgList: [{
+          url: 'javascript:',
+          img: '../../static/images/banner1.jpg'
+        }, {
+          url: 'javascript:',
+          img: '../../static/images/banner3.jpg'
+        }, {
+          url: 'javascript:',
+          img: '../../static/images/banner4.jpg'
+        }],
+        topSell: {
+          title: '热门推荐',
+          subjects: [
+            {
+              images: '../../static/images/banner4.jpg',
+              title: '123',
+              rating: {
+                stars: 42,
+                average: 4.2,
+                collect_count: 102,
+                price: 99
+              }
+            },
+            {
+              images: '../../static/images/banner4.jpg',
+              title: '123',
+              rating: {
+                stars: 42,
+                average: 4.2,
+                collect_count: 102,
+                price: 99
+              }
+            },
+            {
+              images: '../../static/images/banner4.jpg',
+              title: '123',
+              rating: {
+                stars: 42,
+                average: 4.2,
+                collect_count: 102,
+                price: 99
+              }
+            },
+            {
+              images: '../../static/images/banner4.jpg',
+              title: '123',
+              rating: {
+                stars: 42,
+                average: 4.2,
+                collect_count: 102,
+                price: 99
+              }
+            },
+            {
+              images: '../../static/images/banner4.jpg',
+              title: '123',
+              rating: {
+                stars: 42,
+                average: 4.2,
+                collect_count: 102,
+                price: 99
+              }
+            }
+          ]
+        }
       }
     },
     methods: {
@@ -139,12 +196,6 @@
       },
       routerTo (e) {
         this.toggleIconWrap(e)
-      },
-      toggleIconWrap (e) {
-        let el = e.currentTarget
-        let left = el.offsetLeft
-        let iconWrap = this.iconWrap || this.$refs.iconWrap
-        iconWrap.style.left = left + 12 + 'px'
       },
       routerToDetail (data) {
         this.$router.push({ path: '/good_detail', query: { goodData: JSON.stringify(data) } })
@@ -201,14 +252,6 @@
     }
     .nav-item:nth-child(4) .img{
       background-color: #2ed9df;
-    }
-    .icon-wrap{
-      position: absolute;
-      width: 60px;
-      height: 60px;
-      left: 22px;
-      top: 5px;
-      transition: all 0.1s;
     }
   }
   .home-recommend{

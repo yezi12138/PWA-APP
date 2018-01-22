@@ -6,9 +6,11 @@
     </div>
     <transition name="select">
       <ul
+        v-transfer-dom
         class="optionsPanel"
         v-show="optionsPanel"
-        ref="optionsPanel">
+        ref="optionsPanel"
+        :style="panelStyle">
         <scroll-panel :load="true" :probeType="2">
           <div
             v-show="optionsPanel"
@@ -71,11 +73,11 @@ export default {
       }
     },
     savePos () {
-      let dom = this.$refs.select
+      let dom = this.$refs.select.getBoundingClientRect()
       return {
-        width: dom.offsetWidth + 'px',
-        top: dom.clientTop + dom.offsetHeight + 'px',
-        left: dom.clientLeft + 'px'
+        width: dom.width + 'px',
+        top: dom.top + dom.height + 'px',
+        left: dom.left + 'px'
       }
     }
   },

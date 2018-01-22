@@ -25,20 +25,23 @@
 
         <div class="introduction">
           <h1 class="name">Factory</h1>
-          <div class="price-wrap">
+          <div class="price-wrap clearfix">
             <span>价格： <strong class="price">$32</strong>&nbsp;|&nbsp;<span class="origin-price">$199</span></span>
-            <i
-              v-show="!like"
-              class="like-icon iconfont icon-like"
-              @click="addLike">
-            </i>
-            <transition name="like" mode="in-out">
+            <div class="like-icon">
               <i
-                v-show="like"
-                class="like-icon iconfont icon-likeon2x"
+                v-show="!like"
+                class="iconfont icon-like"
                 @click="addLike">
               </i>
-            </transition>
+              <transition name="like" mode="in-out">
+                <i
+                  v-show="like"
+                  class="iconfont icon-likeon2x"
+                  @click="addLike">
+                </i>
+              </transition>
+              <div class="like-num">1202</div>
+            </div>
           </div>
           <div class="supplier-recommend">
             <h3>商家推荐</h3>
@@ -47,9 +50,7 @@
         </div>
 
         <div class="btn-group clearfix">
-          <div class="select-meal">
-            <x-select :data="meal"></x-select>
-          </div>
+          <button class="add-btn">添加到购物车</button>
           <button class="buy-btn">BUY</button>
         </div>
 
@@ -246,8 +247,8 @@ export default {
       }
       .price-wrap{
         position: relative;
-        height: 24px;
-        line-height: 24px;
+        height: 34px;
+        line-height: 34px;
         .price{
           color: red;
         }
@@ -257,12 +258,22 @@ export default {
         }
         .like-icon{
           position: absolute;
+          top: 0;
           right: 20px;
-          font-size: 24px;
-          color: #999;
-        }
-        .icon-likeon2x{
-          color: red;
+          line-height: 22px;
+          .icon-like{
+            font-size: 24px;
+            color: #999;
+          }
+          .icon-likeon2x{
+            font-size: 24px;
+            color: red;
+          }
+          .like-num{
+            color: #333;
+            font-size: 10px;
+            line-height: 10px;
+          }
         }
       }
       .supplier-recommend{
@@ -282,10 +293,7 @@ export default {
       background-color: #fff;
       padding: 30px 15px 15px 15px;
       margin: 0;
-      .select-meal{
-        flex: 1;
-      }
-      .buy-btn{
+      .add-btn, .buy-btn{
         float: right;
         flex: 1;
         border-radius: 3px;
@@ -296,9 +304,14 @@ export default {
         text-align: center;
         text-transform: uppercase;
         font-weight: 500;
-        background: #ff6a00;
         color: #fff;
         margin-left: 2%;
+      }
+      .add-btn {
+        background-color: #ff6a00;
+      }
+      .buy-btn {
+        background-color: #FF0036;
       }
     }
     .good-detail{
