@@ -46,7 +46,8 @@ const router = new Router({
 
 // 需要验证的路由
 export const authRouter = [
-  '/notification'
+  '/notification',
+  '/order'
 ]
 
 router.beforeEach(checkAuth)

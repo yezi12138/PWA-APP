@@ -81,7 +81,7 @@
         // 设置fixed定位
         if (this.fixHeader && this.$slots.header) {
           headerElm.style.position = 'fixed'
-          headerElm.style.zIndex = '999'
+          headerElm.style.zIndex = '499'
           headerElm.style.top = '0'
           headerElm.style.left = '0'
           headerElm.style.right = '0'

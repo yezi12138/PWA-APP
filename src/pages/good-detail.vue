@@ -49,9 +49,15 @@
           </div>
         </div>
 
+        <div class="deliver-info">
+          <span>快递: 0.00</span>
+          <span>月销量120321件</span>
+          <span>广东 广州</span>
+        </div>
+
         <div class="btn-group clearfix">
-          <button class="add-btn">添加到购物车</button>
-          <button class="buy-btn">BUY</button>
+          <span class="add-btn">添加到购物车</span>
+          <span class="buy-btn" @click="showBuyPanel = true">BUY</span>
         </div>
 
         <div class="good-detail">
@@ -94,13 +100,16 @@
       </actionsheet>
     </div>
 
+    <buy-panel :isShow.sync="showBuyPanel"  />
+
   </div>
 </template>
 
 <script>
 import Layout from 'components/public/layout'
 import XSelect from 'components/public/x-select'
-import { XHeader, Actionsheet, TransferDom, Previewer, Swiper, Card } from 'vux'
+import BuyPanel from 'components/buy-panel'
+import { XHeader, Actionsheet, TransferDom, Previewer, Swiper, Card, Popup, Icon } from 'vux'
 export default {
   name: 'GoodDetail',
   components: {
@@ -110,10 +119,14 @@ export default {
     Previewer,
     Swiper,
     Card,
-    XSelect
+    XSelect,
+    Popup,
+    Icon,
+    BuyPanel
   },
   data () {
     return {
+      showBuyPanel: false,
       menus: {
         menu1: {
           label: '分享',
@@ -221,10 +234,6 @@ export default {
     addLike () {
       this.like = !this.like
     }
-  },
-
-  created () {
-
   }
 }
 </script>
@@ -287,11 +296,19 @@ export default {
         }
       }
     }
+    .deliver-info{
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 25px;
+      font-size: 12px;
+      color: #999;
+      background-color: #fff;
+    }
     .btn-group{
       display: flex;
       flex-direction: row;
       background-color: #fff;
-      padding: 30px 15px 15px 15px;
+      padding: 10px 15px 15px 15px;
       margin: 0;
       .add-btn, .buy-btn{
         float: right;
