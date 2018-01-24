@@ -24,9 +24,9 @@
         </div>
 
         <div class="introduction">
-          <h1 class="name">Factory</h1>
+          <h1 class="name">{{good.name}}</h1>
           <div class="price-wrap clearfix">
-            <span>价格： <strong class="price">$32</strong>&nbsp;|&nbsp;<span class="origin-price">$199</span></span>
+            <span>价格： <strong class="price">${{good.price}}</strong>&nbsp;|&nbsp;<span class="origin-price">${{good.origin_price}}</span></span>
             <div class="like-icon">
               <i
                 v-show="!like"
@@ -40,19 +40,19 @@
                   @click="addLike">
                 </i>
               </transition>
-              <div class="like-num">1202</div>
+              <div class="like-num">{{good.likes}}</div>
             </div>
           </div>
           <div class="supplier-recommend">
             <h3>商家推荐</h3>
-            <p>Factory Free sample U8 Smart Watch U8 Android Smart Watch DZ09 TW64 GT08 Wifi in stock</p>
+            <p>{{good.introduction}}</p>
           </div>
         </div>
 
         <div class="deliver-info">
-          <span>快递: 0.00</span>
-          <span>月销量120321件</span>
-          <span>广东 广州</span>
+          <span>快递: {{good.deliver_cost}}</span>
+          <span>月销量{{good.year_count}}件</span>
+          <span>{{good.city}}</span>
         </div>
 
         <div class="btn-group clearfix">
@@ -66,7 +66,7 @@
               <ul class="good-info-wrap">
                 <li
                   class="good-info-item"
-                  v-for="(item, index) in goodDetail"
+                  v-for="(item, index) in good.detail"
                   :key="index">
                   <span class="item-name">{{item.name}}</span>
                   <span class="item-content">{{item.content}}</span>
@@ -100,7 +100,7 @@
       </actionsheet>
     </div>
 
-    <buy-panel :isShow.sync="showBuyPanel"  />
+    <buy-panel :isShow.sync="showBuyPanel" :data="good"  />
 
   </div>
 </template>
@@ -110,6 +110,7 @@ import Layout from 'components/public/layout'
 import XSelect from 'components/public/x-select'
 import BuyPanel from 'components/buy-panel'
 import { XHeader, Actionsheet, TransferDom, Previewer, Swiper, Card, Popup, Icon } from 'vux'
+import req from 'api/common'
 export default {
   name: 'GoodDetail',
   components: {
@@ -127,6 +128,7 @@ export default {
   data () {
     return {
       showBuyPanel: false,
+      good: {},
       menus: {
         menu1: {
           label: '分享',
@@ -163,28 +165,6 @@ export default {
       }],
       imgIndex: 0,
       like: false,
-      goodDetail: [
-        {
-          name: '商品名称',
-          content: '爱马仕手表'
-        },
-        {
-          name: '生产时间',
-          content: '2012-2-13'
-        },
-        {
-          name: '型号',
-          content: 'sfa232345463'
-        },
-        {
-          name: '价格',
-          content: '999'
-        },
-        {
-          name: '简介',
-          content: 'Factory Free sample U8 Smart Watch U8 Android Smart Watch DZ09 TW64 GT08 Wifi in stock'
-        }
-      ],
       meal: [
         {
           value: '苹果6',
@@ -234,6 +214,18 @@ export default {
     addLike () {
       this.like = !this.like
     }
+  },
+
+  created () {
+    req('getGoodInfo')
+    .then(res => {
+      console.log(res)
+      this.good = res
+    })
+  },
+
+  deactivated () {
+    this.$destroy()
   }
 }
 </script>
@@ -356,6 +348,7 @@ export default {
             flex: 1;
             width: 50%;
             font-size: 14px;
+            line-height: 18px;
           }
         }
       }

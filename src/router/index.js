@@ -5,6 +5,7 @@ import Login from 'pages/login'
 import Register from 'pages/register'
 import Notification from 'pages/notification'
 import GoodDetail from 'pages/good-detail'
+import Order from 'pages/order'
 import { checkAuth, getInfo } from '../utils/router'
 
 Vue.use(Router)
@@ -40,6 +41,11 @@ const router = new Router({
       path: '/good_detail',
       name: 'goodDetail',
       component: GoodDetail
+    },
+    {
+      path: '/order',
+      name: 'order',
+      component: Order
     }
   ]
 })

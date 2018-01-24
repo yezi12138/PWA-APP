@@ -24,6 +24,11 @@ export const config = {
   uploadAvatar: {
     url: '/upLoadAvatar',
     method: 'post'
+  },
+  // 获取商品详细信息
+  getGoodInfo: {
+    url: '/goodInfo',
+    method: 'get'
   }
 }
 

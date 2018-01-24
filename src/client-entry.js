@@ -6,6 +6,7 @@ import router from './router'
 import 'src/sass/index.scss'
 import store from './store.js'
 import { ToastPlugin } from 'vux'
+require('./mock.js')
 Vue.use(ToastPlugin)
 Vue.config.productionTip = false
 

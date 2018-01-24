@@ -18,7 +18,7 @@
           <span>21:00前付款，预计1月26日(周五)送达</span>
         </div>
 
-        <div class="package">
+        <div class="package border-bottom border-scaleY">
           <div class="title">套餐类型</div>
           <span
             v-for="item in packages"
@@ -27,6 +27,15 @@
             @click="currentPackage = item.key">
               {{item.label}}
           </span>
+        </div>
+
+        <div class="buy-num item-cell border-bottom border-scaleY">
+          <span>购买数量</span>
+          <div class="btn-group">
+            <span class="decrease-btn" @click="decreaseNum"></span>
+            <span class="current-num">{{ currentNum }}</span>
+            <span class="add-btn" @click="addNum"></span>
+          </div>
         </div>
 
         <div class="stage">
@@ -63,6 +72,9 @@ export default {
     isShow: {
       type: Boolean,
       default: false
+    },
+    data: {
+      type: Object
     }
   },
 
@@ -104,7 +116,8 @@ export default {
           key: '03'
         }
       ],
-      currentStage: ''
+      currentStage: '',
+      currentNum: 1
     }
   },
 
@@ -116,6 +129,13 @@ export default {
     beforeHide () {
       this.showBuyPanel = false
       this.$emit('update:isShow', false)
+    },
+    decreaseNum () {
+      this.currentNum--
+      this.currentNum < 1 && (this.currentNum = 1)
+    },
+    addNum () {
+      this.currentNum++
     }
   }
 }
@@ -210,5 +230,69 @@ export default {
       color: #fff;
       background-color: #FF0036;
     }
+    .item-cell{
+      padding: 9px;
+      background-color: #fff;
     }
+    .buy-num{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      padding: 15px;
+      color: #666;
+      .btn-group{
+        .current-num{
+          vertical-align: middle;
+        }
+        .decrease-btn, .add-btn{
+          vertical-align: middle;
+          display: inline-block;
+          width: 32px;
+          height: 32px;
+          position: relative;
+          line-height: 1;
+        }
+        .decrease-btn{
+              background-color: #f5f5f5;
+          margin-right: 10px;
+          &:after{
+            position: absolute;
+            top: 15px;
+            left: 10px;
+            border-bottom: 2px solid #999;
+            width: 12px;
+            height: 1px;
+            content: ' ';
+          }
+        }
+        .add-btn{
+          background-color: #ccc;
+          margin-left: 10px;
+          &:before{
+            box-sizing: border-box;
+            position: absolute;
+            top: 15px;
+            left: 10px;
+            border-bottom: 2px solid #999;
+            width: 12px;
+            height: 1px;
+            content: ' ';
+            transform: rotate(90deg);
+          }
+          &:after{
+            box-sizing: border-box;
+            position: absolute;
+            top: 15px;
+            left: 10px;
+            border-bottom: 2px solid #999;
+            width: 12px;
+            height: 1px;
+            content: ' ';
+          }
+        }
+      }
+    }
+  }
 </style>
