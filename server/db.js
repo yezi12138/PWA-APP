@@ -18,85 +18,19 @@ const loginSchema = new mongoose.Schema({
   username: String,
   password: String,
   avatar: String,
-  createTime: Date
-})
-
-const newBookSchema = new mongoose.Schema({
-  author: String,
-  images: Object,
-  rating: Object,
-  title: String
-})
-
-const popularBookSchema = new mongoose.Schema({
-  images: Object,
-  classification: String,
-  rating: Object,
-  reviewer: String,
-  reviews: String,
-  title: String
-})
-
-const hotSchema = new mongoose.Schema({
-  detailContent: Object,
-  detailUrl: String,
-  review: String,
-  title: String,
-  userName: String,
-  userPic: String
-})
-
-const eBookSchema = new mongoose.Schema({
-  author: Object,
-  images: Object,
-  rating: Object,
-  price: String,
-  title: String
-})
-
-const movieCommentSchema = new mongoose.Schema({
-  userName: String,
-  stars: Number,
-  value: String,
-  time: Date,
-  like: Number,
-  moviIid: String,
-  childComment: Array,
-  avatar: String,
-  only: Boolean,
-  tags: Array
-})
-
-const bookCommentSchema = new mongoose.Schema({
-  userName: String,
-  stars: Number,
-  value: String,
-  time: Date,
-  like: Number,
-  moviIid: String,
-  childComment: Array,
-  avatar: String,
-  only: Boolean,
-  tags: Array
+  createTime: Date,
+  goods: {
+    order_time: Date,
+    good_info: Object,
+    select_data: Object
+  }
 })
 
 /**
  * 定义模型Model
  */
 const User = mongoose.model('account', loginSchema)
-const NewBook = mongoose.model('newbook', newBookSchema)
-const Hot = mongoose.model('hot', hotSchema)
-const EBook = mongoose.model('eBook', eBookSchema)
-const PopularBook = mongoose.model('popularBook', popularBookSchema)
-const MovieComment = mongoose.model('movieComment', movieCommentSchema)
-const BookComment = mongoose.model('bookComment', bookCommentSchema)
 
 module.exports = {
-  User,
-  NewBook,
-  Hot,
-  EBook,
-  PopularBook,
-  MovieComment,
-  BookComment
+  User
 }

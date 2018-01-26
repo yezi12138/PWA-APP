@@ -9,6 +9,7 @@ const goodData = function () {
   var name = Random.csentence(3, 10)
   return {
     name: name,
+    shop_name: Random.csentence(3, 10),
     price: price,
     origin_price: originPrice,
     image: Random.dataImage('100*100', 'mock的图片'),

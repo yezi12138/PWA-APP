@@ -52,7 +52,7 @@ export default {
         {
           icon: 'icon-mine',
           text: '我的商品',
-          path: '/myGoods'
+          path: '/my_goods'
         }
       ]
     }

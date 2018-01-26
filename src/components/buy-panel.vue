@@ -95,15 +95,15 @@ export default {
       packages: [
         {
           label: '官方标配',
-          key: '01'
+          key: '官方标配'
         },
         {
           label: '港澳台',
-          key: '02'
+          key: '港澳台'
         },
         {
           label: '美版',
-          key: '03'
+          key: '美版'
         }
       ],
       currentPackage: '',
@@ -143,7 +143,17 @@ export default {
         this.$vux.toast.text('请选择套餐', 'top')
         return
       }
-      this.$router.push({ path: '/order' })
+      this.$router.push({
+        path: '/order',
+        query: {
+          goodInfo: JSON.stringify(this.data),
+          selectData: JSON.stringify({
+            stage: this.currentStage,
+            package: this.currentPackage,
+            num: this.currentNum
+          })
+        }
+      })
     }
   }
 }

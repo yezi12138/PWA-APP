@@ -217,11 +217,15 @@ export default {
   },
 
   created () {
-    req('getGoodInfo')
-    .then(res => {
-      console.log(res)
-      this.good = res
-    })
+    let good = JSON.parse(this.$route.query.good)
+    if (good) {
+      this.good = good
+    } else {
+      req('getGoodInfo')
+      .then(res => {
+        this.good = res
+      })
+    }
   },
 
   deactivated () {

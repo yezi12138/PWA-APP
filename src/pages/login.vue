@@ -61,7 +61,11 @@
         }
         req('login', params)
         .then((res) => {
-          if (res.token) {
+          if (!res.status) {
+            this.$vux.toast.text('登录失败', 'top')
+            return
+          }
+          if (res.status && res.token) {
             this.$vux.toast.text('登录成功', 'top')
             // 添加cookies
             setToken(res.token, {
@@ -74,12 +78,11 @@
             // 跳转之前得页面
             let path = this.$route.query.url
             this.$router.push({ path: path })
-          } else {
-            this.$vux.toast.text('登录失败', 'top')
           }
           return false
         })
         .catch(res => {
+          this.$vux.toast.text('登录失败', 'top')
         })
       },
       showLine (num) {

@@ -1,58 +1,71 @@
 <template>
-  <div class="order" slot="body" :loaded="true">
+  <div class="order-wrap">
 
-    <div class="order-address">
-      <div class="order-accept">
-        <span class="accepter">收货人： 叶先生</span>
-        <span class="phone">17612080016</span>
-      </div>
-      <p class="address single-text-overflow">收货地址：广东 湛江 霞山 乐华 明哲路明景花园</p>
-      <i class="iconfont icon-xiangyoujiantou"></i>
-    </div>
+    <layout  :loaded="true" :fix-header="true">
 
-    <div class="shop-info">
-      <div class="shop-name item-cell border-bottom border-scaleY">诺西裕佳缘专卖店</div>
-      <div class="shop-content item-cell border-bottom border-scaleY">
-        <div class="img">img</div>
-        <div class="good-info">
-          <div class="basic-info">
-            <div class="good-name">年货价】苹果数据线保护套手机充电器保护线iphone充电线保护绳耳机绕线器</div>
-            <div class="price">￥8.80  X1</div>
+      <x-header
+        slot="header">
+        订单
+      </x-header>
+
+      <div class="order" slot="body">
+
+        <div class="order-address">
+          <div class="order-accept">
+            <span class="accepter">收货人： 叶先生</span>
+            <span class="phone">17612080016</span>
           </div>
-          <div class="package">
-            <span>套餐: </span>
-            <span>港台</span>
+          <p class="address single-text-overflow">收货地址：广东 湛江 霞山 乐华 明哲路明景花园</p>
+          <i class="iconfont icon-xiangyoujiantou"></i>
+        </div>
+
+        <div class="shop-info">
+          <div class="shop-name item-cell border-bottom border-scaleY">{{goodInfo.shop_name}}</div>
+          <div class="shop-content item-cell border-bottom border-scaleY">
+            <div class="img">img</div>
+            <div class="good-info">
+              <div class="basic-info">
+                <div class="good-name">{{goodInfo.name}}</div>
+                <div class="price">￥{{goodInfo.price}}  X1</div>
+              </div>
+              <div class="package">
+                <span>套餐: </span>
+                <span>{{selectData.package}}</span>
+              </div>
+            </div>
           </div>
         </div>
+
+        <div class="buy-num item-cell border-bottom border-scaleY">
+          <span>购买数量</span>
+          <div class="btn-group">
+            <span class="decrease-btn" @click="decreaseNum"></span>
+            <span class="current-num">{{selectData.num}}</span>
+            <span class="add-btn" @click="addNum"></span>
+          </div>
+        </div>
+
+        <div class="discount item-cell border-bottom border-scaleY">
+          <selector ref="defaultValueRef" title="店铺优惠" :options="lists" v-model="discount"></selector>
+        </div>
+
+        <div class="message item-cell border-bottom border-scaleY">
+          <span>给卖家留言: </span>
+          <input v-model="message" placeholder="选填:填写内容已与商家确认" />
+        </div>
+
+        <div class="sum item-cell border-bottom border-scaleY">
+          <span class="title">共{{ selectData.num }}件,合计: </span>
+          <span class="price">￥<span class="integer">{{Math.floor(total)}}</span>.{{total.toString().split('.')[1]}}</span>
+        </div>
+
       </div>
-    </div>
 
-    <div class="buy-num item-cell border-bottom border-scaleY">
-      <span>购买数量</span>
-      <div class="btn-group">
-        <span class="decrease-btn" @click="decreaseNum"></span>
-        <span class="current-num">{{ currentNum }}</span>
-        <span class="add-btn" @click="addNum"></span>
-      </div>
-    </div>
-
-    <div class="discount item-cell border-bottom border-scaleY">
-      <selector ref="defaultValueRef" title="店铺优惠" :options="lists" v-model="discount"></selector>
-    </div>
-
-    <div class="message item-cell border-bottom border-scaleY">
-      <span>给卖家留言: </span>
-      <input v-model="message" placeholder="选填:填写内容已与商家确认" />
-    </div>
-
-    <div class="sum item-cell border-bottom border-scaleY">
-      <span class="title">共{{ currentNum }}件,合计: </span>
-      <span class="price">￥<span class="integer">{{Math.floor(total)}}</span>.{{total.toString().split('.')[1]}}</span>
-    </div>
+    </layout>
 
     <div class="bottom-panel">
       <div class="bottom-sum">
-        <span class="title">共{{ currentNum }}件,总金额: </span>
+        <span class="title">共{{ selectData.num }}件,总金额: </span>
         <span class="price">￥<span class="integer">{{Math.floor(total)}}</span>.{{total.toString().split('.')[1]}}</span>
       </div>
       <div class="buy-btn">
@@ -61,21 +74,25 @@
     </div>
 
   </div>
+
 </template>
 
 <script>
 import Layout from 'components/public/layout'
-import { Selector, XInput } from 'vux'
+import { Selector, XInput, XHeader } from 'vux'
+import req from 'api/common'
 export default {
   name: 'Order',
   components: {
     Layout,
     Selector,
-    XInput
+    XInput,
+    XHeader
   },
   data () {
     return {
-      currentNum: 1,
+      goodInfo: {},
+      selectData: {},
       price: 1.82,
       discount: '',
       message: '',
@@ -94,30 +111,49 @@ export default {
 
   computed: {
     total () {
-      return this.price * this.currentNum
+      return this.goodInfo.price * this.selectData.num
     }
   },
 
   methods: {
     decreaseNum () {
-      this.currentNum--
-      this.currentNum < 1 && (this.currentNum = 1)
+      this.selectData.num--
+      this.selectData.num < 1 && (this.selectData.num = 1)
     },
     addNum () {
-      this.currentNum++
+      this.selectData.num++
     },
     buy () {
-      this.$vux.toast.text('购买成功', 'top')
+      let params = {
+        order: {
+          order_time: (new Date()).valueOf(),
+          good_info: this.goodInfo,
+          select_data: this.selectData
+        }
+      }
+      req('postOrder', params)
+      .then(res => {
+        if (res.status) {
+          this.$vux.toast.text('购买成功', 'top')
+          this.$router.push({ path: '/my_goods' })
+        } else {
+          this.$vux.toast.text('购买失败,请重新下单', 'top')
+        }
+      })
     }
   },
 
-  created () {
-
+  activated () {
+    this.goodInfo = JSON.parse(this.$route.query.goodInfo)
+    this.selectData = JSON.parse(this.$route.query.selectData)
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  .order-wrap{
+    height: 100%;
+  }
   .order{
     color: #666;
     height: 100%;
@@ -267,36 +303,36 @@ export default {
         font-size: 16px;
       }
     }
-    .bottom-panel{
-      position: fixed;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      background-color: #fff;
-      margin-top: 9px;
-      z-index: 999;
-      box-shadow: 0 -1px 0 0 rgba(0,0,0,.1), 0 -0.5px 0.5px 0 rgba(0,0,0,.2);
+  }
+  .bottom-panel{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #fff;
+    margin-top: 9px;
+    z-index: 999;
+    box-shadow: 0 -1px 0 0 rgba(0,0,0,.1), 0 -0.5px 0.5px 0 rgba(0,0,0,.2);
+    text-align: right;
+    .bottom-sum{
+      display: inline-block;
+      padding-top: 15px;
+      padding-bottom: 15px;
       text-align: right;
-      .bottom-sum{
-        display: inline-block;
-        padding-top: 15px;
-        padding-bottom: 15px;
-        text-align: right;
-        .price{
-          color: #ff0036;
-        }
-        .integer{
-          font-size: 16px;
-        }
+      .price{
+        color: #ff0036;
       }
-      .buy-btn{
-        display: inline-block;
-        padding: 1.1em 1.4em;
-        pointer-events: all;
+      .integer{
         font-size: 16px;
-        background-color: #ff0036;
-        color: #fff;
       }
+    }
+    .buy-btn{
+      display: inline-block;
+      padding: 1.1em 1.4em;
+      pointer-events: all;
+      font-size: 16px;
+      background-color: #ff0036;
+      color: #fff;
     }
   }
 </style>

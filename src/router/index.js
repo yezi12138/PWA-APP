@@ -6,6 +6,7 @@ import Register from 'pages/register'
 import Notification from 'pages/notification'
 import GoodDetail from 'pages/good-detail'
 import Order from 'pages/order'
+import MyGoods from 'pages/my-goods'
 import { checkAuth, getInfo } from '../utils/router'
 
 Vue.use(Router)
@@ -46,6 +47,11 @@ const router = new Router({
       path: '/order',
       name: 'order',
       component: Order
+    },
+    {
+      path: '/my_goods',
+      name: 'myGoods',
+      component: MyGoods
     }
   ]
 })

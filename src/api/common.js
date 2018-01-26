@@ -29,6 +29,16 @@ export const config = {
   getGoodInfo: {
     url: '/goodInfo',
     method: 'get'
+  },
+  // 获取商品订单
+  getOrder: {
+    url: '/order',
+    method: 'get'
+  },
+  // 下订单
+  postOrder: {
+    url: '/order',
+    method: 'post'
   }
 }
 

@@ -6,10 +6,6 @@ const decodeToken = require('./auth').decodeToken
 // 数据库定义
 const db = require('./db')
 const User = db.User
-const Hot = db.Hot
-const NewBook = db.NewBook
-const EBook = db.EBook
-const PopularBook = db.PopularBook
 
 const error = (res, code, message) => {
   res
@@ -67,10 +63,14 @@ router.post('/auth/login', (req, res) => {
       error(res, 500, err)
     } else {
       if (data.length === 0) {
-        error(res, 500, 'No message available')
+        res.json({
+          status: false,
+          msg: '登录失败'
+        })
       } else {
         let token = generateToken(data[0])
         res.json({
+          status: true,
           token: token
         })
       }
@@ -144,6 +144,51 @@ router.get('/auth/token', (req, res) => {
 })
 
 /**
+ * 确认订单
+ */
+router.post('/order', (req, res) => {
+  let token = req.cookies.Token
+  let result = decodeToken(token)
+  if (result) {
+    var order = req.body.order
+    User.update({_id: result}, {$push: {goods: order}}, function (err, result) {
+      if (err) {
+        error(res, 500, err)
+      } else {
+        res.json({
+          status: true,
+          msg: '购买成功'
+        })
+      }
+    })
+  }
+})
+
+/**
+ * 获取订单详情
+ */
+router.get('/order', (req, res) => {
+  let token = req.cookies.Token
+  let result = decodeToken(token)
+  if (result) {
+    User.find({_id: result}, (err, data) => {
+      if (err) {
+        error(res, 500, err)
+      } else {
+        if (data.length === 0) {
+          res.json({
+            status: false,
+            msg: '不存在该用户'
+          })
+        } else {
+          res.send(data[0].goods)
+        }
+      }
+    })
+  }
+})
+
+/**
  * 修改头像
  */
 router.post('/upLoadAvatar', (req, res) => {
@@ -172,97 +217,6 @@ router.post('/upLoadAvatar', (req, res) => {
           }
         }
       })
-    }
-  })
-})
-
-/**
- * 返回今日精选内容
- */
-router.get('/hot', (req, res) => {
-  Hot.find({}, (err, data) => {
-    if (err) {
-      console.log(err)
-    } else {
-      if (data.length === 0) {
-        res.json({
-          msg: 'fail to find data'
-        })
-      } else {
-        let pushData = []
-        pushData.push(data[data.length - 1])
-        pushData.push(data[data.length - 2])
-        res.json({
-          title: '今日精选',
-          subjects: pushData
-        })
-      }
-    }
-  })
-})
-
-/**
- * 返回新书速递
- */
-router.get('/new_book', (req, res) => {
-  NewBook.find({}, (err, data) => {
-    if (err) {
-      console.log(err)
-    } else {
-      if (data.length === 0) {
-        res.json({
-          msg: 'fail to find data'
-        })
-      } else {
-        res.json({
-          title: '新书速递',
-          subjects: data
-        })
-      }
-    }
-  })
-})
-
-/**
- * 返回最受关注图书榜
- */
-router.get('/popular_book', (req, res) => {
-  PopularBook.find({}, (err, data) => {
-    if (err) {
-      console.log(err)
-    } else {
-      if (data.length === 0) {
-        res.json({
-          msg: 'fail to find data'
-        })
-      } else {
-        res.json({
-          title: '最受关注图书榜',
-          subjects: data
-        })
-      }
-    }
-  })
-})
-
-/**
- * 返回电子图书
- */
-router.get('/e_book', (req, res) => {
-  EBook.find({}, (err, data) => {
-    if (err) {
-      console.log(err)
-    } else {
-      if (data.length === 0) {
-        res.json({
-          msg: 'fail to find data'
-        })
-      } else {
-        res.json({
-          title: '电子图书',
-          subjects: data
-        })
-      }
     }
   })
 })
