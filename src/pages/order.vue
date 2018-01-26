@@ -56,7 +56,7 @@
         <span class="price">￥<span class="integer">{{Math.floor(total)}}</span>.{{total.toString().split('.')[1]}}</span>
       </div>
       <div class="buy-btn">
-        <span>提交订单</span>
+        <span @click="buy">提交订单</span>
       </div>
     </div>
 
@@ -105,6 +105,9 @@ export default {
     },
     addNum () {
       this.currentNum++
+    },
+    buy () {
+      this.$vux.toast.text('购买成功', 'top')
     }
   },
 

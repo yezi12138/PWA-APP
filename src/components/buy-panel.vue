@@ -1,7 +1,9 @@
 <template>
-  <div v-transfer-dom>
-    <popup v-model="showBuyPanel" @on-hide="beforeHide">
+  <div class="buy-panel">
+    <popup v-model="showBuyPanel" @on-hide="beforeHide" slot="body">
       <div class="popup">
+
+        <div class="transparent"></div>
 
         <div class="popup-header border-bottom border-scaleY">
           <div class="preview">img</div>
@@ -49,7 +51,8 @@
           </span>
         </div>
 
-        <router-link to="/order" class="buy">购买</router-link>
+        <span class="buy" @click="routerTo">购买</span>
+
       </div>
     </popup>
   </div>
@@ -59,13 +62,15 @@
 /**
  * 购买时候弹出的菜单选择
  */
-import { TransferDom, Popup, Icon } from 'vux'
+import { Popup, Icon } from 'vux'
+import ScrollPanel from 'components/public/scroll-panel'
 export default {
   name: 'BuyPanel',
 
   components: {
     Popup,
-    Icon
+    Icon,
+    ScrollPanel
   },
 
   props: {
@@ -121,10 +126,6 @@ export default {
     }
   },
 
-  directives: {
-    TransferDom
-  },
-
   methods: {
     beforeHide () {
       this.showBuyPanel = false
@@ -136,18 +137,39 @@ export default {
     },
     addNum () {
       this.currentNum++
+    },
+    routerTo () {
+      if (!this.currentPackage) {
+        this.$vux.toast.text('请选择套餐', 'top')
+        return
+      }
+      this.$router.push({ path: '/order' })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  .buy-panel{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 501;
+  }
   .popup{
-    background-color: #fff;
+    height: 400px;
+    overflow: auto;
+    background-color: transparent;
+    .transparent{
+      height: 28px;
+      background-color: transparent;
+    }
     .popup-header{
       position: relative;
       padding: 10px 15px;
       padding-bottom: 40px;
+      background-color: #fff;
       .weui_icon_cancel{
         float: right;
       }
@@ -181,6 +203,7 @@ export default {
       flex-direction: column;
       color: #666;
       font-size: 12px;
+      background-color: #fff;
       padding: 20px 15px;
       span+span{
         margin-top: 10px;
@@ -190,6 +213,7 @@ export default {
       color: #666;
       font-size: 12px;
       padding: 20px 15px;
+      background-color: #fff;
       span{
         position: relative;
         display: inline-block;
@@ -208,6 +232,7 @@ export default {
       }
     }
     .stage{
+      background-color: #fff;
       span{
         text-align: center;
         width: 112px;
@@ -215,6 +240,7 @@ export default {
       }
     }
     .deliver-area, .package, .stage{
+      background-color: #fff;
       .title{
         font-size: 13px;
         font-weight: 400;
