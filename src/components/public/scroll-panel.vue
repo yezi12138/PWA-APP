@@ -2,6 +2,9 @@
   <div class="scroll-wrap" ref="content">
     <div class="scroll-panel" ref="panel">
       <slot></slot>
+      <div class="bottom-text">
+        已经到底啦
+      </div>
     </div>
   </div>
 </template>
@@ -161,7 +164,22 @@
 
 <style lang="scss" scoped>
   .scroll-wrap{
+    position: relative;
     height: 100%;
+  }
+  .bottom-text{
+    position: absolute;
+    bottom: -60px;
+    left: 0;
+    width: 100%;
+    margin: 10px 10px;
+	  padding: 5px 0;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: red;
+    border-radius: 5px;
   }
 </style>
 

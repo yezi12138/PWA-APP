@@ -17,6 +17,8 @@
             height="120px"
           />
 
+          <button @click='post'>点击推送</button>
+
           <!-- 主页导航 -->
           <div class="nav-list">
             <div

@@ -12,10 +12,6 @@
       </scroll-panel>
     </div>
 
-    <div class="bottom-text">
-      已经没有其他东西啦
-    </div>
-
   </div>
 </template>
 
@@ -95,20 +91,8 @@
   .layout{
     position: relative;
     height: 100%;
-  }
-  .bottom-text{
-    position: absolute;
-    bottom: -100px;
-    left: 0;
-    width: 100%;
-    margin: 10px 10px;
-	padding: 5px 0;
-    height: 20px;
-    line-height: 20px;
-    text-align: center;
-    background-color: #f2f3f7;
-    font-size: 14px;
-    color: #c08f8f;
-    border-radius: 5px;
+    .loyout-home{
+      position: relative;
+    }
   }
 </style>

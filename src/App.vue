@@ -9,12 +9,16 @@
 </template>
 
 <script>
+import { requestPermission } from 'utils/sw'
 export default {
   name: 'app',
   computed: {
     transitionName () {
       return this.$store.state.transitionName
     }
+  },
+  mounted () {
+    requestPermission()
   }
 }
 </script>
