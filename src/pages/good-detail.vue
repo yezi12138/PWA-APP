@@ -3,7 +3,9 @@
 
     <layout
       :fix-header="true"
-      :loaded="true">
+      :loaded="true"
+      :pullDownRefresh="true"
+      @pullingDown="pullingDown">
 
       <x-header
         slot="header"
@@ -213,13 +215,18 @@ export default {
     },
     addLike () {
       this.like = !this.like
+    },
+    pullingDown (scroll) {
+      console.log('pull down reflesh')
+      scroll.finishPullDown()
     }
   },
 
   created () {
-    let good = JSON.parse(this.$route.query.good)
-    if (good) {
-      this.good = good
+    let goodData = JSON.parse(this.$route.query.goodData)
+    console.log(goodData)
+    if (goodData) {
+      this.good = goodData
     } else {
       req('getGoodInfo')
       .then(res => {

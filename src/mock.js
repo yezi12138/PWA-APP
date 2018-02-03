@@ -8,6 +8,7 @@ const goodData = function () {
   var originPrice = Random.float(price, 9999, 2, 2)
   var name = Random.csentence(3, 10)
   return {
+    id: Random.id(),
     name: name,
     shop_name: Random.csentence(3, 10),
     price: price,
@@ -72,7 +73,20 @@ const goodData = function () {
   }
 }
 
+const topSellData = function () {
+  return {
+    'subjects|2': [
+      goodData(),
+      goodData(),
+      goodData(),
+      goodData(),
+      goodData()
+    ]
+  }
+}
+
 // Mock.mock( url, post/get , 返回的数据)；
 Mock.mock('/goodInfo', 'get', goodData())
+Mock.mock('/topSell', 'get', topSellData())
 
 module.exports = Mock

@@ -30,6 +30,11 @@ export const config = {
     url: '/goodInfo',
     method: 'get'
   },
+  // 获取商品信息
+  getTopSell: {
+    url: '/topSell',
+    method: 'get'
+  },
   // 获取商品订单
   getOrder: {
     url: '/order',

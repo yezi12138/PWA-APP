@@ -19,7 +19,7 @@
     name: 'ScrollPanel',
     data () {
       return {
-        nodes: null           // 保存slot得节点
+        nodes: null          // 保存slot得节点
       }
     },
     props: {
@@ -57,7 +57,8 @@
       probeType: {
         type: Number,
         default: 0
-      }
+      },
+      pullDownRefresh: [Boolean, Object]
     },
     watch: {
       // 数据加载完毕后相应操作
@@ -82,6 +83,12 @@
         if (this.scrollX) {
           this.$refs.panel.style.width = this.getTotalWidth() + 'px'
         }
+        // 判断是否需要下拉刷新
+        var isBoolean = typeof this.pullDownRefresh === 'boolean'
+        var pulldown = {
+          threshold: isBoolean ? 50 : this.pullDownRefresh.threshold,
+          stop: isBoolean ? 40 : this.pullDownRefresh.stop
+        }
         if (!this.scroll) {
           this.scroll = new BScroll(this.$refs.content, {
             click: true,
@@ -89,8 +96,10 @@
             eventPassthrough: this.eventPassthrough,
             snap: this.snap,
             snapThreshold: 0.1,
-            probeType: this.probeType
+            probeType: this.probeType,
+            pullDownRefresh: !!this.pullDownRefresh && pulldown
           })
+          this.pullDownRefresh && this._initPullDown()
         } else {
           this.scroll.refresh()
         }
@@ -133,6 +142,15 @@
         this.$nextTick(() => {
           this.nodes = Array.from(this.$refs.panel.children)
         })
+      },
+      _initPullDown () {
+        if (this.scroll) {
+          this.scroll.on('pullingDown', () => {
+            this.$emit('pullingDown', this.scroll)
+          })
+        } else {
+          this.setScroll()
+        }
       }
     },
     activated () {

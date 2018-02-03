@@ -7,9 +7,13 @@
 
     <!-- 主体内容 -->
     <div class="layout-home" :style="bodyStyle" ref="content">
-      <scroll-panel :loaded="loaded">
+      <scroll-panel :loaded="loaded" :pullDownRefresh="pullDownRefresh" @pullingDown="pullingDown">
         <slot name="body"></slot>
       </scroll-panel>
+    </div>
+
+    <div class="bottom-text">
+      已经没有其他东西啦
     </div>
 
   </div>
@@ -41,7 +45,8 @@
       fixHeader: {
         type: Boolean,
         default: false
-      }
+      },
+      pullDownRefresh: [Boolean, Object]
     },
     components: {
       ScrollPanel
@@ -55,18 +60,6 @@
       }
     },
     methods: {
-      // goback () {
-      //   if (this.beforeGoBack) {
-      //     let promise = new Promise((resolve) => {
-      //       this.beforeGoBack(resolve)
-      //     })
-      //     promise.then(res => {
-      //       this.$router.back()
-      //     })
-      //   } else {
-      //     this.$router.go(-1)
-      //   }
-      // },
       setHeight () {
         let headerElm = this.$slots.header ? this.$slots.header[0].elm : null
         let wrapHeight = this.$refs.wrap.offsetHeight
@@ -86,6 +79,9 @@
           headerElm.style.left = '0'
           headerElm.style.right = '0'
         }
+      },
+      pullingDown (scroll) {
+        this.$emit('pullingDown', scroll)
       }
     },
     mounted () {
@@ -99,5 +95,20 @@
   .layout{
     position: relative;
     height: 100%;
+  }
+  .bottom-text{
+    position: absolute;
+    bottom: -100px;
+    left: 0;
+    width: 100%;
+    margin: 10px 10px;
+	padding: 5px 0;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    background-color: #f2f3f7;
+    font-size: 14px;
+    color: #c08f8f;
+    border-radius: 5px;
   }
 </style>

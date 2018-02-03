@@ -13,7 +13,15 @@
       },
       height: {
         type: Number,
-        default: 50
+        default: 40
+      },
+      scrollY: {
+        type: Number
+      }
+    },
+    data () {
+      return {
+        context: null
       }
     },
     methods: {
@@ -55,7 +63,8 @@
           }
         })
       },
-      drawEye (context, callback) {
+      drawEye (callback) {
+        var context = this.context
         context.beginPath()
         context.arc(context.width / 2 - 5, context.height / 2 - 6, 2, 0, 2 * Math.PI)
         context.fillStyle = '#999'
@@ -119,12 +128,19 @@
           context.clearRect(0, 0, context.width, context.height)
         }, 1000)
       }
+    },
+    mounted () {
+      this.context = this.$refs.myCanvas.getContext('2d')
     }
   }
 </script>
 
 <style lang="scss">
   .smileLoading{
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
   }
 </style>

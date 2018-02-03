@@ -5,14 +5,18 @@
 
     <layout
       :fix-header="true"
-      :loaded="true">
+      :loaded="loaded"
+      :pullDownRefresh="true"
+      @pullingDown="pullingDown">
         <home-header slot="header" @toggleSide="toggleSide" />
         <div slot="body" class="body">
+
           <!-- 轮播图 -->
           <swiper
             :list="imgList"
             height="120px"
           />
+
           <!-- 主页导航 -->
           <div class="nav-list">
             <div
@@ -26,12 +30,14 @@
               <span class="nav-name">{{item.name}}</span>
             </div>
           </div>
+
           <!-- 主页推荐 -->
           <div class="home-recommend">
-            <common-card :title="topSell.title">
-              <home-top-sell :itemData="topSell.subjects" />
+            <common-card title="热门商品">
+              <good-card :data="topSell.subjects" @clickItem="clickItem" ref="goodCard" />
             </common-card>
           </div>
+
         </div>
     </layout>
 
@@ -47,8 +53,9 @@
   import HomeHeader from 'components/home-header'
   import Layout from 'components/public/layout'
   import HomeSide from 'components/home-side'
-  import HomeTopSell from 'components/home-top-sell'
   import CommonCard from 'components/public/common-card'
+  import GoodCard from 'components/good-card'
+  import req from 'api/common'
   export default{
     name: 'Home',
     components: {
@@ -57,8 +64,8 @@
       Swiper,
       Drawer,
       HomeSide,
-      HomeTopSell,
-      CommonCard
+      CommonCard,
+      GoodCard
     },
     data () {
       return {
@@ -133,66 +140,9 @@
           url: 'javascript:',
           img: '../../static/images/banner4.jpg'
         }],
-        topSell: {
-          title: '热销产品',
-          subjects: [
-            {
-              image: '../../static/images/top250.jpg',
-              name: '【好吃到爆】棕熊饼干 *232',
-              introduction: 'this is introduction',
-              labels: ['食品', '小吃', '吃啥'],
-              price: 12
-            },
-            {
-              image: '../../static/images/banner4.jpg',
-              name: '123',
-              introduction: 'this is introduction',
-              seller: 'user',
-              rating: {
-                stars: 42,
-                average: 4.2,
-                collect_count: 102,
-                price: 99
-              }
-            },
-            {
-              image: '../../static/images/banner4.jpg',
-              name: '123',
-              introduction: 'this is introduction',
-              seller: 'user',
-              rating: {
-                stars: 42,
-                average: 4.2,
-                collect_count: 102,
-                price: 99
-              }
-            },
-            {
-              image: '../../static/images/banner4.jpg',
-              name: '123',
-              introduction: 'this is introduction',
-              seller: 'user',
-              rating: {
-                stars: 42,
-                average: 4.2,
-                collect_count: 102,
-                price: 99
-              }
-            },
-            {
-              image: '../../static/images/banner4.jpg',
-              name: '123',
-              introduction: 'this is introduction',
-              seller: 'user',
-              rating: {
-                stars: 42,
-                average: 4.2,
-                collect_count: 102,
-                price: 99
-              }
-            }
-          ]
-        }
+        topSell: {},
+        historyDiv: null,
+        loaded: false
       }
     },
     methods: {
@@ -201,9 +151,46 @@
       },
       routerTo (e) {
         this.toggleIconWrap(e)
+      },
+      getTopSell () {
+        this.loaded = false
+        req('getTopSell')
+        .then(res => {
+          this.topSell = res
+          this.loaded = true
+        })
+      },
+      clickItem (data) {
+        this.$router.push({ path: '/good_detail', query: { goodData: JSON.stringify(data) } })
+      },
+      pullingDown (scroll) {
+        this.loaded = false
+        req('getTopSell')
+        .then(res => {
+          this.topSell.subjects.unshift.apply(this.topSell.subjects, res.subjects)
+          this.$vux.toast.text('刷新完成', 'top')
+          scroll.finishPullDown()
+          this.refreshHistoryMark(scroll)
+          this.loaded = true
+        })
+      },
+      refreshHistoryMark (scroll) {
+        if (!this.historyDiv) {
+          var div = document.createElement('div')
+          div.className = 'history-mark'
+          div.innerHTML = '你上次浏览到这里'
+          var goodCard = this.$refs.goodCard
+          var goodCardItems = this.$refs.goodCard.$el.children
+          console.log(goodCard)
+          console.log(goodCardItems)
+          goodCard.$el.insertBefore(div, goodCardItems[10])
+          scroll.refresh()
+          this.historyDiv = div
+        }
       }
     },
     activated () {
+      this.getTopSell()
     }
   }
 </script>
