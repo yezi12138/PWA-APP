@@ -1,6 +1,7 @@
 <template>
   <div class="scroll-wrap" ref="content">
     <div class="scroll-panel" ref="panel">
+      <slot name="loading"></slot>
       <slot></slot>
       <div class="bottom-text">
         已经到底啦
@@ -17,6 +18,7 @@
  * @prop  [Boolean]  loaded   加载完成得标志
  */
   import BScroll from 'better-scroll'
+  import SmileLoading from 'components/smile-loading'
   import { getStyle } from 'utils/index.js'
   export default {
     name: 'ScrollPanel',
@@ -59,9 +61,18 @@
       // 探针类型
       probeType: {
         type: Number,
-        default: 0
+        default: 2
       },
-      pullDownRefresh: [Boolean, Object]
+      // 下拉刷新
+      pullDownRefresh: [Boolean, Object],
+      // 监听滑动事件
+      listenScroll: {
+        type: Boolean,
+        default: false
+      }
+    },
+    components: {
+      SmileLoading
     },
     watch: {
       // 数据加载完毕后相应操作
@@ -103,6 +114,7 @@
             pullDownRefresh: !!this.pullDownRefresh && pulldown
           })
           this.pullDownRefresh && this._initPullDown()
+          this.listenScroll && this._initScroll()
         } else {
           this.scroll.refresh()
         }
@@ -150,6 +162,15 @@
         if (this.scroll) {
           this.scroll.on('pullingDown', () => {
             this.$emit('pullingDown', this.scroll)
+          })
+        } else {
+          this.setScroll()
+        }
+      },
+      _initScroll () {
+        if (this.scroll) {
+          this.scroll.on('scroll', (pos) => {
+            this.$emit('scroll', pos)
           })
         } else {
           this.setScroll()

@@ -17,8 +17,6 @@
             height="120px"
           />
 
-          <button @click='post'>点击推送</button>
-
           <!-- 主页导航 -->
           <div class="nav-list">
             <div
@@ -170,10 +168,12 @@
         req('getTopSell')
         .then(res => {
           this.topSell.subjects.unshift.apply(this.topSell.subjects, res.subjects)
-          this.$vux.toast.text('刷新完成', 'top')
-          scroll.finishPullDown()
-          this.refreshHistoryMark(scroll)
-          this.loaded = true
+          setTimeout(() => {
+            this.$vux.toast.text('刷新完成', 'top')
+            scroll.finishPullDown()
+            this.refreshHistoryMark(scroll)
+            this.loaded = true
+          }, 5000)
         })
       },
       refreshHistoryMark (scroll) {
@@ -183,8 +183,6 @@
           div.innerHTML = '你上次浏览到这里'
           var goodCard = this.$refs.goodCard
           var goodCardItems = this.$refs.goodCard.$el.children
-          console.log(goodCard)
-          console.log(goodCardItems)
           goodCard.$el.insertBefore(div, goodCardItems[10])
           scroll.refresh()
           this.historyDiv = div

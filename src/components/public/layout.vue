@@ -7,7 +7,15 @@
 
     <!-- 主体内容 -->
     <div class="layout-home" :style="bodyStyle" ref="content">
-      <scroll-panel :loaded="loaded" :pullDownRefresh="pullDownRefresh" @pullingDown="pullingDown">
+      <scroll-panel
+        :loaded="loaded"
+        :pullDownRefresh="pullDownRefresh"
+        @pullingDown="pullingDown"
+        :listenScroll="!!pullingDown"
+        @scroll="scroll">
+        <slot name="loading" slot="loading" v-if="pullingDown" :scrollPos="scrollPos">
+          <smile-loading ref="loadingComp" :scrollPos="scrollPos" />
+        </slot>
         <slot name="body"></slot>
       </scroll-panel>
     </div>
@@ -22,6 +30,7 @@
  * @prop  [Boolean]  search  是否显示搜索组件
  * @prop  [Boolean]  bottom  是否显示底部组件
  */
+  import SmileLoading from 'components/smile-loading'
   import ScrollPanel from 'components/public/scroll-panel'
   export default{
     name: 'Layout',
@@ -45,14 +54,16 @@
       pullDownRefresh: [Boolean, Object]
     },
     components: {
-      ScrollPanel
+      ScrollPanel,
+      SmileLoading
     },
     data () {
       return {
         bodyStyle: {
           height: 0,
           marginTop: 0
-        }
+        },
+        scrollPos: {}
       }
     },
     methods: {
@@ -77,7 +88,11 @@
         }
       },
       pullingDown (scroll) {
+        this.$refs.loadingComp.drawSmile()
         this.$emit('pullingDown', scroll)
+      },
+      scroll (pos) {
+        this.scrollPos = pos
       }
     },
     mounted () {
