@@ -34,6 +34,7 @@
  */
   import SmileLoading from 'components/smile-loading'
   import ScrollPanel from 'components/public/scroll-panel'
+  import { addClass, removeClass, hasClass } from 'utils/dom'
   export default{
     name: 'Layout',
     props: {
@@ -72,7 +73,8 @@
           height: 0,
           marginTop: 0
         },
-        scrollPos: {}
+        scrollPos: {},
+        backToTopDiv: null
       }
     },
     methods: {
@@ -105,8 +107,32 @@
       pullingUp (scroll) {
         this.$emit('pullingUp', scroll)
       },
-      scroll (pos) {
+      createBackToTopDiv (scroll) {
+        var div = document.createElement('div')
+        div.className = 'back-to-top'
+        div.onclick = function () {
+          scroll.scrollTo(0, 0, 1000)
+        }
+        var i = document.createElement('i')
+        i.className = 'iconfont icon-arrowup top-icon'
+        div.appendChild(i)
+        document.getElementsByTagName('body')[0].appendChild(div)
+        this.backToTopDiv = div
+      },
+      scroll (pos, scroll) {
         this.scrollPos = pos
+        // 判断出现回到顶部组件
+        if (pos.y < -1000) {
+          if (this.backToTopDiv && hasClass(this.backToTopDiv, 'hide')) {
+            removeClass(this.backToTopDiv, 'hide')
+          } else if (!this.backToTopDiv) {
+            this.createBackToTopDiv(scroll)
+          }
+        } else if (pos.y > -600) {
+          if (this.backToTopDiv && !hasClass(this.backToTopDiv, 'hide')) {
+            addClass(this.backToTopDiv, 'hide')
+          }
+        }
       }
     },
     mounted () {

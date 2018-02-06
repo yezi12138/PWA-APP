@@ -193,7 +193,7 @@
       _initScroll () {
         if (this.scroll) {
           this.scroll.on('scroll', (pos) => {
-            this.$emit('scroll', pos)
+            this.$emit('scroll', pos, this.scroll)
           })
         } else {
           this.setScroll()

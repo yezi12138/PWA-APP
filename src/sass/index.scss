@@ -16,3 +16,17 @@
 	color: #c08f8f;
 	border-radius: 5px;
 }
+
+.back-to-top{
+	position: fixed;
+	bottom: 30px;
+	right: 15px;
+	padding: 8px;
+	border: 1px solid #ccc;
+	background-color: #fff;
+	border-radius: 5px;
+	.top-icon{
+		font-size: 28px;
+		color:#b4077d;
+	}
+}
