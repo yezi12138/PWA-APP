@@ -9,6 +9,7 @@
       :pullingUpRefresh="true"
       @pullingUp="pullingUp"
       :pullDownRefresh="true"
+      @scroll="scroll"
       @pullingDown="pullingDown">
         <home-header slot="header" @toggleSide="toggleSide" />
         <div slot="body" class="body">
@@ -40,6 +41,8 @@
             </common-card>
           </div>
 
+          <back-to-top :scrollY="scrollY" :scroll="BScroll"  />
+
         </div>
     </layout>
 
@@ -58,6 +61,7 @@
   import CommonCard from 'components/public/common-card'
   import GoodCard from 'components/good-card'
   import req from 'api/common'
+  import BackToTop from 'components/back-to-top'
   export default{
     name: 'Home',
     components: {
@@ -67,7 +71,8 @@
       Drawer,
       HomeSide,
       CommonCard,
-      GoodCard
+      GoodCard,
+      BackToTop
     },
     data () {
       return {
@@ -144,7 +149,9 @@
         }],
         topSell: {},
         historyDiv: null,
-        loaded: false
+        loaded: false,
+        scrollY: 0,
+        BScroll: null
       }
     },
     methods: {
@@ -192,6 +199,10 @@
           scroll.refresh()
           this.historyDiv = div
         }
+      },
+      scroll (pos, scroll) {
+        this.scrollY = pos.y
+        this.BScroll = scroll
       }
     },
     activated () {
