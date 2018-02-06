@@ -1,46 +1,60 @@
 <template>
-  <div class="movie-conmmon">
-    <div class="movies-header">
+  <div class="wrap">
+    <div class="scrollX-header" v-if="isTitle">
       <div class="title">{{title}}</div>
-      <div class="more" v-show='more'>更多</div>
+      <div class="more" v-show='isMore' @click="getMore">更多</div>
     </div>
-    <div class="movies-content" ref="content">
-      <ul ref="list">
-        <li class="movies-item" v-for="item in itemsData" @click='routerTo(item)'>
-          <img :src="item.images.medium" alt="">
+    <div class="scrollX-content">
+      <scroll-panel :scrollX="true" :loaded="loaded" ref="panel">
+        <div class="list-item" v-for="(item, index) in itemData" :key="index" @click='routerTo(item)'>
+          <img :src="item.images" alt="">
           <div v-if="type === 'default'">
             <div class="name">{{item.title}}</div>
             <div class="star-score">
-              <star :size='24' :score='item.rating.stars / 10'></star>
+              <star :size='24' :score='item.rating / 10'></star>
               <div class="score">{{item.rating.average}}</div>
             </div>
           </div>
           <div v-if="type === 'want'">
             <div class="name">{{item.title}}</div>
-            <div class="want-count">{{item.collect_count}}人想看</div>
+            <div class="want-count">{{item.collect_count}}人收藏</div>
           </div>
           <div v-if="type === 'money'">
             <div class="name">{{item.title}}</div>
             <div class="money">{{item.price}}元</div>
           </div>
-        </li>
-      </ul>
+        </div>
+      </scroll-panel>
     </div>   
   </div>
 </template>
 
 <script>
+/**
+ * 水平滑动展示图片组件
+ * @prop  [Array]  data  绑定的数据
+ * @prop  [Boolean]  more  是否显示更多按钮
+ * @prop  [String]  title  组件的标题
+ * @prop  [String]  isTtile  是否显示组件的标题
+ * @prop  [String]  type  组件的类型
+ * @emit  getMore  点击更多按钮的函数
+ */
   import star from '../star/star'
-  import BScroll from 'better-scroll'
+  import ScrollPanel from 'components/public/scroll-panel'
   export default{
+    data () {
+      return {
+        loaded: false
+      }
+    },
     props: {
-      itemsData: {
+      itemData: {
         type: Array,
         default: function () {
           return []
         }
       },
-      more: {
+      isMore: {
         type: Boolean,
         default: true
       },
@@ -48,64 +62,44 @@
         type: String,
         default: '文章标题'
       },
+      isTitle: {
+        type: Boolean,
+        default: true
+      },
       type: {
         type: String,
         default: 'default'
       }
     },
     components: {
-      star
+      star,
+      ScrollPanel
+    },
+    watch: {
+      'itemData' (val) {
+        val.length !== 0 && (this.loaded = true)
+      }
     },
     methods: {
       routerTo (data) {
-        this.$router.push({name: 'movieDetail', query: {moviedata: data}})
+        this.$emit('clickTo', data)
       },
-      setScroll () {
-        var width = 85
-        var margin = 15
-        var totalWidth = (width + margin) * (this.itemsData.length)
-        totalWidth += margin
-        this.$refs.list.style.width = totalWidth + 'px'
-        if (!this.scroll) {
-          this.scroll = new BScroll(this.$refs.content, {
-            click: true,
-            scrollX: true,
-            eventPassthrough: 'vertical'
-          })
-        } else {
-          this.scroll.refresh()
-        }
-        this.$emit('refreshDom')
+      getMore () {
+        this.$emit('more')
       }
-    },
-    mounted () {
-      var that = this
-      var timer = setInterval(() => {
-        if (that.itemsData.length !== 0) {
-          that.setScroll()
-          clearInterval(timer)
-        }
-      }, 500)
     }
   }
 </script>
 
-<style lang='scss'>
-  .movie-conmmon{
+<style lang="scss" scoped>
+  .wrap{
     width: 100%;
-    position: relative;
     background-color:#fff;
     overflow:hidden;
-    margin-bottom:20px;
-    &:last-child{
-      margin-bottom:0;
-    }
-    .movies-header{
-      width: 100%;
+    .scrollX-header{
       display:flex;
       justify-content:space-between;
       padding:25px 15px;
-      height:74px;
       .title{
         font-size:16px;
         color:#333;
@@ -116,17 +110,19 @@
         color:#67c777;
       }
     }
-    .movies-content{
+    .scrollX-content{
       width: 100%;
+      min-height: 142px;
       overflow: hidden;
       white-space: nowrap;
-      height:173px;
-      .movies-item{
+      .list-item{
         display:inline-block;
-        margin-left:15px;
-        margin-bottom:10px;
+        margin:0 0 10px 15px;
         overflow:hidden;
         width:85px;
+        &:last-child{
+          margin-right: 15px;
+        }
         img{
           width:100%;
           height:110px;

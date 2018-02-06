@@ -1,108 +1,69 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import home from '@/components/home'
-import book from '@/components/book'
-import broadcast from '@/components/broadcast'
-import mine from '@/components/mine'
-import movies from '@/components/movies'
-import tv from '@/components/tv'
-import city from '@/components/city'
-import music from '@/components/music'
-import reading from '@/components/reading'
-import movieDetail from '@/components/movie-detail/movie-detail'
-import comment from '@/components/movie-detail/comment'
-import discuss from '@/components/movie-detail/discuss'
-import register from '@/components/register'
-import article from '@/components/home-detail/article'
+import Home from 'pages/home'
+import Login from 'pages/login'
+import Register from 'pages/register'
+import Notification from 'pages/notification'
+import GoodDetail from 'pages/good-detail'
+import Order from 'pages/order'
+import MyGoods from 'pages/my-goods'
+import { checkAuth, getInfo } from '../utils/router'
+
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
       name: 'main',
-      component: home
-    },
-    {
-      path: '/book',
-      name: 'book',
-      component: book,
-      children: [
-        {
-          path: '/book/',
-          component: movies
-        },
-        {
-          path: '/book/movies',
-          name: 'movies',
-          component: movies
-        },
-        {
-          path: '/book/reading',
-          name: 'reading',
-          component: reading
-        },
-        {
-          path: '/book/tv',
-          name: 'tv',
-          component: tv
-        },
-        {
-          path: '/book/music',
-          name: 'music',
-          component: music
-        },
-        {
-          path: '/book/city',
-          name: 'city',
-          component: city
-        }
-      ]
-    },
-    {
-      path: '/broadcast',
-      name: 'broadcast',
-      component: broadcast
-    },
-    {
-      path: '/mine',
-      name: 'mine',
-      component: mine
+      redirect: '/home'
     },
     {
       path: '/home',
       name: 'home',
-      component: home
+      component: Home
     },
     {
-      path: '/movie-detail',
-      name: 'movieDetail',
-      component: movieDetail,
-      children: [
-        {
-          path: '/movie-detail/',
-          component: comment
-        },
-        {
-          path: '/movie-detail/comment',
-          name: 'detailComment',
-          component: comment
-        },
-        {
-          path: '/movie-detail/discuss',
-          name: 'detailDiscuss',
-          component: discuss
-        }
-      ]
+      path: '/login',
+      name: 'login',
+      component: Login
     },
     {
       path: '/register',
       name: 'register',
-      component: register
+      component: Register
     },
     {
-      path: '/article',
-      name: 'article',
-      component: article
+      path: '/notification',
+      name: 'notification',
+      component: Notification
+    },
+    {
+      path: '/good_detail',
+      name: 'goodDetail',
+      component: GoodDetail
+    },
+    {
+      path: '/order',
+      name: 'order',
+      component: Order
+    },
+    {
+      path: '/my_goods',
+      name: 'myGoods',
+      component: MyGoods
     }
-  ]})
+  ]
+})
+
+// 需要验证的路由
+export const authRouter = [
+  '/notification',
+  '/order'
+]
+
+router.beforeEach(checkAuth)
+router.afterEach(getInfo)
+
+export { router }
+export default router

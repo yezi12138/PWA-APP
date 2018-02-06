@@ -1,7 +1,7 @@
 <template>
-  <div class="navTop border-scaleY">
-    <div class="back-icon" v-show="backIcon" @click='goback'><Icon type="ios-arrow-back"></Icon></div>
-    <div class="title">{{title}}</div>
+  <div class="navTop border-bottom border-scaleY">
+    <div class="back-icon" v-show="backIcon" @click='goback'><i class="iconfont icon-xiangzuojiantou"></i></div>
+    <div class="title">{{title || '标题'}}</div>
     <div class="icon-group">
       <slot></slot>
     </div>
@@ -9,26 +9,47 @@
 </template>
 
 <script>
+/**
+ * @prop  [Boolean]  backIcon  是否显示后退图标
+ * @prop  [Function]  beforeGoBack  后退前的操作
+ * @prop  [Boolean]  showHeader  是否显示头部导航
+ */
   export default{
     props: {
+      backIcon: {
+        type: Boolean,
+        default: true
+      },
+      beforeGoBack: {
+        type: Function
+      },
+      showHeader: {
+        type: Boolean,
+        default: true
+      },
       title: {
         type: String,
         default: '标题'
-      },
-      backIcon: {
-        type: Boolean,
-        default: false
       }
     },
     methods: {
       goback () {
-        this.$emit('back')
+        if (this.beforeGoBack) {
+          let promise = new Promise((resolve) => {
+            this.beforeGoBack(resolve)
+          })
+          promise.then(res => {
+            this.$router.back()
+          })
+        } else {
+          this.$router.go(-1)
+        }
       }
     }
   }
 </script>
 
-<style lang='scss'>
+<style lang="scss" scoped>
   .navTop{
     position: fixed;
     z-index:999;
@@ -50,6 +71,14 @@
       font-size:24px;
       color:#333;
       text-align:center;
+      .iconfont{
+        vertical-align: middle;
+      }
+      &:after{
+        content: '';
+        height: 100%;
+        vertical-align: middle;
+      }
     }
     .title{
       text-align:center;
@@ -64,8 +93,10 @@
       top:50%;
       transform:translate(0, -50%);
       right:20px;
-      font-size:24px;
       color:green;
+      i{
+        font-size:24px;
+      }
       i+i{
         margin-left:20px;
       }

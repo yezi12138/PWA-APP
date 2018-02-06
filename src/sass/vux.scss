@@ -1,0 +1,42 @@
+/* 
+ *  覆盖vux默认样式
+ */
+
+.vux-header{
+	height: 48px;
+	background-color: #fff !important;
+	box-shadow: 1px 3px 3px 0px rgba(0, 0, 0, 0.3);
+	.vux-header-left > .vux-header-back, .vux-header-title{
+		color:#333 !important;
+	}
+	.vux-header-left > .left-arrow:before{
+		border-top: 1px solid #333 !important;
+		border-left: 1px solid #333 !important;
+	}
+}
+
+@supports (-webkit-backdrop-filter: none) {
+	.vux-header{
+		background: rgba(255,255,255,.8) !important;
+		-webkit-backdrop-filter: brightness(1.5) blur(4px) !important;
+	}
+}
+
+.vux-previewer{
+	z-index: 1000 !important;
+}
+
+.vux-card-content{
+	.weui-cell__bd{
+		text-align: center !important;
+	}
+}
+
+.vux-popup-bottom{
+	background-color: transparent !important;
+	overflow-y: visible !important;
+}
+
+.vux-selector.weui-cell_select-after{
+	padding-left: 0 !important;
+}

@@ -1,0 +1,18 @@
+@import './reset.scss';
+@import './util.scss';
+@import './icon/iconfont.css';
+@import './vux.scss';
+@import 'nprogress/nprogress.css';
+@import 'animation.scss';
+
+.history-mark{
+	margin: 10px 10px;
+	padding: 5px 0;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	background-color: #f2f3f7;
+	font-size: 14px;
+	color: #c08f8f;
+	border-radius: 5px;
+}

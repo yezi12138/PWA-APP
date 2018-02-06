@@ -1,33 +1,76 @@
-@mixin border-1px($color,$pos){
-	&:after{
+
+.border-bottom {
+	position: relative;
+	&::after{
 		display:block;
 		position: absolute;
-		border-#{$pos}:1px solid $color;
+		bottom:0;
+		left:0;
+		width:100%;
+		border-bottom:1px solid #fbd7d7;
 		content:'';
-		z-index:999;
-		@if $pos == 'top' {
-			top:0;
-			left:0;
-			width:100%;
-		}
-		@else if $pos == 'bottom' {
-			bottom:0;
-			left:0;
-			width:100%;
-		}
-		@else if $pos == 'left' {
-			bottom:0;
-			left:0;
-			height:100%;
-		}
-		@else if $pos == 'right' {
-			bottom:0;
-			right:0;
-			height:100%;
-		}
 	}
 }
 
+.border-top {
+	&:after{
+		display:block;
+		position: absolute;
+		top:0;
+		left:0;
+		width:100%;
+		border-top:1px solid #ccc;
+		content:'';
+	}
+}
+
+.border-left {
+	&:after{
+		display:block;
+		position: absolute;
+		bottom:0;
+		left:0;
+		height:100%;
+		border-left:1px solid #ccc;
+		content:'';
+	}
+}
+
+.border-right {
+	&:after{
+		display:block;
+		position: absolute;
+		bottom:0;
+		right:0;
+		height:100%;
+		border-right:1px solid #ccc;
+		content:'';
+	}
+}
+
+.clearfix{
+	&:after{
+		content: '';
+		display: table;
+		clear: both;
+		overflow: hidden;
+	}
+}
+
+// 单行文本省略
+.single-text-overflow{
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+}
+
+// 多行文本省略
+.double-text-overflow{
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	overflow: hidden;
+}
 
 @media screen and  (-webkit-min-device-pixel-ratio: 1.5),(min-device-pixel-ratio: 1.5){
 	.border-scaleY{

@@ -1,145 +1,224 @@
-// 可能是我的node版本问题，不用严格模式使用ES6语法会报错
-"use strict"
-const user = require('./db')
+'use strict'
 const express = require('express')
 const router = express.Router()
-var bookData = require('../data.json')
+const generateToken = require('./auth').generateToken
+const decodeToken = require('./auth').decodeToken
+// 数据库定义
+const db = require('./db')
+const User = db.User
 
-router.get('/', (req, res, next) => {
-   console.log('listen 8080 ')
-   next()
-})
+const error = (res, code, message) => {
+  res
+  .status(code)
+  .send({
+    error: message
+  })
+}
 
-/************** 创建(create) 读取(get) 更新(update) 删除(delete) **************/
-
-/*************************************************
-注册验证
-
-**************************************************/
-router.post('/identify/register', (req, res) => {
-    // 这里的req.body能够使用就在index.js中引入了const bodyParser = require('body-parser')
-    let newAccount = new user({
-        username: req.body.username,
-        password: req.body.password,
-        avatar: ''
-    })
-    //判断账号是否存在了
-    user.find({username:newAccount.username}, (err, data) => {
-        if (err) {
-            console.log(err)
-        } else {
-            // 如果不存在则注册账号
-            if (data.length === 0) {
-                newAccount.save((err, data) => {
-                    if (err) {
-                        res.send(err)
-                    } else {
-                        res.end('success')
-                    }
-                })
-            } else {
-               res.end('fail')
-           }
-       }
-   })
-})
-
-
-/*************************************************
-登录验证
-
-**************************************************/
-router.post('/identify/login', (req, res) => {
-    let newAccount = new user({
-        username : req.body.username,
-        password : req.body.password
-    })
-    if (req.body.checked) {
-        req.session.loginCode = 1
+/**
+ * 注册验证
+ */
+router.post('/auth/register', (req, res) => {
+  let date = Date.parse(new Date())
+  let newAccount = new User({
+    username: req.body.username,
+    password: req.body.password,
+    avatar: '',
+    createTime: date
+  })
+  // 判断账号是否存在了
+  User.find({username: newAccount.username}, (err, data) => {
+    if (err) {
+      error(res, 500, err)
     } else {
-        req.session.loginCode = 0
+      // 如果不存在则注册账号
+      if (data.length === 0) {
+        newAccount.save((err, data) => {
+          if (err) {
+            error(res, 500, '注册失败')
+          } else {
+            res.json({
+              status: true,
+              msg: '注册成功'
+            })
+          }
+        })
+      } else {
+        error(res, 500, '账号已经存在')
+      }
     }
-    req.session.user = newAccount
-    user.find({username:newAccount.username, password:newAccount.password}, (err, data) => {
-        if (err) {
-            console.log(err)
-        } else {
-            if (data.length === 0) {
-               res.send('fail')
-           } else {
-            var user = {
-                name: data[0].username,
-                avatar: data[0].avatar
-            }
-            res.send(user)
-        }
-    }
-})
-})
-
-/*************************************************
-获取登录信息
-@ 允许自动登录则返回账号
-@ 不允许则返回登陆状态码 2
-**************************************************/
-router.get('/auth', (req, res) => {
-    let token = {
-        account: req.session.user,
-        loginCode: req.session.loginCode
-
-    }
-    if (token) {
-        res.send(token)
-    }
+  })
 })
 
-
-/*************************************************
-修改头像
-**************************************************/
-router.post('/refreshInfo', (req, res) => {
-    var userInfo = req.body.userInfo
-    if (userInfo.password) {
-        return
+/**
+ * 登录验证
+ */
+router.post('/auth/login', (req, res) => {
+  let newAccount = new User({
+    username: req.body.username,
+    password: req.body.password
+  })
+  User.find({username: newAccount.username, password: newAccount.password}, (err, data) => {
+    if (err) {
+      error(res, 500, err)
+    } else {
+      if (data.length === 0) {
+        res.json({
+          status: false,
+          msg: '登录失败'
+        })
+      } else {
+        let token = generateToken(data[0])
+        res.json({
+          status: true,
+          token: token
+        })
+      }
     }
-    user.update({username: userInfo.username}, {$set: {avatar: userInfo.avatar}}, function (err, result) {
+  })
+})
+
+/**
+ * 获取用户信息
+ */
+router.get('/userInfo', (req, res) => {
+  let token = req.cookies.Token
+  let user = decodeToken(token)
+  if (!user) {
+    error(res, 403, 'no correct token')
+  } else {
+    User.find({_id: user}, (err, data) => {
       if (err) {
-        console.log(err)
-    } else {
-        console.log('update success')
-        user.find({username: userInfo.username}, (err, data) => {
-            if (err) {
-                console.log(err)
-            } else {
-                if (data.length === 0) {
-                   res.send('fail')
-               } else {
-                var user = {
-                    name: data[0].username,
-                    avatar: data[0].avatar
-                }
-                res.send(user)
-            }
+        error(res, 403, err)
+      } else {
+        if (data.length === 0) {
+          error(res, 403, 'No this user')
+        } else {
+          res.json({
+            name: data[0].username,
+            avatar: data[0].avatar,
+            createTime: data[0].createTime
+          })
         }
+      }
     })
+  }
+})
+
+/**
+ * 验证token
+ */
+router.get('/auth/token', (req, res) => {
+  let token = req.cookies.Token
+  if (token) {
+    let result = decodeToken(token)
+    if (result) {
+      User.find({_id: result}, (err, data) => {
+        if (err) {
+          error(res, 500, err)
+        } else {
+          if (data.length === 0) {
+            res.json({
+              status: false,
+              msg: 'No this user token不正确'
+            })
+          } else {
+            res.json({
+              status: true
+            })
+          }
+        }
+      })
+    } else {
+      res.json({
+        status: false,
+        msg: 'token不正确'
+      })
     }
-})
-})
-
-/*************************************************
-返回book数据
-**************************************************/
-
-router.get('/bookdata', (req, res) => {
+  } else {
     res.json({
-        data: bookData
+      status: false,
+      msg: 'token不存在'
     })
+  }
 })
 
-router.get('/homedata', (req, res) => {
-    res.json({
-        data: bookData[4]
+/**
+ * 确认订单
+ */
+router.post('/order', (req, res) => {
+  let token = req.cookies.Token
+  let result = decodeToken(token)
+  if (result) {
+    var order = req.body.order
+    User.update({_id: result}, {$push: {goods: order}}, function (err, result) {
+      if (err) {
+        error(res, 500, err)
+      } else {
+        res.json({
+          status: true,
+          msg: '购买成功'
+        })
+      }
     })
+  }
+})
+
+/**
+ * 获取订单详情
+ */
+router.get('/order', (req, res) => {
+  let token = req.cookies.Token
+  let result = decodeToken(token)
+  if (result) {
+    User.find({_id: result}, (err, data) => {
+      if (err) {
+        error(res, 500, err)
+      } else {
+        if (data.length === 0) {
+          res.json({
+            status: false,
+            msg: '不存在该用户'
+          })
+        } else {
+          res.send(data[0].goods)
+        }
+      }
+    })
+  }
+})
+
+/**
+ * 修改头像
+ */
+router.post('/upLoadAvatar', (req, res) => {
+  var username = req.body.username
+  var avatar = req.body.avatar
+  User.update({username: username}, {$set: {avatar: avatar}}, function (err, result) {
+    if (err) {
+      error(res, 500, err)
+    } else {
+      User.find({username: username}, (err, data) => {
+        if (err) {
+          error(res, 500, err)
+        } else {
+          if (data.length === 0) {
+            res.json({
+              status: false,
+              msg: '不存在该用户'
+            })
+          } else {
+            var User = {
+              name: data[0].username,
+              avatar: data[0].avatar,
+              createTime: data[0].createTime
+            }
+            res.send(User)
+          }
+        }
+      })
+    }
+  })
 })
 
 module.exports = router

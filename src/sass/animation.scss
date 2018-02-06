@@ -1,0 +1,64 @@
+
+// 添加喜爱的动画
+.like-leave-active {
+	position: absolute;
+	top: 0;
+	left: 0;
+	animation: fadeOut 1.5s ease-out;
+}
+@keyframes fadeOut {
+	10%{
+		opacity: 0.9;
+		transform: translate(-2px, -10px);
+	}
+	20%{
+		opacity: 0.7;
+		transform: translate(5px, -10px);
+	}
+	50%{
+		opacity: 0.5;
+		transform: translate(-10px, -10px);
+	}
+	100%{
+		opacity: 0;
+		transform: translate(10px, -20px);
+	}
+}
+
+// 页面切换动画
+.slide-left-leave-active{
+	.vux-header{
+		position: relative !important;
+	}
+	.layout-home{
+		margin-top: 0 !important;
+	}
+	opacity: 0;
+	transition: all 0.5s cubic-bezier(.55,0,.1,1);
+}
+.slide-left-leave-to {
+	transform: translateX(-80px);
+}
+
+.slide-right-leave-active{
+	.vux-header{
+		position: relative !important;
+	}
+	.layout-home{
+		margin-top: 0 !important;
+	}
+	opacity: 0;
+	transition: all 0.5s cubic-bezier(.55,0,.1,1);
+}
+.slide-right-leave-to {
+	transform: translateX(80px);
+}
+
+
+// 下拉菜单动画
+.select-enter-active, .select-leave-active{
+	transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.select-enter, .select-leave-to{
+	opacity: 0;
+}
