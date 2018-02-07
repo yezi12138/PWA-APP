@@ -3,7 +3,7 @@
     <div class="scroll-panel" ref="panel">
       <slot name="loading"></slot>
       <slot></slot>
-      <div class="bottom-text">
+      <div class="bottom-text" v-if="pullDownRefresh">
         已经到底啦
       </div>
     </div>

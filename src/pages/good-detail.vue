@@ -3,9 +3,7 @@
 
     <layout
       :fix-header="true"
-      :loaded="true"
-      :pullDownRefresh="true"
-      @pullingDown="pullingDown">
+      :loaded="true">
 
       <x-header
         slot="header"
