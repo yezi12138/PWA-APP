@@ -63,11 +63,7 @@ var httpServer = http.createServer(app)
 // socket
 let socketIo = require('socket.io')
 let io = socketIo(httpServer)
-
-io.on('connection', socket => {
-  console.log('有客户端连接')
-  socketHandle(socket)
-})
+socketHandle(io)
 
 httpServer.listen(PORT, function () {
   console.log('HTTP Server is running on: http://localhost:%s', PORT)

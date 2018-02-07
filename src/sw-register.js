@@ -48,5 +48,3 @@ function createUpDateDiv () {
     document.getElementById('app-refresh').className += ' app-refresh-show'
   }, 16)
 }
-
-export { regt }
