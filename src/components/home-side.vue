@@ -10,7 +10,7 @@
         <router-link to="/register">注册</router-link>
       </div>
       <div class="user" v-else>
-        欢迎你 {{user.name}}
+        欢迎你 {{user.username}}
         <span class="exit" @click.stop="exit">退出</span>
       </div>
     </div>
@@ -28,93 +28,117 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { Toast } from 'vux'
-import req from 'api/common'
-export default {
-  name: 'HomeSide',
-  components: {
-    Toast
-  },
-  data () {
-    return {
-      navList: [                        // 侧边栏导航条配置
-        {
-          icon: 'icon-home',
-          text: '主页',
-          path: '/home'
-        },
-        {
-          icon: 'icon-shopcart',
-          text: '购物车',
-          path: '/shopcart'
-        },
-        {
-          icon: 'icon-mine',
-          text: '我的商品',
-          path: '/my_goods'
-        }
-      ]
-    }
-  },
+  import { mapGetters } from 'vuex'
+  import { Toast } from 'vux'
+  import req from 'api/common'
+  export default {
+    name: 'HomeSide',
 
-  computed: {
-    ...mapGetters({
-      user: 'getUser'
-    })
-  },
-
-  methods: {
-    exit () {
-      this.$store.commit('REMOVE_USER')
-      window.location.reload()
+    components: {
+      Toast
     },
-    upLoadAvatar (e) {
-      if (e._constructed) {
-        return
-      }
-      let file = this.$refs.fileInput.files[0]
-      if (!file) {
-        return
-      }
-      var MAXSIZE = 100 * 1024 // 超过这个值就进行压缩
-      var fr = new FileReader()
-      fr.onload = e => {
-        var result = e.currentTarget.result
-        let imgData = result
-        var img = new Image()
-        img.onload = () => {
-          (file.size >= MAXSIZE) && (imgData = this.compressImg(img))
-          let userInfo = {
-            username: this.user.name,
-            avatar: imgData
+
+    data () {
+      return {
+        navList: [                        // 侧边栏导航条配置
+          {
+            icon: 'icon-home',
+            text: '主页',
+            path: '/home'
+          },
+          {
+            icon: 'icon-shopcart',
+            text: '购物车',
+            path: '/shopcart'
+          },
+          {
+            icon: 'icon-mine',
+            text: '我的商品',
+            path: '/my_goods'
           }
-          req('uploadAvatar', userInfo).then((res) => {
-            this.$store.commit('ADD_USER', res)
+        ]
+      }
+    },
+
+    sockets: {
+      login (val) {
+        if (val.login_time) {
+          var that = this
+          this.$vux.alert.show({
+            title: '警告',
+            content: `你的账号于${val.login_time}时间， 在别处登录`,
+            onHide () {
+              that.exit()
+            }
           })
         }
-        img.src = result
+      },
+      logOut () {
+        console.log(`你的账号退出了`)
       }
-      fr.onerror = function () {
-        this.$vux.toast.text('上传失败', 'top')
-      }
-      fr.readAsDataURL(file)
     },
-    compressImg (img) {
-      var canvas = document.createElement('canvas')
-      var ctx = canvas.getContext('2d')
-      // 利用canvas进行绘图
-      ctx.drawImage(img, 0, 0, 70, 70)
-      // 将原来图片的质量压缩到原先的0.2倍。
-      var data = canvas.toDataURL('image/jpeg', 0.2) // data url的形式
-      canvas = null
-      return data
-    }
-  },
 
-  mounted () {
+    computed: {
+      ...mapGetters({
+        user: 'getUser'
+      })
+    },
+
+    methods: {
+      exit () {
+        this.$store.commit('REMOVE_USER')
+        this.$socket.emit('logout')
+        // window.location.reload()
+      },
+      upLoadAvatar (e) {
+        if (e._constructed) {
+          return
+        }
+        let file = this.$refs.fileInput.files[0]
+        if (!file) {
+          return
+        }
+        var MAXSIZE = 100 * 1024 // 超过这个值就进行压缩
+        var fr = new FileReader()
+        fr.onload = e => {
+          var result = e.currentTarget.result
+          let imgData = result
+          var img = new Image()
+          img.onload = () => {
+            (file.size >= MAXSIZE) && (imgData = this.compressImg(img))
+            let userInfo = {
+              username: this.user.name,
+              avatar: imgData
+            }
+            req('uploadAvatar', userInfo).then((res) => {
+              this.$store.commit('ADD_USER', res)
+            })
+          }
+          img.src = result
+        }
+        fr.onerror = function () {
+          this.$vux.toast.text('上传失败', 'top')
+        }
+        fr.readAsDataURL(file)
+      },
+      compressImg (img) {
+        var canvas = document.createElement('canvas')
+        var ctx = canvas.getContext('2d')
+        // 利用canvas进行绘图
+        ctx.drawImage(img, 0, 0, 70, 70)
+        // 将原来图片的质量压缩到原先的0.2倍。
+        var data = canvas.toDataURL('image/jpeg', 0.2) // data url的形式
+        canvas = null
+        return data
+      }
+    },
+
+    mounted () {
+      if (this.user) {
+        this.$socket.emit('login', this.user)
+      }
+    }
   }
-}
 </script>
 
 <style lang="scss" scoped>

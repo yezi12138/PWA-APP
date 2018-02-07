@@ -1,11 +1,11 @@
 var express = require('express')
-var fs = require('fs')
+// var fs = require('fs')
 var app = express()
 var http = require('http')
-var https = require('https')
-var privateKey = fs.readFileSync('./server/private.pem', 'utf8')
-var certificate = fs.readFileSync('./server/file.crt', 'utf8')
-var credentials = {key: privateKey, cert: certificate}
+// var https = require('https')
+// var privateKey = fs.readFileSync('./server/private.pem', 'utf8')
+// var certificate = fs.readFileSync('./server/file.crt', 'utf8')
+// var credentials = {key: privateKey, cert: certificate}
 var bodyParser = require('body-parser')
 var session = require('express-session')
 var cookieParser = require('cookie-parser')
@@ -13,6 +13,7 @@ var MongoStore = require('connect-mongo')(session)
 var proxyMiddleware = require('http-proxy-middleware')
 var config = require('../config')
 var proxyTable = config.dev.proxyTable
+var socketHandle = require('./socket')
 
 // 使用session
 app.use(cookieParser())
@@ -53,16 +54,25 @@ app.all('*', function (req, res, next) {
   next()
 })
 
-var PORT = 9001
-var SSLPORT = 9000
+var PORT = 9000
+// var SSLPORT = 9000
 
 var httpServer = http.createServer(app)
-var httpsServer = https.createServer(credentials, app)
+// var httpsServer = https.createServer(credentials, app)
+
+// socket
+let socketIo = require('socket.io')
+let io = socketIo(httpServer)
+
+io.on('connection', socket => {
+  console.log('有客户端连接')
+  socketHandle(socket)
+})
 
 httpServer.listen(PORT, function () {
   console.log('HTTP Server is running on: http://localhost:%s', PORT)
 })
 
-httpsServer.listen(SSLPORT, function () {
-  console.log('HTTPS Server is running on: https://localhost:%s', SSLPORT)
-})
+// httpsServer.listen(SSLPORT, function () {
+//   console.log('HTTPS Server is running on: https://localhost:%s', SSLPORT)
+// })

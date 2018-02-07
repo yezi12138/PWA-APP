@@ -89,4 +89,4 @@ const topSellData = function () {
 Mock.mock('/goodInfo', 'get', goodData())
 Mock.mock('/topSell', 'get', topSellData())
 
-module.exports = Mock
+export default Mock

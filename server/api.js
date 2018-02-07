@@ -95,9 +95,11 @@ router.get('/userInfo', (req, res) => {
           error(res, 403, 'No this user')
         } else {
           res.json({
-            name: data[0].username,
+            username: data[0].username,
             avatar: data[0].avatar,
-            createTime: data[0].createTime
+            _id: data[0]._id,
+            createTime: data[0].createTime,
+            goods: data[0].goods
           })
         }
       }

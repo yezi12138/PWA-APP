@@ -11,7 +11,9 @@
       :pullDownRefresh="true"
       @scroll="scroll"
       @pullingDown="pullingDown">
+
         <home-header slot="header" @toggleSide="toggleSide" />
+        
         <div slot="body" class="body">
 
           <!-- 轮播图 -->
@@ -41,6 +43,7 @@
             </common-card>
           </div>
 
+          <!-- 返回顶部组件 -->
           <back-to-top :scrollY="scrollY" :scroll="BScroll"  />
 
         </div>
@@ -96,47 +99,6 @@
             text: '特惠'
           }
         ],
-        goods: [
-          {
-            name: 123
-          },
-          {
-            name: 123
-          },
-          {
-            name: 123
-          },
-          {
-            name: 123
-          },
-          {
-            name: 123
-          },
-          {
-            name: 123
-          },
-          {
-            name: 123
-          },
-          {
-            name: 123
-          },
-          {
-            name: 123
-          },
-          {
-            name: 123
-          },
-          {
-            name: 123
-          },
-          {
-            name: 123
-          },
-          {
-            name: 123
-          }
-        ],
         imgList: [{
           url: 'javascript:',
           img: '../../static/images/banner1.jpg'
@@ -152,6 +114,11 @@
         loaded: false,
         scrollY: 0,
         BScroll: null
+      }
+    },
+    sockets: {
+      connect () {
+        console.log('socket connected')
       }
     },
     methods: {

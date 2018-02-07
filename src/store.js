@@ -31,6 +31,7 @@ const mutations = {
     setStorage(state, 'user', user, () => {
       sessionStorage.setItem('login', true)
       state.login = true
+      Vue.$vux.toast.text('登录成功', 'top')
     })
   },
   REMOVE_USER (state) {
@@ -47,6 +48,19 @@ const mutations = {
   }
 }
 
+const actions = {
+  // socket_login (context, message) {
+  //   if (message.login_time) {
+  //     context.commit('REMOVE_USER')
+  //   } else {
+  //     context.commit('ADD_USER', message)
+  //   }
+  // },
+  // socket_logout (context, message) {
+  //   context.commit('REMOVE_USER')
+  // }
+}
+
 const getters = {
   getUser (state) {
     return state.login && state.user
@@ -56,5 +70,6 @@ const getters = {
 export default new Vuex.Store({
   state,
   mutations,
-  getters
+  getters,
+  actions
 })

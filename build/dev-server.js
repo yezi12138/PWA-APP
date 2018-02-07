@@ -16,6 +16,7 @@ var session = require('express-session')
 var cookieParser = require('cookie-parser')
 var MongoStore = require('connect-mongo')(session)
 var proxyMiddleware = require('http-proxy-middleware')
+var socketHandle = require('./socket')
 
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
@@ -109,6 +110,12 @@ devMiddleware.waitUntilValid(() => {
 })
 
 var server = app.listen(port)
+
+// socket
+
+let socketIo = require('socket.io')
+let io = socketIo(server)
+socketHandle(io)
 
 module.exports = {
   ready: readyPromise,

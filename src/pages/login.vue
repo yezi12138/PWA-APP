@@ -35,6 +35,7 @@
   import req from 'api/common'
   export default {
     name: 'Login',
+
     data () {
       return {
         formData: {
@@ -66,14 +67,16 @@
             return
           }
           if (res.status && res.token) {
-            this.$vux.toast.text('登录成功', 'top')
             // 添加cookies
             setToken(res.token, {
               expires: 7
             })
             // 获取用户信息
             req('userInfo').then(res => {
-              !res.error && this.$store.commit('ADD_USER', res)
+              if (!res.error) {
+                this.$store.commit('ADD_USER', res)
+                this.$socket.emit('login', res)
+              }
             })
             // 跳转之前得页面
             let path = this.$route.query.url
@@ -89,6 +92,7 @@
         num ? this.currentActive = 1 : this.currentActive = 0
       }
     }
+
   }
 </script>
 
