@@ -1,72 +1,8 @@
 
-// 数据库定义
-// const db = require('../server/db')
-// const decodeToken = require('../server/auth').decodeToken
-// const User = db.User
 // 保存上线用户
 var users = []
 // 链接的用户
 var accounts = 0
-
-// const getToken = (socket) => {
-//   var userToken = null
-//   var cookies = socket.handshake.headers.cookie
-//   cookies = cookies.split(';')
-//   cookies = cookies.map(item => {
-//     var cookie = item.split('=')
-//     cookie = {
-//       name: cookie[0].trim(),
-//       value: cookie[1].trim()
-//     }
-//     return cookie
-//   })
-//   cookies.forEach(item => {
-//     if (item.name === 'Token') {
-//       userToken = item.value
-//     }
-//   })
-//   return userToken
-// }
-
-// const getUser = async (token) => {
-//   var res = {}
-//   const find = async (result) => {
-//     return User.findOne({_id: result})
-//   }
-//   const parse = async (token) => {
-//     let account = {}
-//     if (token) {
-//       let result = decodeToken(token)
-//       if (result) {
-//         account = await find(result)
-//         account = {
-//           username: account.username,
-//           avatar: account.avatar,
-//           _id: account._id,
-//           createTime: account.createTime,
-//           goods: account.goods
-//         }
-//       } else {
-//         account = {
-//           status: false,
-//           msg: 'token不正确'
-//         }
-//       }
-//     } else {
-//       account = {
-//         status: false,
-//         msg: 'token不存在'
-//       }
-//     }
-//     return account
-//   }
-//   console.log(token)
-//   if (!token) {
-//     return null
-//   }
-//   res = await parse(token)
-//   return res
-// }
 
 const isOnline = (user) => {
   var flag = false
@@ -114,9 +50,8 @@ module.exports = function socketHandle (io) {
   io.on('connection', (socket) => {
     console.log('有客户端连接')
     console.log('当前连接数', ++accounts)
+
     socket.on('login', async (user) => {
-      // let userToken = getToken(socket)
-      // let user = await getUser(userToken)
       let onlineObj = isOnline(user)
       console.log('user', user.username)
       if (onlineObj.flag) {
@@ -137,10 +72,12 @@ module.exports = function socketHandle (io) {
         socket.emit('login', user)
       }
     })
+
     socket.on('logout', () => {
       deleteUser(socket.user)
       delete socket.logOut
     })
+
     socket.on('disconnect', (reason) => {
       deleteUser(socket.user)
       socket = null

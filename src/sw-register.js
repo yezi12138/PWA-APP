@@ -1,15 +1,15 @@
 /**
  * @file serviceworker register
  * @author yezi(18924400146@163.com)
+ * 全局注册worker，以使用通知功能
  */
 
  /* eslint-disable */
 
 // 注册的地址为 sw-precache-webpack-pulgin 生成的 service-worker.js 或者自己手动维护的 service worker 文件
-let regt = null
 navigator.serviceWorker && navigator.serviceWorker.register('service-worker.js')
 .then((registration) => {
-  regt = registration
+  window.$worker = registration
   navigator.serviceWorker.addEventListener('message', e => {
     // service-worker.js 如果更新成功会 postMessage 给页面，内容为 'sw.update'
     if (e.data === 'sw.update') {

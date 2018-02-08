@@ -4,9 +4,9 @@ import qs from 'qs'
 import config from '../../config'
 let baseURL = ''
 
-if (process.env.NODE_ENV === 'production') {
-  baseURL = 'http://120.79.133.111:9001'
-}
+// if (process.env.NODE_ENV === 'production') {
+//   baseURL = 'http://120.79.133.111:9001'
+// }
 
 const instance = axios.create({
   baseURL,

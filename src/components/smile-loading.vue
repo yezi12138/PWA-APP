@@ -156,7 +156,7 @@
           originY: 0,
           afterX: 0,
           afterY: 2 * Math.PI,
-          speed: 2000,
+          speed: 1000,
           callback: null
         }
         options = Object.assign({}, defaultOptions, options)

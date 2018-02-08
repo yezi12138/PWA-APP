@@ -118,7 +118,22 @@
     },
     sockets: {
       connect () {
-        console.log('socket connected')
+        setTimeout(() => {
+          if (window.$worker) {
+            window.$worker.showNotification('震惊！正品沐浴露才3.9', {
+              actions: [
+                {
+                  action: 'look-action',
+                  title: '去看看'
+                },
+                {
+                  action: 'close-action',
+                  title: '关闭'
+                }
+              ]
+            })
+          }
+        }, 4000)
       }
     },
     methods: {
@@ -148,7 +163,7 @@
             scroll.finishPullDown()
             this.refreshHistoryMark(scroll)
             this.loaded = true
-          }, 5000)
+          }, 3000)
         })
       },
       pullingUp (scroll) {
