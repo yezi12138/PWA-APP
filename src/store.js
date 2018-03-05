@@ -21,7 +21,6 @@ const setStorage = (state, itemName, data, fn) => {
 
 const state = {
   user: JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')) : (Cookies.get('user') ? Cookies.get('user') : null),
-  login: sessionStorage.getItem('login') || false,
   transitionName: '',
   search_history: JSON.parse(localStorage.getItem('search_history')) ? JSON.parse(localStorage.getItem('search_history')) : (Cookies.get('user') ? Cookies.get('user') : null)
 }
@@ -29,16 +28,12 @@ const state = {
 const mutations = {
   ADD_USER (state, user) {
     setStorage(state, 'user', user, () => {
-      sessionStorage.setItem('login', true)
-      state.login = true
       Vue.$vux.toast.text('登录成功', 'top')
     })
   },
   REMOVE_USER (state) {
     Cookies.remove('Token')
     localStorage.removeItem('user')
-    sessionStorage.removeItem('login')
-    state.login = false
   },
   TRANSITION_NAME (state, transitionName) {
     state.transitionName = transitionName
@@ -63,7 +58,7 @@ const actions = {
 
 const getters = {
   getUser (state) {
-    return state.login && state.user
+    return state.user
   }
 }
 

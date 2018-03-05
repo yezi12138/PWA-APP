@@ -88,7 +88,7 @@
       exit () {
         this.$store.commit('REMOVE_USER')
         this.$socket.emit('logout')
-        // window.location.reload()
+        window.location.reload()
       },
       upLoadAvatar (e) {
         if (e._constructed) {
