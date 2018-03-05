@@ -222,7 +222,6 @@ export default {
 
   created () {
     let goodData = JSON.parse(this.$route.query.goodData)
-    console.log(goodData)
     if (goodData) {
       this.good = goodData
     } else {

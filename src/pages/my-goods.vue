@@ -1,6 +1,9 @@
 <template>
   <layout :loaded="true" :fix-header="true">
-    <x-header slot="header">我的商品</x-header>
+    <x-header slot="header">
+      我的商品
+      <router-link class="header-right" slot="right" to="/home">主页</router-link>
+    </x-header>
     <div class="my-goods" slot="body">
       <div
         class="order"
@@ -159,6 +162,10 @@ export default {
         }
       }
     }
+  }
+  .header-right{
+    font-size: 16px;
+    color: #333 !important;
   }
   .item-cell{
     padding: 9px;

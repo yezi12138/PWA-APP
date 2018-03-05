@@ -79,8 +79,13 @@
               }
             })
             // 跳转之前得页面
-            let path = this.$route.query.url
-            this.$router.push({ path: path })
+            let url = this.$route.query.url
+            delete this.$route.query.url
+            let query = this.$route.query
+            this.$router.push({
+              path: url,
+              query: query
+            })
           }
           return false
         })

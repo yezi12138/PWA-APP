@@ -45,7 +45,8 @@ export function checkAuth (to, from, next) {
         if (router.app) {
           router.app.$vux.toast.text('请先登录', 'top')
         }
-        next({path: `/login?url=${to.path}`})
+        let query = to.fullPath.split('?')[1]
+        next({path: `/login?url=${to.path}&${query}`})
       }
     }
   })

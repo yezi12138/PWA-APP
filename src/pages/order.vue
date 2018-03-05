@@ -144,7 +144,8 @@ export default {
   },
 
   activated () {
-    this.goodInfo = JSON.parse(this.$route.query.goodInfo)
+    console.log(this.$route.query)
+    this.goodInfo = JSON.parse(this.$route.query.goodData)
     this.selectData = JSON.parse(this.$route.query.selectData)
   }
 }

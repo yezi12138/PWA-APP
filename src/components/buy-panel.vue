@@ -146,7 +146,7 @@ export default {
       this.$router.push({
         path: '/order',
         query: {
-          goodInfo: JSON.stringify(this.data),
+          goodData: JSON.stringify(this.data),
           selectData: JSON.stringify({
             stage: this.currentStage,
             package: this.currentPackage,
