@@ -15,6 +15,16 @@ const error = (res, code, message) => {
   })
 }
 
+const user_info = (data) => {
+  return {
+    username: data[0].username,
+    avatar: data[0].avatar,
+    _id: data[0]._id,
+    createTime: data[0].createTime,
+    goods: data[0].goods
+  }
+}
+
 /**
  * 注册验证
  */
@@ -94,13 +104,7 @@ router.get('/userInfo', (req, res) => {
         if (data.length === 0) {
           error(res, 403, 'No this user')
         } else {
-          res.json({
-            username: data[0].username,
-            avatar: data[0].avatar,
-            _id: data[0]._id,
-            createTime: data[0].createTime,
-            goods: data[0].goods
-          })
+          res.json(user_info(data))
         }
       }
     })
@@ -210,13 +214,7 @@ router.post('/upLoadAvatar', (req, res) => {
               msg: '不存在该用户'
             })
           } else {
-            var user = {
-              username: data[0].username,
-              avatar: data[0].avatar,
-              _id: data[0]._id,
-              createTime: data[0].createTime,
-              goods: data[0].goods
-            }
+            var user = user_info(data)
             res.send(user)
           }
         }
