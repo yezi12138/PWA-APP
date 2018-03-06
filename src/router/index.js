@@ -7,6 +7,7 @@ import Notification from 'pages/notification'
 import GoodDetail from 'pages/good-detail'
 import Order from 'pages/order'
 import MyGoods from 'pages/my-goods'
+import Shopcart from 'pages/shopcart'
 import { checkAuth, getInfo } from '../utils/router'
 
 Vue.use(Router)
@@ -52,6 +53,11 @@ const router = new Router({
       path: '/my_goods',
       name: 'myGoods',
       component: MyGoods
+    },
+    {
+      path: '/shopcart',
+      name: 'shopcart',
+      component: Shopcart
     }
   ]
 })

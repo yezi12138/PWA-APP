@@ -128,7 +128,8 @@ export default {
         order: {
           order_time: (new Date()).valueOf(),
           good_info: this.goodInfo,
-          select_data: this.selectData
+          select_data: this.selectData,
+          status: '交易成功'
         }
       }
       req('postOrder', params)
