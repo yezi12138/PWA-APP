@@ -210,12 +210,14 @@ router.post('/upLoadAvatar', (req, res) => {
               msg: '不存在该用户'
             })
           } else {
-            var User = {
+            var user = {
               username: data[0].username,
               avatar: data[0].avatar,
-              createTime: data[0].createTime
+              _id: data[0]._id,
+              createTime: data[0].createTime,
+              goods: data[0].goods
             }
-            res.send(User)
+            res.send(user)
           }
         }
       })

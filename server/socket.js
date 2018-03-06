@@ -53,7 +53,6 @@ module.exports = function socketHandle (io) {
 
     socket.on('login', async (user) => {
       let onlineObj = isOnline(user)
-      console.log('user', user.username)
       if (onlineObj.flag) {
         if (onlineObj.socket) {
           console.log(`${onlineObj.socket.user.username}在别处登录，强制下线`)
