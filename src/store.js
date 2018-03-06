@@ -35,6 +35,9 @@ const mutations = {
     Cookies.remove('Token')
     localStorage.removeItem('user')
   },
+  REFLESH_AVATAR (state, user) {
+    setStorage(state, 'user', user)
+  },
   TRANSITION_NAME (state, transitionName) {
     state.transitionName = transitionName
   },

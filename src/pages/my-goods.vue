@@ -67,7 +67,7 @@ export default {
       this.$router.push({
         path: '/good_detail',
         query: {
-          good: JSON.stringify(order.good_info)
+          goodData: JSON.stringify(order.good_info)
         }
       })
     }

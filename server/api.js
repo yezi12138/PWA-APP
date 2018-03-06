@@ -211,7 +211,7 @@ router.post('/upLoadAvatar', (req, res) => {
             })
           } else {
             var User = {
-              name: data[0].username,
+              username: data[0].username,
               avatar: data[0].avatar,
               createTime: data[0].createTime
             }

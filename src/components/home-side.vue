@@ -107,11 +107,11 @@
           img.onload = () => {
             (file.size >= MAXSIZE) && (imgData = this.compressImg(img))
             let userInfo = {
-              username: this.user.name,
+              username: this.user.username,
               avatar: imgData
             }
             req('uploadAvatar', userInfo).then((res) => {
-              this.$store.commit('ADD_USER', res)
+              this.$store.commit('REFLESH_AVATAR', res)
             })
           }
           img.src = result
