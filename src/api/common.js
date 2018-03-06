@@ -44,6 +44,16 @@ export const config = {
   postOrder: {
     url: '/order',
     method: 'post'
+  },
+  // 收藏商品
+  collect: {
+    url: '/collect',
+    method: 'post'
+  },
+  // 获取收藏商品
+  getCollect: {
+    url: '/getCollect',
+    method: 'get'
   }
 }
 

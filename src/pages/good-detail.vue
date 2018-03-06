@@ -56,7 +56,7 @@
         </div>
 
         <div class="btn-group clearfix">
-          <span class="add-btn">添加到购物车</span>
+          <span class="add-btn" @click="addToShopcart">添加到购物车</span>
           <span class="buy-btn" @click="showBuyPanel = true">BUY</span>
         </div>
 
@@ -100,7 +100,7 @@
       </actionsheet>
     </div>
 
-    <buy-panel :isShow.sync="showBuyPanel" :data="good"  />
+    <buy-panel :isShow.sync="showBuyPanel" :data="good" :isCollect="isCollect"  />
 
   </div>
 </template>
@@ -190,7 +190,8 @@ export default {
           value: '苹果71',
           key: 'apple71'
         }
-      ]
+      ],
+      isCollect: false
     }
   },
 
@@ -217,6 +218,27 @@ export default {
     pullingDown (scroll) {
       console.log('pull down reflesh')
       scroll.finishPullDown()
+    },
+    addToShopcart () {
+      this.showBuyPanel = true
+      this.isCollect = true
+    },
+    collect (selectData) {
+      let params = {
+        order: {
+          order_time: (new Date()).valueOf(),
+          good_info: this.good,
+          select_data: selectData,
+          status: '待付款',
+          id: this.good.id
+        }
+      }
+      req('collect', params)
+      .then(res => {
+        res.status && this.$vux.toast.text('添加成功', 'top')
+      })
+      this.showBuyPanel = false
+      this.isCollect = false
     }
   },
 

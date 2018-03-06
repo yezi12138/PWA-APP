@@ -1,12 +1,15 @@
 <template>
-  <div class="my-goods" slot="body">
+  <div class="my-goods" v-if="orders.length > 0">
     <div
       class="order"
       v-for="(order, index) in orders"
       :key="index">
 
       <div class="order-header item-cell">
-        <span class="shop-name">{{order.good_info.shop_name}}</span>
+        <div>
+          <check-icon v-if="check" :value.sync="check[index]"></check-icon>
+          <span class="shop-name">{{order.good_info.shop_name}}</span>
+        </div>
         <span class="order-status">{{order.status}}</span>
       </div>
 
@@ -35,17 +38,30 @@
 
     </div>
   </div>
+  <div class="void-text" v-else>没有商品</div>
 </template>
 
 <script>
-
+import { CheckIcon } from 'vux'
 export default {
   name: 'BuyGoodCard',
+
+  components: {
+    CheckIcon
+  },
 
   props: {
     orders: {
       type: Array,
       required: true
+    },
+    check: {
+      type: Array
+    }
+  },
+
+  data () {
+    return {
     }
   },
 
@@ -67,15 +83,15 @@ export default {
 
 <style lang="scss" scoped>
   .my-goods{
-    padding-top: 15px;
+    padding: 15px 0;
     background-color: #e7e7e7;
     .order{
       margin-bottom: 20px;
       background-color: #fff;
       .order-header{
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
         font-size: 13px;
         padding-left: 10px;
         padding-right: 10px;
@@ -149,5 +165,13 @@ export default {
   .item-cell{
     padding: 9px;
     background-color: #fff;
+  }
+  .void-text{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 50vh;
+    font-size: 16px;
   }
 </style>

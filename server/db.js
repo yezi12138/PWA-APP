@@ -19,11 +19,8 @@ const loginSchema = new mongoose.Schema({
   password: String,
   avatar: String,
   createTime: Date,
-  goods: {
-    order_time: Date,
-    good_info: Object,
-    select_data: Object
-  }
+  goods: Array,
+  collects: Array
 })
 
 /**

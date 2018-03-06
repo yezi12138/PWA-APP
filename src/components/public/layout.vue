@@ -22,6 +22,9 @@
       </scroll-panel>
     </div>
 
+    <slot name="bottom">
+    </slot>
+
   </div>
 </template>
 
@@ -42,10 +45,6 @@
         default: false
       },
       search: {
-        type: Boolean,
-        default: false
-      },
-      bottom: {
         type: Boolean,
         default: false
       },
@@ -79,13 +78,16 @@
     methods: {
       setHeight () {
         let headerElm = this.$slots.header ? this.$slots.header[0].elm : null
+        let bottomElm = this.$slots.bottom ? this.$slots.bottom[0].elm : null
         let wrapHeight = this.$refs.wrap.offsetHeight
         let headerHeight = headerElm ? headerElm.offsetHeight : 0
-        // let bottomHeight = this.bottom ? this.$refs.bottom.$el.offsetHeight : 0
-        let height = wrapHeight - headerHeight + 'px'
+        let bottomHeight = bottomElm ? bottomElm.offsetHeight : 0
+        let height = wrapHeight - headerHeight - bottomHeight + 'px'
         // 设置边距
         let marginTop = headerHeight + 'px'
+        let marginBottom = bottomHeight + 'px'
         this.$set(this.bodyStyle, 'marginTop', marginTop)
+        this.$set(this.bodyStyle, 'marginBottom', marginBottom)
         // 设置主体高度
         this.$set(this.bodyStyle, 'height', height)
         // 设置fixed定位

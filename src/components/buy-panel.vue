@@ -51,7 +51,8 @@
           </span>
         </div>
 
-        <span class="buy" @click="routerTo">购买</span>
+        <span class="buy" v-if="!isCollect" @click="routerTo">购买</span>
+        <span class="buy" v-else @click="collect">添加到购物车</span>
 
       </div>
     </popup>
@@ -80,6 +81,9 @@ export default {
     },
     data: {
       type: Object
+    },
+    isCollect: {
+      type: Boolean
     }
   },
 
@@ -154,6 +158,14 @@ export default {
           })
         }
       })
+    },
+    collect () {
+      let selectData = {
+        stage: this.currentStage,
+        package: this.currentPackage,
+        num: this.currentNum
+      }
+      this.$parent.collect(selectData)
     }
   }
 }

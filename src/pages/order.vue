@@ -125,11 +125,12 @@ export default {
     },
     buy () {
       let params = {
-        order: {
+        orders: {
           order_time: (new Date()).valueOf(),
           good_info: this.goodInfo,
           select_data: this.selectData,
-          status: '交易成功'
+          status: '交易成功',
+          id: this.goodInfo.id
         }
       }
       req('postOrder', params)

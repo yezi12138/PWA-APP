@@ -155,17 +155,39 @@ router.get('/auth/token', (req, res) => {
 router.post('/order', (req, res) => {
   let token = req.cookies.Token
   let result = decodeToken(token)
-  if (result) {
-    var order = req.body.order
+  let orders = req.body.orders
+  let isCollect = req.body.isCollect
+  let update = (order) => {
     User.update({_id: result}, {$push: {goods: order}}, function (err, result) {
       if (err) {
         error(res, 500, err)
       } else {
-        res.json({
-          status: true,
-          msg: '购买成功'
-        })
+        console.log('我的商品加一')
       }
+    })
+  }
+  let deleteOrders = (order) => {
+    User.update({_id: result}, {$pull: {collects: {id: order.id}}}, function (err, result) {
+      if (err) {
+        error(res, 500, err)
+      } else {
+        console.log('购物车数量减一')
+      }
+    })
+  }
+  if (result) {
+    if (orders instanceof Array) {
+      orders.forEach(order => {
+        update(order)
+        deleteOrders(order)
+      })
+    } else {
+      update(orders)
+      isCollect && deleteOrders(orders)
+    }
+    res.json({
+      status: true,
+      msg: '购买成功'
     })
   }
 })
@@ -188,6 +210,51 @@ router.get('/order', (req, res) => {
           })
         } else {
           res.send(data[0].goods)
+        }
+      }
+    })
+  }
+})
+
+/**
+ * 收藏商品
+ */
+router.post('/collect', (req, res) => {
+  let token = req.cookies.Token
+  let result = decodeToken(token)
+  if (result) {
+    var order = req.body.order
+    User.update({_id: result}, {$push: {collects: order}}, function (err, result) {
+      if (err) {
+        error(res, 500, err)
+      } else {
+        res.json({
+          status: true,
+          msg: '收藏成功'
+        })
+      }
+    })
+  }
+})
+
+/**
+ * 获取收藏商品
+ */
+router.get('/getCollect', (req, res) => {
+  let token = req.cookies.Token
+  let result = decodeToken(token)
+  if (result) {
+    User.find({_id: result}, (err, data) => {
+      if (err) {
+        error(res, 500, err)
+      } else {
+        if (data.length === 0) {
+          res.json({
+            status: false,
+            msg: '不存在该用户'
+          })
+        } else {
+          res.send(data[0].collects)
         }
       }
     })
