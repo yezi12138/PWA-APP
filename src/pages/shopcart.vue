@@ -61,7 +61,7 @@ export default {
       let money = 0
       this.orders.forEach((order, index) => {
         if (this.check[index]) {
-          money += order.good_info.price
+          money += order.good_info.price * order.select_data.num
         }
       })
       return money

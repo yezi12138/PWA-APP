@@ -36,6 +36,9 @@
 	.bottom-panel{
 		position: relative !important;
 	}
+	.vux-slider > .vux-swiper > .vux-swiper-item{
+		position: relative !important;
+	}
 }
 .slide-left-leave-active{
 	opacity: 0;

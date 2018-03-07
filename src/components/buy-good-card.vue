@@ -26,7 +26,7 @@
             </div>
           </div>
 
-          <div class="delete-order vertical-middle cneter" @click="deleteOrder(order)">删除</div>
+          <div class="delete-order vertical-middle cneter" @click="showConfirm = true">删除</div>
         </div>
 
         <div class="good-info" v-else>
@@ -55,13 +55,20 @@
 
       <buy-panel :isShow.sync="showBuyPanel" :data="currentEdit" :title="false"  />
 
+      <div v-transfer-dom>
+        <confirm v-model="showConfirm"
+          title="确定删除这个宝贝吗？"
+          @on-confirm="deleteOrder">
+        </confirm>
+      </div>
+
     </div>
   </div>
   <div class="void-text" v-else>没有商品</div>
 </template>
 
 <script>
-import { CheckIcon } from 'vux'
+import { CheckIcon, Confirm, TransferDom } from 'vux'
 import BuyPanel from 'components/buy-panel'
 import DecreaseAddBtn from 'components/decrease-add-btn'
 import count from 'mixin/count'
@@ -72,7 +79,12 @@ export default {
   components: {
     CheckIcon,
     BuyPanel,
-    DecreaseAddBtn
+    DecreaseAddBtn,
+    Confirm
+  },
+
+  directives: {
+    TransferDom
   },
 
   props: {
@@ -91,7 +103,8 @@ export default {
     return {
       currentEdit: null,
       showBuyPanel: false,
-      currentOrders: []
+      currentOrders: [],
+      showConfirm: false
     }
   },
 
@@ -116,9 +129,9 @@ export default {
         this.$emit('update:orders', res)
       })
     },
-    deleteOrder (order) {
+    deleteOrder () {
       let params = {
-        orderId: order.id
+        orderId: this.currentEdit.id
       }
       req('deleteCollect', params)
       .then(res => {
