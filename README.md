@@ -49,7 +49,33 @@
 3. 最后 敲下 `npm server` 项目正式启动
 
 ### <a name="feature">⊙ 功能</a>
-1. 单终端登录
+#### 一. 主页
+
+功能： 
+> 1. 商品展示
+> 2. 下滑加载（支持自定义上拉动画）
+> 3. 上拉加载（未开启，可在框架添加参数开启）
+> 4. 索搜商品（未支持）
+> 5. 返回顶部按钮
+> 6. 侧边栏上传头像功能
+
+截图： 
+![enter image description here](//wx2.sinaimg.cn/thumb150/a359ab18gy1fp4bjr5w69j20fo0sjgqs.jpg)![enter image description here](//wx2.sinaimg.cn/thumb150/a359ab18gy1fp4bjr07uuj20fr0rrmz7.jpg)![enter image description here](//wx3.sinaimg.cn/thumb150/a359ab18gy1fp4bjquscmj20fp0rvq36.jpg)![enter image description here](//wx2.sinaimg.cn/thumb150/a359ab18gy1fp4bjr40dfj20fm0rtq7b.jpg)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 2. 系统通知功能
 3. PWA应用体验
 4. 购物车展示
