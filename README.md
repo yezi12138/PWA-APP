@@ -60,7 +60,7 @@
 > 6. 侧边栏上传头像功能
 
 截图： 
-![enter image description here](//wx2.sinaimg.cn/thumb150/a359ab18gy1fp4bjr5w69j20fo0sjgqs.jpg)![enter image description here](//wx2.sinaimg.cn/thumb150/a359ab18gy1fp4bjr07uuj20fr0rrmz7.jpg)![enter image description here](//wx3.sinaimg.cn/thumb150/a359ab18gy1fp4bjquscmj20fp0rvq36.jpg)![enter image description here](//wx2.sinaimg.cn/thumb150/a359ab18gy1fp4bjr40dfj20fm0rtq7b.jpg)
+![gif](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/GIF.gif)
 
 
 
