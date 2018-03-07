@@ -59,29 +59,66 @@
 > 5. 返回顶部按钮
 > 6. 侧边栏上传头像功能
 
-截图： 
-![gif](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/GIF.gif)
+截图：
+![home](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/home.gif)
+
+
+#### 二. 购物车
+
+功能： 
+> 1. 商品展示
+> 2. 购物车编辑模式
+> 3. 删除购物车商品
+> 4. 购买购物车商品（支持批量购买）
+> 5. 添加商品到购物车
+
+
+截图：
+![shopcart1](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/shopcart1.gif)
+![shopcart2](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/shopcart2.gif)
+
+
+#### 三. 我的商品
+
+功能： 
+> 1. 商品展示
+> 2. 订单界面
+> 3. 购买商品
+> 4. 我的商品页面
+
+
+截图：
+![myGood](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/myGood.gif)
+![buy](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/buy.gif)
 
 
 
+#### 四. 登录限制
+
+功能： 
+> 1. 统一设定登录限制界面
+> 2. 登录后页面跳转回登录前界面
+> 3. 账号登录限制（不允许同时登录同一个账号）
 
 
+截图：
+![login1](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/login1.gif)
+![login2](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/login2.gif)
 
 
+#### 伍. PWA用户体验（需手机使用谷歌浏览器链接电脑测试）
 
 
+> 1. 离线使用
+> 2. 缓存
+> 3. 消息通知
+> 4. 添加桌面
+
+#### 六. 其他功能
 
 
+> 1. 页面切换动画
+> 2. 消息推送
+> 3. 免登录验证
 
 
-
-
-2. 系统通知功能
-3. PWA应用体验
-4. 购物车展示
-5. 购物车和我的商品联动
-6. 我的商品展示
-7. 上传头像功能
-8. 登陆注册功能
-9. 封装框架，支持移动端滑动，上拉下滑
-10. 页面切换动画
