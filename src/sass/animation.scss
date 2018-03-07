@@ -26,13 +26,18 @@
 }
 
 // 页面切换动画
-.slide-left-leave-active{
+.slide-left-leave-active, .slide-right-leave-active{
 	.vux-header{
 		position: relative !important;
 	}
 	.layout-home{
 		margin-top: 0 !important;
 	}
+	.bottom-panel{
+		position: relative !important;
+	}
+}
+.slide-left-leave-active{
 	opacity: 0;
 	transition: all 0.5s cubic-bezier(.55,0,.1,1);
 }
@@ -41,12 +46,6 @@
 }
 
 .slide-right-leave-active{
-	.vux-header{
-		position: relative !important;
-	}
-	.layout-home{
-		margin-top: 0 !important;
-	}
 	opacity: 0;
 	transition: all 0.5s cubic-bezier(.55,0,.1,1);
 }
