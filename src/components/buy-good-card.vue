@@ -49,8 +49,8 @@
 
       <div class="btn-group item-cell border-bottom border-scaleY">
         <span @click="routerTo(order)" v-if="currentEdit !== order">查看</span>
-        <span @click="edit(order)" v-if="currentEdit !== order">编辑</span>
-        <span @click="save(order)" v-if="currentEdit === order">完成</span>
+        <span @click="edit(order)" v-if="isSHopCart && currentEdit !== order">编辑</span>
+        <span @click="save(order)" v-if="isSHopCart && currentEdit === order">完成</span>
       </div>
 
       <buy-panel :isShow.sync="showBuyPanel" :data="currentEdit" :title="false"  />
@@ -94,6 +94,10 @@ export default {
     },
     check: {
       type: Array
+    },
+    isSHopCart: {
+      type: Boolean,
+      default: false
     }
   },
 
