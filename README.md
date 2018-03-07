@@ -60,10 +60,7 @@
 > 6. 侧边栏上传头像功能
 
 截图： 
-![home1](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/home1.png)
-![home2](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/home2.png)
-![home3](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/home3.png)
-![home4](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/home4.png)
+![home1](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/GIF.png)
 
 
 
