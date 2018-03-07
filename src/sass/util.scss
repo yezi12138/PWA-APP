@@ -48,6 +48,20 @@
 	}
 }
 
+.center{
+	text-align: center;
+}
+
+.vertical-middle{
+	vertical-align: middle;
+	&:after{
+		display: inline-block;
+		content: '';
+		height: 100%;
+		vertical-align: middle;
+	}
+}
+
 .clearfix{
 	&:after{
 		content: '';
@@ -76,6 +90,9 @@
 	overflow: hidden;
 }
 
+
+
+// 边框的像素比
 @media screen and  (-webkit-min-device-pixel-ratio: 1.5),(min-device-pixel-ratio: 1.5){
 	.border-scaleY{
 		&:after{

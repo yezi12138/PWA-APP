@@ -9,7 +9,7 @@
 
       <div class="shopcart-content" slot="body">
 
-        <buy-good-card :orders="orders" :check="check" />
+        <buy-good-card :orders.sync="orders" :check="check" />
 
       </div>
 

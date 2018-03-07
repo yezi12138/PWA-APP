@@ -41,7 +41,8 @@ let webpackConfig = {
       'api': resolve('src/api'),
       'pages': resolve('src/pages'),
       'utils': resolve('src/utils'),
-      'static': resolve('src/static')
+      'static': resolve('src/static'),
+      'mixin': resolve('src/mixin')
     }
   },
   module: {

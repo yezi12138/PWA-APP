@@ -14,27 +14,46 @@
       </div>
 
       <div class="order-info item-cell border-bottom border-scaleY">
+
         <div class="img">img</div>
-        <div class="good-info">
+
+        <div class="edit" v-if="currentEdit === order">
+
+          <div class="edit-info">
+            <decrease-add-btn :selectData="order.select_data" />
+            <div class="package" @click="showBuyPanel = true">
+              {{order.select_data.package}}
+            </div>
+          </div>
+
+          <div class="delete-order vertical-middle cneter" @click="deleteOrder(order)">删除</div>
+        </div>
+
+        <div class="good-info" v-else>
           <div class="basic-info">
             <div class="good-name">{{order.good_info.name}}</div>
-            <div class="price">￥{{order.good_info.price}}  X1</div>
+            <div class="price">￥{{order.good_info.price}}  X{{ order.select_data.num }}</div>
           </div>
           <div class="package">
             <span>套餐: </span>
             <span>{{order.select_data.package}}</span>
           </div>
         </div>
+
       </div>
 
       <div class="sum item-cell border-bottom border-scaleY">
         <span class="title">共{{ order.select_data.num }}件,合计: </span>
-        <span class="price">￥<span class="integer">{{Math.floor(total(order.good_info, order.select_data))}}</span>.{{total(order.good_info, order.select_data).toString().split('.')[1]}}</span>
+        <span class="price">￥<span class="integer">{{total(order.good_info, order.select_data) | integer}}</span>.{{total(order.good_info, order.select_data) | point}}</span>
       </div>
 
       <div class="btn-group item-cell border-bottom border-scaleY">
-        <span @click="routerTo(order)">更多</span>
+        <span @click="routerTo(order)" v-if="currentEdit !== order">查看</span>
+        <span @click="edit(order)" v-if="currentEdit !== order">编辑</span>
+        <span @click="save(order)" v-if="currentEdit === order">完成</span>
       </div>
+
+      <buy-panel :isShow.sync="showBuyPanel" :data="currentEdit" :title="false"  />
 
     </div>
   </div>
@@ -43,11 +62,17 @@
 
 <script>
 import { CheckIcon } from 'vux'
+import BuyPanel from 'components/buy-panel'
+import DecreaseAddBtn from 'components/decrease-add-btn'
+import count from 'mixin/count'
+import req from 'api/common'
 export default {
   name: 'BuyGoodCard',
 
   components: {
-    CheckIcon
+    CheckIcon,
+    BuyPanel,
+    DecreaseAddBtn
   },
 
   props: {
@@ -60,8 +85,13 @@ export default {
     }
   },
 
+  mixins: [count],
+
   data () {
     return {
+      currentEdit: null,
+      showBuyPanel: false,
+      currentOrders: []
     }
   },
 
@@ -74,9 +104,37 @@ export default {
         }
       })
     },
-    total (goodInfo, selectData) {
-      return goodInfo.price * selectData.num
+    edit (order) {
+      this.currentEdit = order
+    },
+    save (order) {
+      this.currentEdit = null
+    },
+    getCollect () {
+      req('getCollect')
+      .then(res => {
+        this.$emit('update:orders', res)
+      })
+    },
+    deleteOrder (order) {
+      let params = {
+        orderId: order.id
+      }
+      req('deleteCollect', params)
+      .then(res => {
+        if (res.status) {
+          this.$vux.toast.text('删除成功', 'top')
+          this.getCollect()
+        } else {
+          this.$vux.toast.text('删除失败', 'top')
+        }
+      })
     }
+  },
+
+  activated () {
+    this.currentEdit = null
+    this.showBuyPanel = false
   }
 }
 </script>
@@ -102,19 +160,21 @@ export default {
       .order-info{
         display: flex;
         flex-direction: row;
-        background-color: #f5f5f5;
+        background-color: #fff;
+        padding: 0 0 0 9px;
         .img{
           flex: 0 0 92px;
           width: 92px;
           height: 92px;
           line-height: 92px;
+          margin: 9px 0;
           background-position: 50% 50%;
           -webkit-background-size: contain;
           -ms-background-size: contain;
           background-size: contain;
           background-repeat: no-repeat;
           text-align: center;
-          background-color: #fff;
+          background-color: #ccc;
         }
         .good-info{
           margin-left: 10px;
@@ -126,6 +186,27 @@ export default {
               color: red;
             }
             margin-bottom: 10px;
+          }
+        }
+        .edit{
+          flex: 1;
+          display: flex;
+          margin-left: 10px;
+          .edit-info{
+            flex: 5;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .package{
+              padding: 20px 15px;
+            }
+          }
+          .delete-order{
+            flex: 1;
+            height: 100%;
+            padding: 0 15px;
+            background-color: red;
+            color: #fff;
           }
         }
       }

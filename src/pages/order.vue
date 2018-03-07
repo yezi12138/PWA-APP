@@ -26,7 +26,7 @@
             <div class="good-info">
               <div class="basic-info">
                 <div class="good-name">{{goodInfo.name}}</div>
-                <div class="price">￥{{goodInfo.price}}  X1</div>
+                <div class="price">￥{{goodInfo.price}}  X{{ selectData.num }}</div>
               </div>
               <div class="package">
                 <span>套餐: </span>
@@ -38,11 +38,7 @@
 
         <div class="buy-num item-cell border-bottom border-scaleY">
           <span>购买数量</span>
-          <div class="btn-group">
-            <span class="decrease-btn" @click="decreaseNum"></span>
-            <span class="current-num">{{selectData.num}}</span>
-            <span class="add-btn" @click="addNum"></span>
-          </div>
+          <decrease-add-btn :selectData="selectData" />
         </div>
 
         <div class="discount item-cell border-bottom border-scaleY">
@@ -56,7 +52,7 @@
 
         <div class="sum item-cell border-bottom border-scaleY">
           <span class="title">共{{ selectData.num }}件,合计: </span>
-          <span class="price">￥<span class="integer">{{Math.floor(total)}}</span>.{{total.toString().split('.')[1]}}</span>
+          <span class="price">￥<span class="integer">{{total(goodInfo, selectData) | integer}}</span>.{{total(goodInfo, selectData) | point}}</span>
         </div>
 
       </div>
@@ -66,7 +62,7 @@
     <div class="bottom-panel">
       <div class="bottom-sum">
         <span class="title">共{{ selectData.num }}件,总金额: </span>
-        <span class="price">￥<span class="integer">{{Math.floor(total)}}</span>.{{total.toString().split('.')[1]}}</span>
+        <span class="price">￥<span class="integer">{{total(goodInfo, selectData) | integer}}</span>.{{total(goodInfo, selectData) | point}}</span>
       </div>
       <div class="buy-btn">
         <span @click="buy">提交订单</span>
@@ -79,6 +75,8 @@
 
 <script>
 import Layout from 'components/public/layout'
+import DecreaseAddBtn from 'components/decrease-add-btn'
+import count from 'mixin/count'
 import { Selector, XInput, XHeader } from 'vux'
 import req from 'api/common'
 export default {
@@ -87,7 +85,8 @@ export default {
     Layout,
     Selector,
     XInput,
-    XHeader
+    XHeader,
+    DecreaseAddBtn
   },
   data () {
     return {
@@ -109,20 +108,9 @@ export default {
     }
   },
 
-  computed: {
-    total () {
-      return this.goodInfo.price * this.selectData.num
-    }
-  },
+  mixins: [count],
 
   methods: {
-    decreaseNum () {
-      this.selectData.num--
-      this.selectData.num < 1 && (this.selectData.num = 1)
-    },
-    addNum () {
-      this.selectData.num++
-    },
     buy () {
       let params = {
         orders: {
@@ -146,7 +134,6 @@ export default {
   },
 
   activated () {
-    console.log(this.$route.query)
     this.goodInfo = JSON.parse(this.$route.query.goodData)
     this.selectData = JSON.parse(this.$route.query.selectData)
   }
@@ -224,57 +211,6 @@ export default {
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
-      .btn-group{
-        .current-num{
-          vertical-align: middle;
-        }
-        .decrease-btn, .add-btn{
-          vertical-align: middle;
-          display: inline-block;
-          width: 32px;
-          height: 32px;
-          position: relative;
-          line-height: 1;
-        }
-        .decrease-btn{
-              background-color: #f5f5f5;
-          margin-right: 10px;
-          &:after{
-            position: absolute;
-            top: 15px;
-            left: 10px;
-            border-bottom: 2px solid #999;
-            width: 12px;
-            height: 1px;
-            content: ' ';
-          }
-        }
-        .add-btn{
-          background-color: #ccc;
-          margin-left: 10px;
-          &:before{
-            box-sizing: border-box;
-            position: absolute;
-            top: 15px;
-            left: 10px;
-            border-bottom: 2px solid #999;
-            width: 12px;
-            height: 1px;
-            content: ' ';
-            transform: rotate(90deg);
-          }
-          &:after{
-            box-sizing: border-box;
-            position: absolute;
-            top: 15px;
-            left: 10px;
-            border-bottom: 2px solid #999;
-            width: 12px;
-            height: 1px;
-            content: ' ';
-          }
-        }
-      }
     }
     .message{
       display: flex;

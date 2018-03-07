@@ -217,7 +217,7 @@ router.get('/order', (req, res) => {
 })
 
 /**
- * 收藏商品
+ * 添加购物车商品
  */
 router.post('/collect', (req, res) => {
   let token = req.cookies.Token
@@ -238,7 +238,7 @@ router.post('/collect', (req, res) => {
 })
 
 /**
- * 获取收藏商品
+ * 获取购物车商品
  */
 router.get('/getCollect', (req, res) => {
   let token = req.cookies.Token
@@ -258,6 +258,38 @@ router.get('/getCollect', (req, res) => {
         }
       }
     })
+  }
+})
+
+/**
+ * 删除购物车订单
+ */
+router.delete('/deleteCollect/:orderId', (req, res) => {
+  let token = req.cookies.Token
+  let result = decodeToken(token)
+  let orderId = req.params.orderId
+  let deleteOrders = (orderId) => {
+    User.update({_id: result}, {$pull: {collects: {id: orderId}}}, function (err, result) {
+      if (err) {
+        error(res, 500, err)
+      } else {
+        if (result.nModified) {
+          console.log('购物车数量减一')
+          res.json({
+            status: true,
+            msg: '删除购物车商品成功'
+          })
+        } else {
+          res.json({
+            status: false,
+            msg: '删除购物车商品失败'
+          })
+        }
+      }
+    })
+  }
+  if (result) {
+    deleteOrders(orderId)
   }
 })
 

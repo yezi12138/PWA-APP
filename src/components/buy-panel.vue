@@ -25,19 +25,15 @@
           <span
             v-for="item in packages"
             :key="item.key"
-            :class="['label', {'active': currentPackage === item.key}]"
-            @click="currentPackage = item.key">
+            :class="['label', {'active': selectData.package === item.key}]"
+            @click="selectData.package = item.key">
               {{item.label}}
           </span>
         </div>
 
         <div class="buy-num item-cell border-bottom border-scaleY">
           <span>购买数量</span>
-          <div class="btn-group">
-            <span class="decrease-btn" @click="decreaseNum"></span>
-            <span class="current-num">{{ currentNum }}</span>
-            <span class="add-btn" @click="addNum"></span>
-          </div>
+          <decrease-add-btn :selectData="selectData" />
         </div>
 
         <div class="stage">
@@ -45,8 +41,8 @@
           <span
             v-for="item in stages"
             :key="item.key"
-            :class="['label', {'active': currentStage === item.key}]"
-            @click="currentStage = item.key">
+            :class="['label', {'active': selectData.stage === item.key}]"
+            @click="selectData.stage = item.key">
               {{item.label}}
           </span>
         </div>
@@ -64,6 +60,7 @@
  * 购买时候弹出的菜单选择
  */
 import { Popup, Icon } from 'vux'
+import DecreaseAddBtn from 'components/decrease-add-btn'
 import ScrollPanel from 'components/public/scroll-panel'
 export default {
   name: 'BuyPanel',
@@ -71,7 +68,8 @@ export default {
   components: {
     Popup,
     Icon,
-    ScrollPanel
+    ScrollPanel,
+    DecreaseAddBtn
   },
 
   props: {
@@ -110,7 +108,6 @@ export default {
           key: '美版'
         }
       ],
-      currentPackage: '',
       stages: [
         {
           label: '分3期(0手续费)¥2796起/期',
@@ -125,8 +122,11 @@ export default {
           key: '03'
         }
       ],
-      currentStage: '',
-      currentNum: 1
+      selectData: {
+        stage: '',
+        package: '',
+        num: 1
+      }
     }
   },
 
@@ -135,15 +135,8 @@ export default {
       this.showBuyPanel = false
       this.$emit('update:isShow', false)
     },
-    decreaseNum () {
-      this.currentNum--
-      this.currentNum < 1 && (this.currentNum = 1)
-    },
-    addNum () {
-      this.currentNum++
-    },
     routerTo () {
-      if (!this.currentPackage) {
+      if (!this.selectData.package) {
         this.$vux.toast.text('请选择套餐', 'top')
         return
       }
@@ -151,21 +144,12 @@ export default {
         path: '/order',
         query: {
           goodData: JSON.stringify(this.data),
-          selectData: JSON.stringify({
-            stage: this.currentStage,
-            package: this.currentPackage,
-            num: this.currentNum
-          })
+          selectData: JSON.stringify(this.selectData)
         }
       })
     },
     collect () {
-      let selectData = {
-        stage: this.currentStage,
-        package: this.currentPackage,
-        num: this.currentNum
-      }
-      this.$parent.collect(selectData)
+      this.$parent.collect(this.selectData)
     }
   }
 }

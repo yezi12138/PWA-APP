@@ -45,15 +45,20 @@ export const config = {
     url: '/order',
     method: 'post'
   },
-  // 收藏商品
+  // 添加购物车商品
   collect: {
     url: '/collect',
     method: 'post'
   },
-  // 获取收藏商品
+  // 获取购物车商品
   getCollect: {
     url: '/getCollect',
     method: 'get'
+  },
+  // 删除购物车商品
+  deleteCollect: {
+    url: '/deleteCollect/{orderId}',
+    method: 'delete'
   }
 }
 
