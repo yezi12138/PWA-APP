@@ -46,7 +46,8 @@
 1. 本项目依赖mongodb，请先行安装mongodb 教程：[mongodb安装和使用][2]
 先打开命令窗口下，敲下 `mongod –dbpath=D:\data\db`  (按照你设置的路径启动mongodb)
 2. 然后在项目的根目录下进入cmd，敲下 `npm install` 安装依赖 (如果安装失败就用cnpm 敲下 `cnpm install`)
-3. 最后 敲下 `npm server` 项目正式启动
+3. `npm run build` 之后 敲入 `npm run fix` 得到项目包
+4. 最后 敲下 `npm server` 项目正式启动
 
 ### <a name="feature">⊙ 功能</a>
 #### 一. 主页
@@ -60,6 +61,7 @@
 > 6. 侧边栏上传头像功能
 
 截图：
+
 ![home](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/home.gif)
 
 
@@ -74,6 +76,7 @@
 
 
 截图：
+
 ![shopcart1](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/shopcart1.gif)
 ![shopcart2](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/shopcart2.gif)
 
@@ -88,6 +91,7 @@
 
 
 截图：
+
 ![myGood](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/myGood.gif)
 ![buy](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/buy.gif)
 
@@ -102,6 +106,7 @@
 
 
 截图：
+
 ![login1](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/login1.gif)
 ![login2](https://github.com/yezi12138/PWA-APP/blob/dev2/static/readmeImgs/login2.gif)
 
