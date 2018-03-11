@@ -32,6 +32,7 @@
   import { XHeader } from 'vux'
   import Layout from 'components/public/layout'
   import { setToken } from 'utils/auth'
+  import { runQueue } from 'utils/index'
   import req from 'api/common'
   export default {
     name: 'Login',
@@ -52,49 +53,51 @@
     },
 
     methods: {
-      login (e) {
-        if (e._constructed) {
-          return
-        }
-        let params = {
-          username: this.formData.username,
-          password: this.formData.password
-        }
-        req('login', params)
-        .then((res) => {
-          if (!res.status) {
-            this.$vux.toast.text('登录失败', 'top')
+      login: function (e) {
+        var that = this
+        let asyncFn = function* () {
+          if (e._constructed) {
             return
           }
-          if (res.status && res.token) {
+          let params = {
+            username: that.formData.username,
+            password: that.formData.password
+          }
+          var logRes = yield req('login', params)
+          if (!logRes.status) {
+            that.$vux.toast.text('登录失败', 'top')
+            return
+          }
+          if (logRes.status && logRes.token) {
             // 添加cookies
-            setToken(res.token, {
+            setToken(logRes.token, {
               expires: 7
             })
             // 获取用户信息
-            req('userInfo').then(res => {
-              if (!res.error) {
-                this.$store.commit('ADD_USER', res)
-                this.$socket.emit('login', res)
-              }
-            })
+            var userRes = yield req('userInfo')
+            if (!userRes.error) {
+              that.$store.commit('ADD_USER', userRes)
+              that.$socket.emit('login', userRes)
+            } else {
+              that.$vux.toast.text('获取数据失败', 'top')
+            }
             // 跳转之前得页面
-            let url = this.$route.query.url
-            delete this.$route.query.url
-            let query = this.$route.query
-            this.$router.push({
-              path: url,
-              query: query
-            })
+            that.parseUrl()
           }
-          return false
-        })
-        .catch(res => {
-          this.$vux.toast.text('登录失败', 'top')
-        })
+        }
+        runQueue(asyncFn)
       },
       showLine (num) {
         num ? this.currentActive = 1 : this.currentActive = 0
+      },
+      parseUrl () {
+        let url = this.$route.query.url
+        delete this.$route.query.url
+        let query = this.$route.query
+        this.$router.push({
+          path: url,
+          query: query
+        })
       }
     }
 
