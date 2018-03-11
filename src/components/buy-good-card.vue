@@ -16,7 +16,7 @@
       <div class="order-info item-cell border-bottom border-scaleY">
 
         <div class="img">img</div>
-
+        <!-- 编辑模式 -->
         <div class="edit" v-if="currentEdit === order">
 
           <div class="edit-info">
@@ -28,7 +28,7 @@
 
           <div class="delete-order vertical-middle cneter" @click="showConfirm = true">删除</div>
         </div>
-
+        <!-- 正常模式 -->
         <div class="good-info" v-else>
           <div class="basic-info">
             <div class="good-name">{{order.good_info.name}}</div>

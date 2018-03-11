@@ -109,7 +109,9 @@ export default {
     getCollect () {
       req('getCollect')
       .then(res => {
-        this.orders = res
+        if (Array.isArray(res)) {
+          this.orders = res
+        }
       })
     }
   },
