@@ -27,14 +27,11 @@
 
 // 页面切换动画
 .slide-left-leave-active, .slide-right-leave-active{
-	.vux-header{
+	.vux-header, .home-header, .bottom-panel{
 		position: relative !important;
 	}
 	.layout-home{
 		margin-top: 0 !important;
-	}
-	.bottom-panel{
-		position: relative !important;
 	}
 	.vux-slider > .vux-swiper > .vux-swiper-item{
 		position: relative !important;

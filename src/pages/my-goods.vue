@@ -47,8 +47,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .header-right{
-    font-size: 16px;
-    color: #333 !important;
-  }
 </style>

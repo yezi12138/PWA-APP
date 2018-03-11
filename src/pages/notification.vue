@@ -3,7 +3,10 @@
     :header="true"
     :fix-header="true"
     :loaded="true">
-    <x-header slot="header">信息中心</x-header>
+    <x-header slot="header">
+      信息中心
+      <router-link class="header-right" slot="right" to="/home">主页</router-link>
+    </x-header>
     <div class="notification-wrap" slot="body">
       <div class="notification-list">
         <div class="notification-item border-bottom border-scaleY">
