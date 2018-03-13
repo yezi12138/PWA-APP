@@ -187,7 +187,7 @@
         this.BScroll = scroll
       }
     },
-    activated () {
+    mounted () {
       this.getTopSell()
     }
   }
