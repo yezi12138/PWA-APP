@@ -27,6 +27,9 @@ const state = {
 
 const mutations = {
   ADD_USER (state, user) {
+    if (user) {
+      return
+    }
     setStorage(state, 'user', user, () => {
       Vue.$vux.toast.text('登录成功', 'top')
     })

@@ -1,5 +1,5 @@
 <template>
-  <div ref="backToTopDiv" class="back-to-top hide" v-transfer-dom @click="toTop">
+  <div ref="backToTopDiv" class="back-to-top hide" v-transfer-dom="'.vux-drawer-body'" @click="toTop">
     <i class="iconfont icon-arrowup top-icon"></i>
   </div>
 </template>
