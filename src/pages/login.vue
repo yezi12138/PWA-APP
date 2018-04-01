@@ -75,7 +75,7 @@
             })
             // 获取用户信息
             var userRes = yield req('userInfo')
-            if (!userRes.error) {
+            if (!userRes.error && userRes.username) {
               that.$store.commit('ADD_USER', userRes)
               that.$socket.emit('login', userRes)
             } else {

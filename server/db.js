@@ -20,7 +20,9 @@ const loginSchema = new mongoose.Schema({
   avatar: String,
   createTime: Date,
   goods: Array,
-  collects: Array
+  collects: Array,
+  shelfGoods: Array,
+  authority: Number   // 100为管理员， 101为会员
 })
 
 /**

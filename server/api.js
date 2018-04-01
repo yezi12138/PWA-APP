@@ -21,7 +21,8 @@ const user_info = (data) => {
     avatar: data[0].avatar,
     _id: data[0]._id,
     createTime: data[0].createTime,
-    goods: data[0].goods
+    goods: data[0].goods,
+    authority: data[0].authority
   }
 }
 
@@ -34,7 +35,11 @@ router.post('/auth/register', (req, res) => {
     username: req.body.username,
     password: req.body.password,
     avatar: '',
-    createTime: date
+    createTime: date,
+    goods: [],
+    collects: [],
+    shelfGoods: [],
+    authority: 101
   })
   // 判断账号是否存在了
   User.find({username: newAccount.username}, (err, data) => {
@@ -320,6 +325,123 @@ router.post('/upLoadAvatar', (req, res) => {
       })
     }
   })
+})
+
+/**
+ * 上架商品
+ */
+router.post('/add_good', (req, res) => {
+  let token = req.cookies.Token
+  let result = decodeToken(token)
+  let good = req.body.good || {}
+  let packages = [
+    {
+      label: '官方标配',
+      key: '01'
+    },
+    {
+      label: '港澳台',
+      key: '02'
+    },
+    {
+      label: '美版',
+      key: '03'
+    }
+  ]
+  let stages = [
+    {
+      label: '分3期(0手续费)¥2796起/期',
+      key: '01'
+    },
+    {
+      label: '分6期(0手续费)¥1398起/期',
+      key: '02'
+    },
+    {
+      label: '分12期(0手续费)¥699起/期',
+      key: '03'
+    }
+  ]
+  if (result) {
+    User.find({_id: result}, function (err, data) {
+      if (err) {
+        error(res, 500, err)
+      } else {
+        let newGood = {
+          shop_name: data[0].username,
+          city: '山西省 晋中市',
+          detail: [],
+          id: (new Date()).valueOf(),
+          order_time: (new Date()).valueOf(),
+          image: '',
+          likes: 0,
+          packages: packages,
+          stages: stages,
+          year_count: 0,
+          stock: 0
+        }
+        newGood = Object.assign({}, newGood, good)
+        User.update({_id: result}, {$push: {shelfGoods: newGood}}, function (err, data) {
+          if (err) {
+            error(res, 500, err)
+          } else {
+            res.json({
+              status: true,
+              msg: '上架成功'
+            })
+          }
+        })
+      }
+    })
+  }
+})
+
+/**
+ * 上架商品
+ */
+router.get('/get_good', (req, res) => {
+  let token = req.cookies.Token
+  let result = decodeToken(token)
+  if (result) {
+    User.find({_id: result}, function (err, data) {
+      if (err) {
+        error(res, 500, err)
+      } else {
+        res.send(data[0].shelfGoods)
+      }
+    })
+  }
+})
+
+/**
+ * 删除上架商品
+ */
+router.delete('/delete_good/:goodId', (req, res) => {
+  let token = req.cookies.Token
+  let result = decodeToken(token)
+  let orderId = Number(req.params.goodId)
+  let deleteOrders = (orderId) => {
+    User.update({_id: result}, {$pull: {shelfGoods: {id: orderId}}}, function (err, result) {
+      if (err) {
+        error(res, 500, err)
+      } else {
+        if (result.nModified) {
+          res.json({
+            status: true,
+            msg: '删除上架商品成功'
+          })
+        } else {
+          res.json({
+            status: false,
+            msg: '删除上架商品失败'
+          })
+        }
+      }
+    })
+  }
+  if (result) {
+    deleteOrders(orderId)
+  }
 })
 
 module.exports = router

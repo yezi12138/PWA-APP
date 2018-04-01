@@ -19,7 +19,8 @@
         v-for="(item, index) in navList"
         :key="index"
         :to="item.path"
-        :class="['nav-item', {'home': index === 0}]">
+        :class="['nav-item', {'home': index === 0}]"
+        v-if="item.path !== '/add_good' || (item.path === '/add_good' && user && user.authority === '100')">
         <i :class="['iconfont', item.icon]"></i>
         <span class="text">{{item.text}}</span>
       </router-link>
@@ -55,6 +56,11 @@
             icon: 'icon-mine',
             text: '我的商品',
             path: '/my_goods'
+          },
+          {
+            icon: 'icon-setting',
+            text: '上架商品',
+            path: '/add_good'
           }
         ]
       }

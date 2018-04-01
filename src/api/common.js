@@ -59,6 +59,21 @@ export const config = {
   deleteCollect: {
     url: '/deleteCollect/{orderId}',
     method: 'delete'
+  },
+  // 上架商品
+  getGood: {
+    url: '/get_good',
+    method: 'get'
+  },
+  // 上架商品
+  addGood: {
+    url: '/add_good',
+    method: 'post'
+  },
+  // 删除商品
+  deleteGood: {
+    url: '/delete_good/{goodId}',
+    method: 'delete'
   }
 }
 

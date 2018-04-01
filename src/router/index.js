@@ -8,6 +8,8 @@ import GoodDetail from 'pages/good-detail'
 import Order from 'pages/order'
 import MyGoods from 'pages/my-goods'
 import Shopcart from 'pages/shopcart'
+import AddGood from 'pages/add-good'
+import NewGood from 'pages/new-good'
 import { checkAuth, getInfo } from '../utils/router'
 
 Vue.use(Router)
@@ -58,6 +60,16 @@ const router = new Router({
       path: '/shopcart',
       name: 'shopcart',
       component: Shopcart
+    },
+    {
+      path: '/add_good',
+      name: 'addGood',
+      component: AddGood
+    },
+    {
+      path: '/new_good',
+      name: 'newGood',
+      component: NewGood
     }
   ]
 })
@@ -67,7 +79,8 @@ export const authRouter = [
   '/notification',
   '/order',
   '/shopcart',
-  '/my_goods'
+  '/my_goods',
+  '/add_good'
 ]
 
 router.beforeEach(checkAuth)
