@@ -20,7 +20,7 @@
         :key="index"
         :to="item.path"
         :class="['nav-item', {'home': index === 0}]"
-        v-if="item.path !== '/add_good' || (item.path === '/add_good' && user && user.authority === '100')">
+        v-if="item.path !== '/add_good' || (item.path === '/add_good' && user && user.authority == '100')">
         <i :class="['iconfont', item.icon]"></i>
         <span class="text">{{item.text}}</span>
       </router-link>
